@@ -1,0 +1,28 @@
+name: Prix des cartes (quotidien)
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 9 * * *'
+  push:
+    branches: [main]
+    paths: ['tools/prices.py', '.github/workflows/prices.yml']
+permissions:
+  contents: write
+concurrency: prices
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python tools/prices.py
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add prices.json
+          git commit -m "Prix des cartes $(date +%F) [skip ci]" || echo "rien a changer"
+          git pull --rebase origin main
+          git push origin HEAD:main
