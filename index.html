@@ -267,7 +267,7 @@ function vPl(){const inP=d=>{if(B.p=='all')return true;const x=new Date(d);if(B.
 
 const SW=[['','#2563eb'],['#7c3aed','#7c3aed'],['#e11d48','#e11d48'],['#ea580c','#ea580c'],['#059669','#059669'],['#0891b2','#0891b2'],['#db2777','#db2777']],uiB=(k,v,t)=>`<button class="chip ${UI[k]==v?'on':''}" data-a="ui" data-k="${k}" data-v="${v}">${t}</button>`;
 let SS='ev';
-const APP_UPDATED='2026-11-19T03:11:40-05:00';
+const APP_UPDATED='2026-11-19T03:21:35-05:00';
 const appUpd=()=>'Dernière mise à jour de l’app : '+new Date(APP_UPDATED).toLocaleString(LC(),{dateStyle:'long',timeStyle:'short'});
 const SECN={buy:'Acheter',stock:'Stock',sv:'Ventes',gr:'Grading',tr:'Échanges',pl:'Bilan',gx:'Croissance',ex:'Dépenses',log:'Suivi',set:'Réglages'};
 function goHome(){sheet=null;EE={id:''};CR.open=false;QS.open=TP.open=false;QS.on=false;tab='home';HS=true;HA=false;render()}
@@ -533,7 +533,7 @@ async function ocrZones(cv){const wk=await tw(),W=cv.width,H=cv.height;
  await wk.setParameters({tessedit_pageseg_mode:'3',tessedit_char_whitelist:''});return{name,num}}
 /* ---- Détection de la carte + redressement + empreinte texte ---- */
 let CFP=null,CFPp=null;
-async function cfp(){if(CFP)return CFP;if(!CFPp)CFPp=(async()=>{const r=await fetch('cards-fp.json');if(!r.ok)throw new Error('fp');const d=await r.json();return CFP={w:d.w,c:d.c.map(s=>{if(!s)return null;const p=s.split('|');return{hp:p[0],ids:p[1]?p[1].split('.').map(x=>parseInt(x,16)):[]}})}})();try{return await CFPp}catch(e){CFPp=null;throw e}}
+async function cfp(){if(CFP)return CFP;if(!CFPp)CFPp=(async()=>{const r=await fetch('cards-fp.json');if(!r.ok)throw new Error('fp');const d=await r.json();return CFP={w:d.w,f:d.f||[],cw:d.cw||{},c:d.c.map(s=>{if(!s)return null;const p=s.split('|');return p.length>2?{hp:p[0],dex:p[1],ids:p[2]?p[2].split('.').map(x=>parseInt(x,16)):[]}:{hp:p[0],dex:'',ids:p[1]?p[1].split('.').map(x=>parseInt(x,16)):[]}})}})();try{return await CFPp}catch(e){CFPp=null;throw e}}
 function findCard(src){const S=360/Math.max(src.width,src.height),w=Math.round(src.width*S),h=Math.round(src.height*S),c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d',{willReadFrequently:true});x.drawImage(src,0,0,w,h);const d=x.getImageData(0,0,w,h).data,N=w*h;
  const hsv=i=>{const r=d[i*4]/255,g=d[i*4+1]/255,b=d[i*4+2]/255,mx=Math.max(r,g,b),mn=Math.min(r,g,b),df=mx-mn;let H=0;if(df){if(mx==r)H=60*(((g-b)/df)%6);else if(mx==g)H=60*((b-r)/df+2);else H=60*((r-g)/df+4)}if(H<0)H+=360;return[H,mx?df/mx:0,mx]};
  const tests=[(H,S,V)=>H>=30&&H<=76&&S>=.43&&V>=.43,(H,S,V)=>S<=.13&&V>=.62];let best=null;
@@ -544,8 +544,9 @@ function findCard(src){const S=360/Math.max(src.width,src.height),w=Math.round(s
     for(const n of [k-1,k+1,k-w,k+w]){if(n<0||n>=N||seen[n]||!m[n])continue;if((n==k-1||n==k+1)&&((n/w)|0)!=py)continue;seen[n]=1;q[qt++]=n}}
    if(cnt<150)continue;let Q=[[a[1],a[2]],[e[1],e[2]],[b[1],b[2]],[g[1],g[2]]];const L=(u,v)=>Math.hypot(u[0]-v[0],u[1]-v[1]),wq=(L(Q[0],Q[1])+L(Q[3],Q[2]))/2,hq=(L(Q[0],Q[3])+L(Q[1],Q[2]))/2;
    let ar=Math.min(wq,hq)/Math.max(wq,hq),area=Math.abs(Q.reduce((s2,P,i)=>{const R=Q[(i+1)%4];return s2+P[0]*R[1]-R[0]*P[1]},0))/2,fill=cnt/Math.max(area,1);
-   if(area<N*.06||ar<.55||ar>.9||fill>.62||fill<.03)continue;const sc=area*(1-Math.abs(ar-.716)*3);if(!best||sc>best.sc){if(wq>hq)Q=[Q[3],Q[0],Q[1],Q[2]];best={sc,Q:Q.map(P=>[P[0]/S,P[1]/S])}}}}
- return best?best.Q:null}
+   const sd=[L(Q[0],Q[1]),L(Q[1],Q[2]),L(Q[2],Q[3]),L(Q[3],Q[0])],cr=(o,a2,b2)=>(a2[0]-o[0])*(b2[1]-o[1])-(a2[1]-o[1])*(b2[0]-o[0]),cx=[0,1,2,3].map(i=>Math.sign(cr(Q[i],Q[(i+1)%4],Q[(i+2)%4])));if(Math.abs(sd[0]-sd[2])>.2*Math.max(sd[0],sd[2])||Math.abs(sd[1]-sd[3])>.2*Math.max(sd[1],sd[3])||!cx.every(v=>v==cx[0]))continue;
+   if(area<N*.06||ar<.55||ar>.9||fill>.62||fill<.03)continue;const sc=area*(1-Math.abs(ar-.716)*3);if(!best||sc>best.sc){const land=wq>hq;if(land)Q=[Q[3],Q[0],Q[1],Q[2]];best={sc,land,Q:Q.map(P=>[P[0]/S,P[1]/S])}}}}
+ if(best)best.Q.land=best.land;return best?best.Q:null}
 const rotQ=(q,k)=>q.map((_,i)=>q[(i+k)%4]);
 function homog(P,Q){const A=[],B=[];for(let i=0;i<4;i++){const[x,y]=P[i],[u,v]=Q[i];A.push([x,y,1,0,0,0,-u*x,-u*y]);B.push(u);A.push([0,0,0,x,y,1,-v*x,-v*y]);B.push(v)}
  for(let i=0;i<8;i++){let mx=i;for(let k=i+1;k<8;k++)if(Math.abs(A[k][i])>Math.abs(A[mx][i]))mx=k;[A[i],A[mx]]=[A[mx],A[i]];[B[i],B[mx]]=[B[mx],B[i]];for(let k=i+1;k<8;k++){const f=A[k][i]/A[i][i];for(let j=i;j<8;j++)A[k][j]-=f*A[i][j];B[k]-=f*B[i]}}
@@ -553,31 +554,51 @@ function homog(P,Q){const A=[],B=[];for(let i=0;i<4;i++){const[x,y]=P[i],[u,v]=Q
 function warpC(src,q,W,H){const sd=src.getContext('2d').getImageData(0,0,src.width,src.height).data,SW=src.width,SH=src.height,h=homog([[0,0],[W,0],[W,H],[0,H]],q),o=document.createElement('canvas');o.width=W;o.height=H;const ox=o.getContext('2d'),od=ox.createImageData(W,H),D=od.data;
  for(let y=0;y<H;y++)for(let x=0;x<W;x++){const z=h[6]*x+h[7]*y+1,u=(h[0]*x+h[1]*y+h[2])/z,v=(h[3]*x+h[4]*y+h[5])/z,i=(y*W+x)*4;D[i+3]=255;if(u<0||v<0||u>=SW-1||v>=SH-1){D[i]=D[i+1]=D[i+2]=255;continue}const x0=u|0,y0=v|0,fx=u-x0,fy=v-y0,p=(y0*SW+x0)*4,r2=SW*4;for(let k=0;k<3;k++)D[i+k]=(sd[p+k]*(1-fx)+sd[p+4+k]*fx)*(1-fy)+(sd[p+r2+k]*(1-fx)+sd[p+r2+4+k]*fx)*fy}
  ox.putImageData(od,0,0);return o}
-async function readCard(src,rk){const q0=findCard(src),q=q0&&rk?rotQ(q0,rk):q0,card=q?warpC(src,q,900,1257):src,wk=await tw();
- const zc=(c0,x0,y0,x1,y1,sc,flt)=>{const W=c0.width,H=c0.height,c=document.createElement('canvas');c.width=Math.max(1,Math.round(W*(x1-x0)*sc));c.height=Math.max(1,Math.round(H*(y1-y0)*sc));const x=c.getContext('2d');x.filter=flt||'grayscale(1) contrast(1.3)';x.imageSmoothingQuality='high';x.drawImage(c0,W*x0,H*y0,W*(x1-x0),H*(y1-y0),0,0,c.width,c.height);return c};
- const rd=async(c,p)=>{await wk.setParameters(p);return((await wk.recognize(c)).data.text||'').trim()};
- const free={tessedit_pageseg_mode:'11',tessedit_char_whitelist:''},nums={tessedit_pageseg_mode:'11',tessedit_char_whitelist:'0123456789/'};
- const sc=q?1:Math.min(1.5,1800/Math.max(src.width,src.height));let text=await rd(zc(card,0,0,1,1,sc),free);
- const ar=src.width/src.height;let num='';if(q||(ar>.6&&ar<.8)){num=await rd(zc(card,0,.93,1,1,2.5),nums);if(!/\d{1,3}\s*\/\s*\d{2,3}/.test(num))num+=' '+await rd(zc(card,0,.86,1,1,2,'grayscale(1) contrast(1.8)'),nums)}
- let lab='';if(q){const top=Math.min(...q.map(P=>P[1]));if(top>src.height*.12)lab=await rd(zc(src,0,0,1,top/src.height,1),free)}
- await wk.setParameters({tessedit_pageseg_mode:'3',tessedit_char_whitelist:''});
- let thumb='';if(q){try{const t=document.createElement('canvas');t.width=300;t.height=419;t.getContext('2d').drawImage(card,0,0,300,419);thumb=t.toDataURL('image/jpeg',.82)}catch(e){}}
- return{text,num,lab,found:!!q,thumb,q0}}
+function sharpBox(src){const S=400/Math.max(src.width,src.height),w=Math.round(src.width*S),h=Math.round(src.height*S),c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d',{willReadFrequently:true});x.drawImage(src,0,0,w,h);const d=x.getImageData(0,0,w,h).data,N=w*h,g=new Float32Array(N);for(let i=0;i<N;i++)g[i]=d[i*4]*.3+d[i*4+1]*.59+d[i*4+2]*.11;
+ const L=new Float32Array(N);for(let y=1;y<h-1;y++)for(let x2=1;x2<w-1;x2++){const i=y*w+x2;L[i]=Math.abs(4*g[i]-g[i-1]-g[i+1]-g[i-w]-g[i+w])}
+ const I=new Float64Array((w+1)*(h+1));for(let y=0;y<h;y++){let r=0;for(let x2=0;x2<w;x2++){r+=L[y*w+x2];I[(y+1)*(w+1)+x2+1]=I[y*(w+1)+x2+1]+r}}
+ const R=7,E=new Float32Array(N);for(let y=0;y<h;y++)for(let x2=0;x2<w;x2++){const x0=Math.max(0,x2-R),x1=Math.min(w,x2+R+1),y0=Math.max(0,y-R),y1=Math.min(h,y+R+1);E[y*w+x2]=(I[y1*(w+1)+x1]-I[y0*(w+1)+x1]-I[y1*(w+1)+x0]+I[y0*(w+1)+x0])/((x1-x0)*(y1-y0))}
+ const so=Float32Array.from(E).sort(),th=so[Math.floor(N*.92)]*.55,seen=new Uint8Array(N),q=new Int32Array(N);let best=null;
+ for(let p=0;p<N;p++){if(seen[p]||E[p]<=th)continue;let qh=0,qt=0,n=0,a=w,b=0,cc=h,dd=0;q[qt++]=p;seen[p]=1;while(qh<qt){const k=q[qh++],px=k%w,py=(k/w)|0;n++;if(px<a)a=px;if(px>b)b=px;if(py<cc)cc=py;if(py>dd)dd=py;for(const m of [k-1,k+1,k-w,k+w]){if(m<0||m>=N||seen[m]||E[m]<=th)continue;if((m==k-1||m==k+1)&&((m/w)|0)!=py)continue;seen[m]=1;q[qt++]=m}}if(!best||n>best.n)best={n,a,b,cc,dd}}
+ if(!best||best.n<N*.03)return null;const pad=6;return{x:Math.max(0,(best.a-pad)/S),y:Math.max(0,(best.cc-pad)/S),w:Math.min(src.width,(best.b-best.a+2*pad)/S),h:Math.min(src.height,(best.dd-best.cc+2*pad)/S)}}
+function prepC(src,bx,mode){const sc=Math.min(2,2000/Math.max(bx.w,bx.h)),W=Math.max(1,Math.round(bx.w*sc)),H=Math.max(1,Math.round(bx.h*sc)),c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d',{willReadFrequently:true});x.imageSmoothingQuality='high';x.filter='grayscale(1)';x.drawImage(src,bx.x,bx.y,bx.w,bx.h,0,0,W,H);
+ if(mode=='flat'){const im=x.getImageData(0,0,W,H),d=im.data,N=W*H,I=new Float64Array((W+1)*(H+1));for(let y=0;y<H;y++){let r=0;for(let x2=0;x2<W;x2++){r+=d[(y*W+x2)*4];I[(y+1)*(W+1)+x2+1]=I[y*(W+1)+x2+1]+r}}const R=Math.max(7,Math.round(Math.max(W,H)/130));
+  for(let y=0;y<H;y++)for(let x2=0;x2<W;x2++){const x0=Math.max(0,x2-R),x1=Math.min(W,x2+R+1),y0=Math.max(0,y-R),y1=Math.min(H,y+R+1),m=(I[y1*(W+1)+x1]-I[y0*(W+1)+x1]-I[y1*(W+1)+x0]+I[y0*(W+1)+x0])/((x1-x0)*(y1-y0)),i=(y*W+x2)*4,v=d[i]>m-15?255:0;d[i]=d[i+1]=d[i+2]=v}x.putImageData(im,0,0)}
+ return c}
+async function readCard(src,rk){const wk=await tw(),rd=async(c,p)=>{await wk.setParameters(p);return((await wk.recognize(c)).data.text||'').trim()},free={tessedit_pageseg_mode:'11',tessedit_char_whitelist:''},nums={tessedit_pageseg_mode:'11',tessedit_char_whitelist:'0123456789/'};
+ const out={text:'',num:'',lab:'',found:false,thumb:''},q0=findCard(src),q=q0&&rk?rotQ(q0,rk):q0;if(q0)out.land=!!q0.land;
+ if(q){const card=warpC(src,q,900,1257);out.found=true;out.text=await rd(prepC(card,{x:0,y:0,w:900,h:1257},'g'),free)+'\n'+await rd(prepC(card,{x:0,y:0,w:900,h:1257},'flat'),free);out.num=await rd(prepC(card,{x:0,y:1257*.92,w:900,h:1257*.08},'g'),nums);
+  const top=Math.min(...q.map(P=>P[1]));if(top>src.height*.12)out.lab=await rd(prepC(src,{x:0,y:0,w:src.width,h:top},'g'),free);
+  try{const t=document.createElement('canvas');t.width=300;t.height=419;t.getContext('2d').drawImage(card,0,0,300,419);out.thumb=t.toDataURL('image/jpeg',.82)}catch(e){}
+  out.q=q;out.card=card}
+ out.full=async()=>{const ar=src.width/src.height,bx=(ar>.6&&ar<.8&&!q)?{x:0,y:0,w:src.width,h:src.height}:(sharpBox(src)||{x:0,y:0,w:src.width,h:src.height});out.box=bx;
+  out.text+='\n'+await rd(prepC(src,bx,'g'),free);out.text+='\n'+await rd(prepC(src,bx,'flat'),free);
+  if(!/\d{1,3}\s*\/\s*\d{2,3}/.test(out.num))out.num+=' '+await rd(prepC(src,{x:bx.x,y:bx.y+bx.h*.8,w:bx.w,h:bx.h*.2},'g'),nums)};
+ await wk.setParameters({tessedit_pageseg_mode:'3',tessedit_char_whitelist:''});return out}
+let NIDF=null;
 async function fpMatch(text,numTxt){const db=await cdb();let fp=null;try{fp=await cfp()}catch(e){}
- const T=crN(text),Ws=new Set(T.split(' ')),W=[...Ws].filter(w=>w.length>=4);
- const fz=w=>{if(Ws.has(w))return 1;if(w.length<5)return 0;const tol=w.length>=8?2:1;let b=0;for(const o of W)if(Math.abs(o.length-w.length)<=tol){const v=lev(o,w);if(v<=tol){b=v==1?.8:.6;if(v==1)break}}return b};
- const memo=new Map(),m=w=>{let v=memo.get(w);if(v===undefined){v=fz(w);memo.set(w,v)}return v};
+ if(!NIDF){const df=new Map();db.cards.forEach(c=>new Set(c.k.split(' ')).forEach(t=>df.set(t,(df.get(t)||0)+1)));NIDF=t=>Math.log(db.cards.length/(df.get(t)||1))}
+ const T=crN(text),Tn=T.replace(/\b[a-z]*olves? (?:from|fr[a-z]*) [a-z]+/g,' '),Wn=new Set(Tn.split(' ')),Ws=new Set(T.split(' ')),W=[...Ws].filter(w=>w.length>=4),Wl=new Map();W.forEach(w=>{const l=w.length;if(!Wl.has(l))Wl.set(l,[]);Wl.get(l).push(w)});
+ const fz=w=>{if(Ws.has(w))return 1;if(w.length<6)return 0;const tol=w.length>=9?2:1;let b=0;for(let l=w.length-tol;l<=w.length+tol;l++){const A=Wl.get(l);if(!A)continue;for(const o of A){if(o[0]!=w[0]&&o[1]!=w[1]&&o[o.length-1]!=w[w.length-1])continue;const v=lev(o,w);if(v<=tol){b=Math.max(b,v==1?.8:.55);if(v==1)return b}}}
+  if(!b&&w.length>=6)for(const o of W)if(o.length>=5&&(o.includes(w.slice(1))||o.includes(w.slice(0,-1))))return .7;return b};
+ const memo=new Map(),m=w=>{let v=memo.get(w);if(v===undefined){v=fz(w);memo.set(w,v)}return v},mn=new Map(),mN=t=>{let v=mn.get(t);if(v===undefined){v=Wn.has(t)?1:(Tn.includes(t)?m(t):(m(t)&&[...Wn].some(o=>o.length>=4&&lev(o,t)<=2)?m(t):0));mn.set(t,v)}return v};
  const all=String(numTxt||'')+' '+text,nums=[...all.matchAll(/(\d{1,3})\s*[\/|]\s*(\d{2,3})/g)].filter(x=>+x[1]<=+x[2]+120).map(x=>[db.nk(x[1]),+x[2]]),tots=new Set(nums.map(x=>x[1])),digits=String(numTxt||'').replace(/[^0-9]/g,'');
- const SUF=new Set(['ex','gx','v','vmax','vstar','lv','x','break','prime','star','δ']),R=[];
- db.cards.forEach((c,i)=>{let nm=0,ns=0;for(const t of c.k.split(' ')){if(!t)continue;if(SUF.has(t)||t.length<3){if(Ws.has(t))ns+=.5}else nm=Math.max(nm,m(t))}
-  let s=nm*4+ns,fw=0;const f=fp&&fp.c[i];if(f){for(const id of f.ids)fw+=m(fp.w[id]);s+=Math.min(fw,4)*2.2;if(f.hp&&Ws.has(f.hp))s+=.6}
-  const nk=db.nk(c.num);if(nums.some(x=>x[0]==nk&&x[1]==c.tot))s+=8;else if(nums.some(x=>x[0]==nk))s+=2.5;else{if(tots.has(c.tot))s+=1.2;if(digits.length>=3&&digits.includes(String(nk)+String(c.tot)))s+=3}
-  if(s>=4&&(nm>0||fw>=1.5||s>=8))R.push([s,c])});
+ const promo=[...T.toUpperCase().matchAll(/\b(SWSH|SVP|SV|SM|XY|BW|DP|HGSS|MEP|ME)\s?(\d{2,3})\b/g)].map(x=>x[1]+x[2]);
+ const dexs=new Set([...T.matchAll(/no\s?(\d{1,4})\b/g)].map(x=>String(+x[1])));
+ const SUF=new Set(['ex','gx','v','vmax','vstar','lv','x','break','prime','star','s','the','of','pokemon','energy','basic','team','dark','light']),R=[];
+ db.cards.forEach((c,i)=>{let nw=0,nm=0,ns=0;for(const t of c.k.split(' ')){if(!t)continue;if(SUF.has(t)||t.length<3){if(t.length>=2&&Ws.has(t))ns+=.4;else if(/^(ex|gx|v|vmax|vstar|lv|x|break|prime)$/.test(t))ns-=2.5;continue}const f=NIDF(t),bf=fp&&fp.cw[t]!=null?fp.cw[t]:1;nw+=f;nm+=mN(t)*f*bf}
+  const nsc=nw?nm/nw:0;let s=nsc*8+(nsc>=.99?1:0)+ns,tx=0,dx=0;const f=fp&&fp.c[i];
+  if(f){for(const id of f.ids){const v=m(fp.w[id]);if(v)tx+=v*(fp.f[id]||1.5)}s+=Math.min(tx,30)*.3;if(f.hp&&Ws.has(f.hp))s+=.5;if(f.dex&&dexs.has(f.dex)){s+=3.5;dx=1}}
+  const nk=db.nk(c.num);if(nums.some(x=>x[0]==nk&&x[1]==c.tot))s+=8;else if(nums.some(x=>x[0]==nk&&nk.length>=2))s+=2;else{if(tots.has(c.tot))s+=1.2;if(digits.length>=4&&digits.includes(String(nk)+String(c.tot)))s+=3}
+  if(promo.length&&promo.includes(String(c.num).toUpperCase()))s+=8;
+  if(s>=3.5&&(nsc>=.5||tx>=6||s>=8||dx))R.push([s,c])});
  R.sort((a,b)=>b[0]-a[0]||(/Holo/i.test(b[1].rar||'')?1:0)-(/Holo/i.test(a[1].rar||'')?1:0)||String(b[1].date).localeCompare(String(a[1].date)));
  const top=R.length?R[0][0]:0,out=R.filter(r=>r[0]>=top*.6).slice(0,15).map(r=>Object.assign(candOf(r[1]),{score:Math.round(r[0]*10)/10}));out.sp=out.length?out[0].name:null;out.top=top;out.gap=R.length>1?top-R[1][0]:top;return out}
-async function scanCanvas(cv){let r=await readCard(cv),cands=await fpMatch(r.text,r.num);
- if(r.q0&&cands.top<7){const L=(u,v)=>Math.hypot(u[0]-v[0],u[1]-v[1]),q=r.q0,land=L(q[0],q[1])>L(q[0],q[3])*1.05;for(const k of (land?[2,1,3]:[2,1,3])){const r2=await readCard(cv,k),c2=await fpMatch(r2.text,r2.num);if(c2.top>cands.top){r=r2;cands=c2}if(cands.top>=9)break}}
+async function scanCanvas(cv){let r=await readCard(cv),cands=r.found?await fpMatch(r.text,r.num):{top:0};
+ if(r.land&&cands.top<12){const r2=await readCard(cv,2),c2=await fpMatch(r2.text,r2.num);if(c2.top>cands.top){r=r2;cands=c2}}
+ if(!(cands.top>=12&&cands.gap>=0)){await r.full();cands=await fpMatch(r.text,r.num);await (await tw()).setParameters({tessedit_pageseg_mode:'3',tessedit_char_whitelist:''})}
  const all=r.text+' '+r.lab;
+
  const gm=all.match(/\b(PSA|CGC|BGS|SGC)\b/i),grd=gm?((all.match(/(?:GEM\s*M[IT]+|MINT|NM[- ]?MT|PRISTINE)\s*\+?\s*(10|9\.5|9|8\.5|8|7\.5|7|6)/i)||[])[1]||null):null;
  const nm=(r.num+' '+r.text).match(/(\d{1,3})\s*\/\s*(\d{2,3})/);
  const j={name:null,number:nm?nm[1]+'/'+nm[2]:null,set:null,finish:null,grader:gm?gm[1].toUpperCase():null,grade:grd,raw:r,cands,thumb:r.thumb};
