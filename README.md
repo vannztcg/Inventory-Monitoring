@@ -2,7 +2,7 @@
 
 L'app d'inventaire, de ventes, de dépenses et de profit pour vendeurs de cartes à collectionner.
 
-**Ouvrir l'app :** https://inventorymonitoring.ca
+**Ouvrir l'app :** https://vannztcg.github.io/Inventory-Monitoring/
 
 ## Pour commencer
 1. Ouvre l'adresse ci-dessus (Safari sur iPhone, Chrome ou Edge sur ordinateur).
