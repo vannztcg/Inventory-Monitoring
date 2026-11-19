@@ -14,7 +14,8 @@ def get(u, tries=3):
     raise err
 KEY = {'normal': 'n', 'holofoil': 'h', 'reverseHolofoil': 'r', '1stEditionHolofoil': '1h', '1stEditionNormal': '1n', '1stEdition': '1n', 'unlimitedHolofoil': 'h', 'unlimited': 'n'}
 SUB = {'Normal': 'n', 'Holofoil': 'h', 'Reverse Holofoil': 'r', '1st Edition Holofoil': '1h', '1st Edition Normal': '1n', '1st Edition': '1n', 'Unlimited Holofoil': 'h', 'Unlimited': 'n'}
-nk = lambda s: re.sub(r'^0+(?=\d)', '', str(s).split('/')[0].strip()).lower()
+nk = lambda s: re.sub(r'^([a-z]*)0+(?=\d)', r'\1', str(s).split('/')[0].strip().lower())
+REP = []
 norm = lambda s: re.sub(r'[^a-z0-9]', '', unicodedata.normalize('NFD', str(s).lower()).encode('ascii', 'ignore').decode())
 want = {}
 for r in D['cards']:
@@ -29,8 +30,12 @@ except Exception as e:
 gname = {}
 for g in groups: gname.setdefault(norm(g['name']), []).append(g)
 SETN = {s[0]: s[1] for s in D['sets']}
+ALIAS = {'svp': ['svscarletvioletpromocards', 'scarletvioletpromos'], 'swshp': ['swshswordshieldpromocards', 'swordshieldpromos'], 'smp': ['smpromos', 'sunmoonpromos'], 'xyp': ['xypromos'], 'bwp': ['blackandwhitepromos', 'bwpromos'], 'dpp': ['diamondandpearlpromos', 'dppromos'], 'hsp': ['hgsspromos'], 'basep': ['wotcpromo', 'wizardsblackstarpromos'], 'np': ['nintendopromos'], 'mep': ['mepromos', 'megaevolutionpromos']}
 def groups_for(sid):
     n = norm(SETN[sid]); out = []
+    for a in ALIAS.get(sid, []):
+        out += [g for k, gs in gname.items() for g in gs if k == a or k.endswith(a)]
+    if out: return out
     for k, gs in gname.items():
         if k == n or k.endswith(n) or n.endswith(k) or (len(n) > 5 and n in k): out += gs
     if sid.endswith('p') or 'promo' in n:
@@ -41,7 +46,7 @@ for sid, nums in missing.items():
         try:
             prods = get(f'https://tcgcsv.com/tcgplayer/3/{g["groupId"]}/products')['results']
             prices = get(f'https://tcgcsv.com/tcgplayer/3/{g["groupId"]}/prices')['results']
-        except Exception as e: print('tcgcsv fail', g['name'], e); continue
+        except Exception as e: print('tcgcsv fail', g['name'], e); REP.append(f'fail {g["name"]} {e}'); continue
         num = {}
         for p in prods:
             for x in p.get('extendedData') or []:
@@ -77,6 +82,10 @@ for sid in lack:
         page += 1
     time.sleep(.3)
 print('ptcg', src['ptcg'])
+for sid, nums in want.items():
+    got = sum(1 for n in nums if f'{sid}-{n}' in P)
+    if got < len(nums) * .8: REP.append(f'{sid} | {SETN[sid]} | {got}/{len(nums)} | groupes: ' + '; '.join(g['name'] for g in groups_for(sid)) + ' | ex: ' + ','.join(sorted(nums)[:4]))
+open('tools/price_report.txt', 'w').write('\n'.join(REP) + '\n\nTOUS LES GROUPES TCGCSV:\n' + '\n'.join(sorted(g['name'] for g in groups)))
 tot = sum(len(v) for v in want.values())
 print('tcgcsv', src['tcgcsv'], 'total', len(P), '/', tot)
 json.dump({'d': datetime.date.today().isoformat(), 'src': src, 'n': len(P), 'tot': tot, 'p': P}, open('prices.json', 'w'), separators=(',', ':'))
