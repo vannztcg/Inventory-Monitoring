@@ -1,4 +1,4 @@
-v=2026-11-19 cards=10397 fails=50
+v=2026-11-19-all cards=20776 fails=52
 https://images.pokemontcg.io/ex5/102.png HTTP Error 404: Not Found
 https://images.pokemontcg.io/hsp/HGSS18.png HTTP Error 404: Not Found
 https://images.pokemontcg.io/mcd14/1.png HTTP Error 404: Not Found
@@ -49,3 +49,5 @@ https://images.pokemontcg.io/mcd18/7.png HTTP Error 404: Not Found
 https://images.pokemontcg.io/mcd18/8.png HTTP Error 404: Not Found
 https://images.pokemontcg.io/mcd18/9.png HTTP Error 404: Not Found
 https://images.pokemontcg.io/svp/102.png HTTP Error 404: Not Found
+https://images.pokemontcg.io/ecard2/67.png HTTP Error 404: Not Found
+https://images.pokemontcg.io/mcd15/8.png HTTP Error 404: Not Found
