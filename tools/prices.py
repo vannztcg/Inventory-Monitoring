@@ -33,7 +33,7 @@ except Exception as e:
 gname = {}
 for g in groups: gname.setdefault(norm(g['name']), []).append(g)
 SETN = {s[0]: s[1] for s in D['sets']}
-ALIAS = {'svp': ['svscarletvioletpromocards', 'scarletvioletpromos'], 'swshp': ['swshswordshieldpromocards', 'swordshieldpromos'], 'smp': ['smpromos', 'sunmoonpromos'], 'xyp': ['xypromos'], 'bwp': ['blackandwhitepromos', 'bwpromos'], 'dpp': ['diamondandpearlpromos', 'dppromos'], 'hsp': ['hgsspromos'], 'basep': ['wotcpromo', 'wizardsblackstarpromos'], 'np': ['nintendopromos'], 'mep': ['memegaevolutionpromo', 'mepromos', 'megaevolutionpromos'], 'tk1a': ['extrainerkitlatias'], 'tk1b': ['extrainerkitlatios'], 'tk2a': ['extrainerkit2plusle'], 'tk2b': ['extrainerkit2minun']}
+ALIAS = {'svp': ['svscarletvioletpromocards', 'scarletvioletpromos'], 'swshp': ['swshswordshieldpromocards', 'swordshieldpromos'], 'smp': ['smpromos', 'sunmoonpromos'], 'xyp': ['xypromos'], 'bwp': ['blackandwhitepromos', 'bwpromos'], 'dpp': ['diamondandpearlpromos', 'dppromos'], 'hsp': ['hgsspromos'], 'basep': ['wotcpromo', 'wizardsblackstarpromos'], 'np': ['nintendopromos'], 'mep': ['memegaevolutionpromo', 'mepromos', 'megaevolutionpromos'], 'dp1': ['diamondandpearl'], 'xy1': ['xybaseset', 'xy'], 'sm1': ['sunmoon', 'smbaseset'], 'bw1': ['blackandwhite', 'bwbaseset'], 'swsh1': ['swordshield', 'swshbaseset'], 'tk1a': ['extrainerkitlatias'], 'tk1b': ['extrainerkitlatios'], 'tk2a': ['extrainerkit2plusle'], 'tk2b': ['extrainerkit2minun']}
 for y in range(2011, 2030): ALIAS[f'mcd{str(y)[2:]}'] = [f'mcdonaldspromos{y}', f'mcdonaldscollection{y}']
 def groups_for(sid):
     n = norm(SETN[sid]); out = []
