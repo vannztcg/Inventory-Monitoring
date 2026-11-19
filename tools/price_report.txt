@@ -1,38 +1,9 @@
-fail SWSH: Crown Zenith HTTP Error 401: Unauthorized
-fail SWSH: Crown Zenith: Galarian Gallery HTTP Error 401: Unauthorized
-fail SWSH: Crown Zenith: Galarian Gallery HTTP Error 401: Unauthorized
-fail SV: Scarlet & Violet 151 HTTP Error 401: Unauthorized
-fail SV: Scarlet & Violet Promo Cards HTTP Error 401: Unauthorized
-fail SV01: Scarlet & Violet Base Set HTTP Error 401: Unauthorized
-fail SVE: Scarlet & Violet Energies HTTP Error 401: Unauthorized
-fail SV02: Paldea Evolved HTTP Error 401: Unauthorized
-fail SV03: Obsidian Flames HTTP Error 401: Unauthorized
-fail SV: Scarlet & Violet 151 HTTP Error 401: Unauthorized
-fail SV04: Paradox Rift HTTP Error 401: Unauthorized
-fail SV: Paldean Fates HTTP Error 401: Unauthorized
-fail SV05: Temporal Forces HTTP Error 401: Unauthorized
-fail SV06: Twilight Masquerade HTTP Error 401: Unauthorized
-fail SV: Shrouded Fable HTTP Error 401: Unauthorized
-fail SV07: Stellar Crown HTTP Error 401: Unauthorized
-fail SV08: Surging Sparks HTTP Error 401: Unauthorized
-fail SV: Prismatic Evolutions HTTP Error 401: Unauthorized
-fail SV09: Journey Together HTTP Error 401: Unauthorized
-fail SV10: Destined Rivals HTTP Error 401: Unauthorized
-fail SV: Black Bolt HTTP Error 401: Unauthorized
+fail McDonald's Promos 2017 HTTP Error 401: Unauthorized
+ex1 | Ruby & Sapphire | 0/35 | groupes:  | ex: 1,10,100,101
 tk1a | EX Trainer Kit Latias | 0/10 | groupes:  | ex: 1,10,2,3
 tk1b | EX Trainer Kit Latios | 0/10 | groupes:  | ex: 1,10,2,3
 tk2b | EX Trainer Kit 2 Minun | 0/11 | groupes:  | ex: 1,10,11,12
-pop4 | POP Series 4 | 4/6 | groupes: POP Series 4 | ex: 1,17,2,3
-pop5 | POP Series 5 | 4/6 | groupes: POP Series 5 | ex: 1,16,17,2
-mcd14 | McDonald's Collection 2014 | 0/12 | groupes:  | ex: 1,10,11,12
-mcd15 | McDonald's Collection 2015 | 0/11 | groupes:  | ex: 1,10,11,12
-mcd16 | McDonald's Collection 2016 | 0/12 | groupes:  | ex: 1,10,11,12
-mcd17 | McDonald's Collection 2017 | 0/12 | groupes:  | ex: 1,10,11,12
-mcd18 | McDonald's Collection 2018 | 0/12 | groupes:  | ex: 1,10,11,12
-mcd22 | McDonald's Collection 2022 | 0/15 | groupes:  | ex: 1,10,11,12
-swsh12pt5gg | Crown Zenith Galarian Gallery | 0/70 | groupes: SWSH: Crown Zenith: Galarian Gallery | ex: gg1,gg10,gg11,gg12
-sv6pt5 | Shrouded Fable | 0/51 | groupes: SV: Shrouded Fable | ex: 12,15,20,21
-sv9 | Journey Together | 0/63 | groupes: SV09: Journey Together | ex: 107,11,111,114
+mcd17 | McDonald's Collection 2017 | 0/12 | groupes: McDonald's Promos 2017 | ex: 1,10,11,12
 
 TOUS LES GROUPES TCGCSV:
 Alternate Art Promos
