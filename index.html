@@ -114,6 +114,34 @@ nav{display:none!important}body{padding-bottom:calc(24px + env(safe-area-inset-b
 @media (min-width:900px){.tb{margin:-24px -32px 16px;padding:14px 32px}}
 .home .acct{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px 12px;margin:0 14px 10px;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:#cfe4ff;font-size:13px}.home .acct button{background:none;border:1px solid rgba(143,194,255,.5);border-radius:999px;color:#8fc2ff;font-size:13px;padding:6px 12px}
 .home .auth .top .sub{text-align:center;letter-spacing:.14em;font-size:11px;margin-top:8px}.home .top .sub{text-align:center}.home .auth{min-height:calc(100vh - 150px);display:flex;flex-direction:column;justify-content:center;padding:10px 0}.home .feat{list-style:none;padding:0 22px;margin:14px 0;display:grid;gap:6px;color:#cfe4ff;font-size:14px}.home .acard{margin:0 14px;padding:16px;border-radius:20px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}.home .acard label{color:#9fb8da}.home .acard .chip{background:transparent;color:#dbe9ff;border-color:rgba(255,255,255,.25)}.home .acard .chip.on{background:var(--ac);border-color:var(--ac);color:#fff}.home .alinks{display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:center;margin-top:12px}.home .alinks button{background:none;border:0;color:#8fc2ff;font-size:13px;text-decoration:underline;padding:4px}@media (min-width:900px){.home .acard,.home .feat{max-width:440px;margin-left:auto;margin-right:auto;width:100%}}
+
+@media (min-width:1024px){
+body.full{background:#02040a!important;padding:0!important}
+body.full #main{max-width:none!important;padding:0!important;margin:0!important}
+body.full .home{border-radius:0;min-height:100vh}
+body.full .home .splash,body.full .home .auth{min-height:100vh}
+.home .ttl b{font-size:64px}.home .ttl b:last-child{font-size:30px}.home .ttl.sm b{font-size:46px}.home .ttl.sm b:last-child{font-size:22px}
+.home .top{padding:40px 24px 10px}
+.home .stats,.home .tiles,.home .qa,.home .rem,.home .chips,.home .acct{max-width:1180px!important;margin-left:auto!important;margin-right:auto!important;width:100%;box-sizing:border-box}
+.home .stats{grid-template-columns:repeat(6,1fr)!important;padding:18px 24px;gap:14px}
+.home .st b{font-size:24px}
+.home .qa{grid-template-columns:repeat(3,1fr);padding:14px 24px 0;gap:14px}.home .qa button{padding:16px}
+.home .rem{padding:14px 24px 0}
+.home .tiles{grid-template-columns:repeat(5,1fr)!important;padding:18px 24px 28px;gap:14px}
+.home .tile{padding:22px 8px;font-size:15px}.home .tile i{width:56px;height:56px;font-size:26px;border-radius:16px}
+.home .tile.wide{grid-column:1/-1}
+.home .acct{margin-bottom:14px!important;max-width:600px!important}
+.home .acard,.home .feat{max-width:460px}
+body.side nav{display:flex!important;position:fixed;top:0;bottom:0;left:0;right:auto;width:230px;flex-direction:column;gap:2px;border-top:0;border-right:1px solid var(--bd);background:var(--card);padding:22px 12px;overflow-y:auto;z-index:5}
+body.side nav::before{content:'INVENTORY MONITORING';display:block;font-weight:800;font-size:13px;letter-spacing:.14em;color:var(--ac);padding:4px 14px 18px}
+body.side nav button{flex:none;display:flex;align-items:center;gap:10px;text-align:left;font-size:15px;padding:11px 14px;border-radius:10px;min-width:0;width:100%;color:var(--tx);border:0;background:transparent}
+body.side nav button span{display:inline-block;width:22px;text-align:center;font-size:16px}
+body.side nav button.on{background:color-mix(in srgb,var(--ac) 14%,transparent);color:var(--ac);font-weight:700;box-shadow:none}
+body.side nav button:hover{background:var(--bg)}
+body.side{padding-left:230px!important}
+body.side #main{max-width:1240px;padding:28px 40px}
+body.side .tb{display:none}
+}
 </style>
 </head>
 <body>
@@ -237,7 +265,7 @@ function vPl(){const inP=d=>{if(B.p=='all')return true;const x=new Date(d);if(B.
 
 const SW=[['','#2563eb'],['#7c3aed','#7c3aed'],['#e11d48','#e11d48'],['#ea580c','#ea580c'],['#059669','#059669'],['#0891b2','#0891b2'],['#db2777','#db2777']],uiB=(k,v,t)=>`<button class="chip ${UI[k]==v?'on':''}" data-a="ui" data-k="${k}" data-v="${v}">${t}</button>`;
 let SS='ev';
-const APP_UPDATED='2026-11-18T21:35:00-05:00';
+const APP_UPDATED='2026-11-18T22:50:00-05:00';
 const appUpd=()=>'Dernière mise à jour de l’app : '+new Date(APP_UPDATED).toLocaleString(LC(),{dateStyle:'long',timeStyle:'short'});
 const SECN={buy:'Acheter',stock:'Stock',sv:'Ventes',gr:'Grading',tr:'Échanges',pl:'Bilan',gx:'Croissance',ex:'Dépenses',log:'Suivi',set:'Réglages'};
 function goHome(){sheet=null;EE={id:''};CR.open=false;QS.open=TP.open=false;QS.on=false;tab='home';HS=true;HA=false;render()}
@@ -441,7 +469,7 @@ function vSheet(){const it=S.items.find(i=>i.id==sheet);if(!it)return'';
 <div class="row" style="margin-top:8px"><button class="chip" data-a="stat" data-s="listed">En vente</button><button class="chip" data-a="stat" data-s="traded">Échangée</button><button class="chip" data-a="stat" data-s="stock">En stock</button></div>`+grSend(it);
  return`<div class="ov" data-a="close"><div class="pn">${head}${body}${(it.ph||[]).filter(p=>p.d).length?`<h3>Historique des prix</h3><div class="card mut">${it.ph.filter(p=>p.d).slice(-6).reverse().map(p=>E(p.d)+' · '+M(p.v)).join('<br>')}</div>`:''}<h3>Notes</h3><textarea data-note="card" placeholder="Un commentaire sur cette carte…">${E(it.note||'')}</textarea><h3>Historique</h3><div class="tl">${hist(it).slice().reverse().map(h=>`<div><b>${EVL[h.e]||h.e}</b> · ${E(h.note)}<small>${fd(h.t)}</small></div>`).join('')}</div>${ED?'':'<button class="btn alt" data-a="edit">Modifier la carte</button>'}<button class="btn alt ko" style="color:#fff" data-a="del">Supprimer</button><button class="btn alt" data-a="close">Fermer</button></div></div>`}
 
-function render(){fixEv();snap();$('#main').innerHTML=L(STANDALONE&&tab=='home'&&HS&&!SBS&&!GUEST()?vAuth():STANDALONE&&tab=='home'&&HS&&SBS&&!ACC.approved?vWait():(tab=='home'?'':`<div class="tb"><button class="bk" data-a="back"><span>‹</span>Accueil</button></div>`)+{gx:vGx,home:vHome,buy:vBuy,stock:vStock,gr:vGr,ex:vExp,tr:vTr,sv:vSales,pl:vPl,log:vLog,set:vSet}[tab]());document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t==tab));{const a=document.querySelector('nav button.on');if(a&&a.scrollIntoView)a.scrollIntoView({inline:'center',block:'nearest'})}$('#sheet').innerHTML=L(OUTQ?vOut():PRE.open?vPre():sheet?vSheet():(CR.open?vCr():EE.id?vXe():QS.open?vQs():(TP.open?vTp():'')));if(sheet)pv();animHome();try{const mm=$('#main');if(tab!==PT){mm.classList.remove('slin','slback');void mm.offsetWidth;mm.classList.add(tab=='home'?'slback':'slin');PT=tab;window.scrollTo(0,0)}}catch(e){}}
+function render(){fixEv();snap();try{document.body.classList.toggle('full',tab=='home');document.body.classList.toggle('side',tab!='home')}catch(e){}$('#main').innerHTML=L(STANDALONE&&tab=='home'&&HS&&!SBS&&!GUEST()?vAuth():STANDALONE&&tab=='home'&&HS&&SBS&&!ACC.approved?vWait():(tab=='home'?'':`<div class="tb"><button class="bk" data-a="back"><span>‹</span>Accueil</button></div>`)+{gx:vGx,home:vHome,buy:vBuy,stock:vStock,gr:vGr,ex:vExp,tr:vTr,sv:vSales,pl:vPl,log:vLog,set:vSet}[tab]());document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t==tab));{const a=document.querySelector('nav button.on');if(a&&a.scrollIntoView)a.scrollIntoView({inline:'center',block:'nearest'})}$('#sheet').innerHTML=L(OUTQ?vOut():PRE.open?vPre():sheet?vSheet():(CR.open?vCr():EE.id?vXe():QS.open?vQs():(TP.open?vTp():'')));if(sheet)pv();animHome();try{const mm=$('#main');if(tab!==PT){mm.classList.remove('slin','slback');void mm.offsetWidth;mm.classList.add(tab=='home'?'slback':'slin');PT=tab;window.scrollTo(0,0)}}catch(e){}}
 const flash=m=>{msg=m;render();setTimeout(()=>{if(msg==m){msg='';const t=$('#toast');if(t)t.textContent=''}},2500)};
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,5);
 
