@@ -42,23 +42,6 @@ def desc(im):
     a = a.reshape(44, 10, 32, 10, 3).mean(axis=(1, 3))
     return desc_from_small(a)
 
-
-CR2, CC2 = dct_mat(88), dct_mat(64)
-def desc2(im):
-    """v2 : pHash 256 bits (DCT 16x16 du gris 88x64, moyennes 5x5 de 320x440) + même grille couleur 4x4"""
-    im = im.convert('RGBA'); bg = Image.new('RGBA', im.size, (255, 255, 255, 255)); bg.alpha_composite(im)
-    big = np.asarray(bg.convert('RGB').resize((320, 440), Image.BILINEAR), dtype=np.float32)
-    a = big.reshape(44, 10, 32, 10, 3).mean(axis=(1, 3))
-    b = big.reshape(88, 5, 64, 5, 3).mean(axis=(1, 3))
-    g = b[..., 0] * .299 + b[..., 1] * .587 + b[..., 2] * .114
-    F = CR2[:16] @ g @ CC2[:16].T
-    low = F.flatten(); med = np.median(low[1:])
-    bits = (low > med).astype(np.uint8); bits[0] = 0
-    ph = 0
-    for x in bits: ph = (ph << 1) | int(x)
-    _, grid = desc_from_small(a)
-    return ph, grid
-
 def fetch(u):
     for t in range(4):
         try:
@@ -73,21 +56,19 @@ def main():
     cards = D['cards']; out = [None] * len(cards); fails = []
     def job(i):
         u = card_url(D, cards[i])
-        try:
-            im = fetch(u); return i, (desc(im), desc2(im)), None
+        try: return i, desc(fetch(u)), None
         except Exception as e: return i, None, f'{u} {e}'
     with cf.ThreadPoolExecutor(32) as ex:
         for n, (i, d, e) in enumerate(ex.map(job, range(len(cards)))):
             out[i] = d
             if e: fails.append(e)
             if n % 500 == 0: print(n, len(fails), flush=True)
-    b = bytearray(b'CV01' + struct.pack('<I', len(cards))); b2 = bytearray(b'CV02' + struct.pack('<I', len(cards)))
+    b = bytearray(b'CV01' + struct.pack('<I', len(cards)))
     for d in out:
-        if d is None: b += bytes(57); b2 += bytes(81); continue
-        (ph, grid), (ph2, grid2) = d
+        if d is None: b += bytes(57); continue
+        ph, grid = d
         b += bytes([1]) + ph.to_bytes(8, 'big') + bytes(grid)
-        b2 += bytes([1]) + ph2.to_bytes(32, 'big') + bytes(grid2)
-    open('cards-vis.bin', 'wb').write(b); open('cards-vis2.bin', 'wb').write(b2)
+    open('cards-vis.bin', 'wb').write(b)
     open('tools/vis_report.txt', 'w').write(f'v={D.get("v")} cards={len(cards)} fails={len(fails)}\n' + '\n'.join(fails[:300]))
     print('done', len(cards), 'fails', len(fails))
 
