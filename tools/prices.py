@@ -5,7 +5,7 @@ Sortie prices.json : {"d": date, "src": {...}, "p": {"<sid>-<num>": {"n":..,"h":
 import json, re, time, unicodedata, urllib.request, datetime
 D = json.load(open('cards-db.json'))
 UA = {'User-Agent': 'Mozilla/5.0 InventoryMonitoring-prices'}
-def get(u, tries=4):
+def get(u, tries=3):
     for t in range(tries):
         try:
             with urllib.request.urlopen(urllib.request.Request(u, headers=UA), timeout=60) as r: return json.loads(r.read())
@@ -20,26 +20,8 @@ want = {}
 for r in D['cards']:
     s = D['sets'][r[0]]; want.setdefault(s[0], set()).add(nk(r[1]))
 P = {}; src = {'ptcg': 0, 'tcgcsv': 0}
-# 1) API Pokémon TCG
-for sid in want:
-    page = 1
-    while True:
-        try: j = get(f'https://api.pokemontcg.io/v2/cards?q=set.id:{sid}&pageSize=250&page={page}&select=id,number,tcgplayer')
-        except Exception as e: print('ptcg fail', sid, e); break
-        for c in j.get('data', []):
-            pr = ((c.get('tcgplayer') or {}).get('prices') or {})
-            out = {}
-            for k, v in pr.items():
-                m = (v or {}).get('market') or (v or {}).get('mid')
-                if m and KEY.get(k) and KEY[k] not in out: out[KEY[k]] = round(float(m), 2)
-            if out and nk(c['number']) in want[sid]: P[f'{sid}-{nk(c["number"])}'] = out; src['ptcg'] += 1
-        if page * 250 >= j.get('totalCount', 0): break
-        page += 1
-    time.sleep(.3)
-print('ptcg', src['ptcg'])
-# 2) TCGCSV pour les cartes sans prix
-missing = {sid: {n for n in nums if f'{sid}-{n}' not in P} for sid, nums in want.items()}
-missing = {k: v for k, v in missing.items() if v}
+# 1) TCGCSV (rapide)
+missing = want
 try:
     groups = get('https://tcgcsv.com/tcgplayer/3/groups')['results']
 except Exception as e:
@@ -70,8 +52,31 @@ for sid, nums in missing.items():
             d = P.setdefault(f'{sid}-{n}', {})
             if k not in d: d[k] = round(float(m), 2); 
         time.sleep(.2)
-    for n in nums:
-        if f'{sid}-{n}' in P: src['tcgcsv'] += 1
+
+src['tcgcsv'] = len(P)
+print('tcgcsv', len(P))
+# 2) API Pokémon TCG seulement pour les sets où il manque des prix (limite de temps)
+T0 = time.time()
+lack = [sid for sid, nums in want.items() if any(f'{sid}-{n}' not in P for n in nums)]
+print('sets avec trous', len(lack))
+for sid in lack:
+    if time.time() - T0 > 900: print('ptcg: limite de temps'); break
+    page = 1
+    while True:
+        try: j = get(f'https://api.pokemontcg.io/v2/cards?q=set.id:{sid}&pageSize=250&page={page}&select=id,number,tcgplayer')
+        except Exception as e: print('ptcg fail', sid, e); break
+        for c in j.get('data', []):
+            pr = ((c.get('tcgplayer') or {}).get('prices') or {})
+            out = {}
+            for k, v in pr.items():
+                m = (v or {}).get('market') or (v or {}).get('mid')
+                if m and KEY.get(k) and KEY[k] not in out: out[KEY[k]] = round(float(m), 2)
+            key = f'{sid}-{nk(c["number"])}'
+            if out and nk(c['number']) in want[sid] and key not in P: P[key] = out; src['ptcg'] += 1
+        if page * 250 >= j.get('totalCount', 0): break
+        page += 1
+    time.sleep(.3)
+print('ptcg', src['ptcg'])
 tot = sum(len(v) for v in want.values())
 print('tcgcsv', src['tcgcsv'], 'total', len(P), '/', tot)
 json.dump({'d': datetime.date.today().isoformat(), 'src': src, 'n': len(P), 'tot': tot, 'p': P}, open('prices.json', 'w'), separators=(',', ':'))
