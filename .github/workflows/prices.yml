@@ -5,7 +5,7 @@ on:
     - cron: '17 9 * * *'
   push:
     branches: [main]
-    paths: ['tools/prices.py', '.github/workflows/prices.yml']
+    paths: ['tools/prices.py', '.github/workflows/prices.yml', 'cards-db.json']
 permissions:
   contents: write
 concurrency: prices
