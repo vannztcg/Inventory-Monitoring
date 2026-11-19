@@ -267,7 +267,7 @@ function vPl(){const inP=d=>{if(B.p=='all')return true;const x=new Date(d);if(B.
 
 const SW=[['','#2563eb'],['#7c3aed','#7c3aed'],['#e11d48','#e11d48'],['#ea580c','#ea580c'],['#059669','#059669'],['#0891b2','#0891b2'],['#db2777','#db2777']],uiB=(k,v,t)=>`<button class="chip ${UI[k]==v?'on':''}" data-a="ui" data-k="${k}" data-v="${v}">${t}</button>`;
 let SS='ev';
-const APP_UPDATED='2026-11-19T03:21:35-05:00';
+const APP_UPDATED='2026-11-19T03:39:11-05:00';
 const appUpd=()=>'Dernière mise à jour de l’app : '+new Date(APP_UPDATED).toLocaleString(LC(),{dateStyle:'long',timeStyle:'short'});
 const SECN={buy:'Acheter',stock:'Stock',sv:'Ventes',gr:'Grading',tr:'Échanges',pl:'Bilan',gx:'Croissance',ex:'Dépenses',log:'Suivi',set:'Réglages'};
 function goHome(){sheet=null;EE={id:''};CR.open=false;QS.open=TP.open=false;QS.on=false;tab='home';HS=true;HA=false;render()}
@@ -561,22 +561,12 @@ function sharpBox(src){const S=400/Math.max(src.width,src.height),w=Math.round(s
  const so=Float32Array.from(E).sort(),th=so[Math.floor(N*.92)]*.55,seen=new Uint8Array(N),q=new Int32Array(N);let best=null;
  for(let p=0;p<N;p++){if(seen[p]||E[p]<=th)continue;let qh=0,qt=0,n=0,a=w,b=0,cc=h,dd=0;q[qt++]=p;seen[p]=1;while(qh<qt){const k=q[qh++],px=k%w,py=(k/w)|0;n++;if(px<a)a=px;if(px>b)b=px;if(py<cc)cc=py;if(py>dd)dd=py;for(const m of [k-1,k+1,k-w,k+w]){if(m<0||m>=N||seen[m]||E[m]<=th)continue;if((m==k-1||m==k+1)&&((m/w)|0)!=py)continue;seen[m]=1;q[qt++]=m}}if(!best||n>best.n)best={n,a,b,cc,dd}}
  if(!best||best.n<N*.03)return null;const pad=6;return{x:Math.max(0,(best.a-pad)/S),y:Math.max(0,(best.cc-pad)/S),w:Math.min(src.width,(best.b-best.a+2*pad)/S),h:Math.min(src.height,(best.dd-best.cc+2*pad)/S)}}
-function prepC(src,bx,mode){const sc=Math.min(2,2000/Math.max(bx.w,bx.h)),W=Math.max(1,Math.round(bx.w*sc)),H=Math.max(1,Math.round(bx.h*sc)),c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d',{willReadFrequently:true});x.imageSmoothingQuality='high';x.filter='grayscale(1)';x.drawImage(src,bx.x,bx.y,bx.w,bx.h,0,0,W,H);
+function prepC(src,bx,mode,fs){const sc=fs||Math.min(2,2000/Math.max(bx.w,bx.h)),W=Math.max(1,Math.round(bx.w*sc)),H=Math.max(1,Math.round(bx.h*sc)),c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d',{willReadFrequently:true});x.imageSmoothingQuality='high';x.filter='grayscale(1)';x.drawImage(src,bx.x,bx.y,bx.w,bx.h,0,0,W,H);
  if(mode=='flat'){const im=x.getImageData(0,0,W,H),d=im.data,N=W*H,I=new Float64Array((W+1)*(H+1));for(let y=0;y<H;y++){let r=0;for(let x2=0;x2<W;x2++){r+=d[(y*W+x2)*4];I[(y+1)*(W+1)+x2+1]=I[y*(W+1)+x2+1]+r}}const R=Math.max(7,Math.round(Math.max(W,H)/130));
   for(let y=0;y<H;y++)for(let x2=0;x2<W;x2++){const x0=Math.max(0,x2-R),x1=Math.min(W,x2+R+1),y0=Math.max(0,y-R),y1=Math.min(H,y+R+1),m=(I[y1*(W+1)+x1]-I[y0*(W+1)+x1]-I[y1*(W+1)+x0]+I[y0*(W+1)+x0])/((x1-x0)*(y1-y0)),i=(y*W+x2)*4,v=d[i]>m-15?255:0;d[i]=d[i+1]=d[i+2]=v}x.putImageData(im,0,0)}
  return c}
-async function readCard(src,rk){const wk=await tw(),rd=async(c,p)=>{await wk.setParameters(p);return((await wk.recognize(c)).data.text||'').trim()},free={tessedit_pageseg_mode:'11',tessedit_char_whitelist:''},nums={tessedit_pageseg_mode:'11',tessedit_char_whitelist:'0123456789/'};
- const out={text:'',num:'',lab:'',found:false,thumb:''},q0=findCard(src),q=q0&&rk?rotQ(q0,rk):q0;if(q0)out.land=!!q0.land;
- if(q){const card=warpC(src,q,900,1257);out.found=true;out.text=await rd(prepC(card,{x:0,y:0,w:900,h:1257},'g'),free)+'\n'+await rd(prepC(card,{x:0,y:0,w:900,h:1257},'flat'),free);out.num=await rd(prepC(card,{x:0,y:1257*.92,w:900,h:1257*.08},'g'),nums);
-  const top=Math.min(...q.map(P=>P[1]));if(top>src.height*.12)out.lab=await rd(prepC(src,{x:0,y:0,w:src.width,h:top},'g'),free);
-  try{const t=document.createElement('canvas');t.width=300;t.height=419;t.getContext('2d').drawImage(card,0,0,300,419);out.thumb=t.toDataURL('image/jpeg',.82)}catch(e){}
-  out.q=q;out.card=card}
- out.full=async()=>{const ar=src.width/src.height,bx=(ar>.6&&ar<.8&&!q)?{x:0,y:0,w:src.width,h:src.height}:(sharpBox(src)||{x:0,y:0,w:src.width,h:src.height});out.box=bx;
-  out.text+='\n'+await rd(prepC(src,bx,'g'),free);out.text+='\n'+await rd(prepC(src,bx,'flat'),free);
-  if(!/\d{1,3}\s*\/\s*\d{2,3}/.test(out.num))out.num+=' '+await rd(prepC(src,{x:bx.x,y:bx.y+bx.h*.8,w:bx.w,h:bx.h*.2},'g'),nums)};
- await wk.setParameters({tessedit_pageseg_mode:'3',tessedit_char_whitelist:''});return out}
 let NIDF=null;
-async function fpMatch(text,numTxt){const db=await cdb();let fp=null;try{fp=await cfp()}catch(e){}
+async function fpMatch(text,numTxt,VD){const db=await cdb();let fp=null;try{fp=await cfp()}catch(e){}
  if(!NIDF){const df=new Map();db.cards.forEach(c=>new Set(c.k.split(' ')).forEach(t=>df.set(t,(df.get(t)||0)+1)));NIDF=t=>Math.log(db.cards.length/(df.get(t)||1))}
  const T=crN(text),Tn=T.replace(/\b[a-z]*olves? (?:from|fr[a-z]*) [a-z]+/g,' '),Wn=new Set(Tn.split(' ')),Ws=new Set(T.split(' ')),W=[...Ws].filter(w=>w.length>=4),Wl=new Map();W.forEach(w=>{const l=w.length;if(!Wl.has(l))Wl.set(l,[]);Wl.get(l).push(w)});
  const fz=w=>{if(Ws.has(w))return 1;if(w.length<6)return 0;const tol=w.length>=9?2:1;let b=0;for(let l=w.length-tol;l<=w.length+tol;l++){const A=Wl.get(l);if(!A)continue;for(const o of A){if(o[0]!=w[0]&&o[1]!=w[1]&&o[o.length-1]!=w[w.length-1])continue;const v=lev(o,w);if(v<=tol){b=Math.max(b,v==1?.8:.55);if(v==1)return b}}}
@@ -588,23 +578,100 @@ async function fpMatch(text,numTxt){const db=await cdb();let fp=null;try{fp=awai
  const SUF=new Set(['ex','gx','v','vmax','vstar','lv','x','break','prime','star','s','the','of','pokemon','energy','basic','team','dark','light']),R=[];
  db.cards.forEach((c,i)=>{let nw=0,nm=0,ns=0;for(const t of c.k.split(' ')){if(!t)continue;if(SUF.has(t)||t.length<3){if(t.length>=2&&Ws.has(t))ns+=.4;else if(/^(ex|gx|v|vmax|vstar|lv|x|break|prime)$/.test(t))ns-=2.5;continue}const f=NIDF(t),bf=fp&&fp.cw[t]!=null?fp.cw[t]:1;nw+=f;nm+=mN(t)*f*bf}
   const nsc=nw?nm/nw:0;let s=nsc*8+(nsc>=.99?1:0)+ns,tx=0,dx=0;const f=fp&&fp.c[i];
-  if(f){for(const id of f.ids){const v=m(fp.w[id]);if(v)tx+=v*(fp.f[id]||1.5)}s+=Math.min(tx,30)*.3;if(f.hp&&Ws.has(f.hp))s+=.5;if(f.dex&&dexs.has(f.dex)){s+=3.5;dx=1}}
+  if(f){for(const id of f.ids){const v=m(fp.w[id]);if(v)tx+=v*(fp.f[id]||1.5)}s+=Math.min(tx,24)*.25;if(f.hp&&Ws.has(f.hp))s+=.5;if(f.dex&&dexs.has(f.dex)){s+=3.5;dx=1}}
   const nk=db.nk(c.num);if(nums.some(x=>x[0]==nk&&x[1]==c.tot))s+=8;else if(nums.some(x=>x[0]==nk&&nk.length>=2))s+=2;else{if(tots.has(c.tot))s+=1.2;if(digits.length>=4&&digits.includes(String(nk)+String(c.tot)))s+=3}
   if(promo.length&&promo.includes(String(c.num).toUpperCase()))s+=8;
-  if(s>=3.5&&(nsc>=.5||tx>=6||s>=8||dx))R.push([s,c])});
+  const vd=VD?VD[i]:9;if(vd<9)s+=Math.max(-3,Math.min(5,(.47-vd)*20));
+  const idn=nsc>=.4||dx||(promo.length&&promo.includes(String(c.num).toUpperCase()))||nums.some(x=>x[0]==nk&&x[1]==c.tot)||vd<.25;if(!idn)s-=3;
+  if(s>=3.5&&(nsc>=.5||tx>=6||s>=8||dx||vd<.25))R.push([s,c])});
  R.sort((a,b)=>b[0]-a[0]||(/Holo/i.test(b[1].rar||'')?1:0)-(/Holo/i.test(a[1].rar||'')?1:0)||String(b[1].date).localeCompare(String(a[1].date)));
  const top=R.length?R[0][0]:0,out=R.filter(r=>r[0]>=top*.6).slice(0,15).map(r=>Object.assign(candOf(r[1]),{score:Math.round(r[0]*10)/10}));out.sp=out.length?out[0].name:null;out.top=top;out.gap=R.length>1?top-R[1][0]:top;return out}
-async function scanCanvas(cv){let r=await readCard(cv),cands=r.found?await fpMatch(r.text,r.num):{top:0};
- if(r.land&&cands.top<12){const r2=await readCard(cv,2),c2=await fpMatch(r2.text,r2.num);if(c2.top>cands.top){r=r2;cands=c2}}
- if(!(cands.top>=12&&cands.gap>=0)){await r.full();cands=await fpMatch(r.text,r.num);await (await tw()).setParameters({tessedit_pageseg_mode:'3',tessedit_char_whitelist:''})}
- const all=r.text+' '+r.lab;
+/* ---- Contour de la carte (lignes droites) ---- */
+function quadDetect0(src,opt){opt=opt||{};const MX=opt.mx||480,S=MX/Math.max(src.width,src.height),w=Math.round(src.width*S),h=Math.round(src.height*S),c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d',{willReadFrequently:true});x.drawImage(src,0,0,w,h);const d=x.getImageData(0,0,w,h).data,N=w*h;
+ const g0=new Float32Array(N);for(let i=0;i<N;i++)g0[i]=d[i*4]*.3+d[i*4+1]*.59+d[i*4+2]*.11;
+ const g=new Float32Array(N);for(let y=1;y<h-1;y++)for(let x2=1;x2<w-1;x2++){const i=y*w+x2;g[i]=(g0[i-w-1]+g0[i-w]+g0[i-w+1]+g0[i-1]+g0[i]+g0[i+1]+g0[i+w-1]+g0[i+w]+g0[i+w+1])/9}
+ const M=new Float32Array(N),A=new Float32Array(N);
+ for(let y=2;y<h-2;y++)for(let x2=2;x2<w-2;x2++){const i=y*w+x2,gx=(g[i-w+1]+2*g[i+1]+g[i+w+1])-(g[i-w-1]+2*g[i-1]+g[i+w-1]),gy=(g[i+w-1]+2*g[i+w]+g[i+w+1])-(g[i-w-1]+2*g[i-w]+g[i-w+1]);M[i]=Math.hypot(gx,gy);let a=Math.atan2(gy,gx);if(a<0)a+=Math.PI;A[i]=a}
+ const srt=Float32Array.from(M).sort(),thr=Math.max(20,srt[Math.floor(N*.88)]);
+ const D2=Math.ceil(Math.hypot(w,h)),R2=2*D2+1,DEG=Math.PI/180;
+ const fam=[[],[]];// 0: near-vertical lines (normal ~0°), 1: near-horizontal (normal ~90°)
+ const TH=[];for(let k=-22;k<=22;k++)TH.push(k);
+ const acc=[new Float32Array(TH.length*R2),new Float32Array(TH.length*R2)],cs=[TH.map(t=>Math.cos(t*DEG)),TH.map(t=>Math.cos((90+t)*DEG))],sn=[TH.map(t=>Math.sin(t*DEG)),TH.map(t=>Math.sin((90+t)*DEG))];
+ for(let y=2;y<h-2;y++)for(let x2=2;x2<w-2;x2++){const i=y*w+x2,m=M[i];if(m<thr)continue;const a=A[i]/DEG;// 0..180
+  for(let f=0;f<2;f++){const base=f?90:0;let dlt=a-base;if(dlt>90)dlt-=180;if(dlt<-90)dlt+=180;if(Math.abs(dlt)>30)continue;const wv=Math.min(m,thr*4);
+   for(let k=0;k<TH.length;k++){if(Math.abs(TH[k]-dlt)>10)continue;const r=Math.round(x2*cs[f][k]+y*sn[f][k])+D2;acc[f][k*R2+r]+=wv}}}
+ const lines=[[],[]];
+ for(let f=0;f<2;f++){const a=acc[f],cand=[];for(let k=0;k<TH.length;k++)for(let r=1;r<R2-1;r++){const v=a[k*R2+r];if(v>0)cand.push([v,k,r])}cand.sort((p,q)=>q[0]-p[0]);
+  for(const [v,k,r] of cand){if(lines[f].length>=16)break;if(lines[f].some(L=>Math.abs(L.k-k)<=4&&Math.abs(L.r-r)<=Math.max(6,w*.025)))continue;const t=(f?90:0)+TH[k];lines[f].push({k,r,v,t:t*DEG,rho:r-D2})}}
+ const inter=(L1,L2)=>{const a1=Math.cos(L1.t),b1=Math.sin(L1.t),a2=Math.cos(L2.t),b2=Math.sin(L2.t),det=a1*b2-a2*b1;if(Math.abs(det)<1e-6)return null;return[(L1.rho*b2-L2.rho*b1)/det,(a1*L2.rho-a2*L1.rho)/det]};
+ const sup=(P,Q)=>{const L=Math.hypot(Q[0]-P[0],Q[1]-P[1]),nx=-(Q[1]-P[1])/L,ny=(Q[0]-P[0])/L,ta=Math.atan2(ny,nx);let hit=0,n=0;for(let s=.1;s<=.9;s+=.02){n++;const px=P[0]+(Q[0]-P[0])*s,py=P[1]+(Q[1]-P[1])*s;let ok=0;for(let o=-2;o<=2&&!ok;o++){const xx=Math.round(px+nx*o),yy=Math.round(py+ny*o);if(xx<1||yy<1||xx>=w-1||yy>=h-1)continue;const i=yy*w+xx;if(M[i]<thr*.6)continue;let da=Math.abs(A[i]-((ta%Math.PI)+Math.PI)%Math.PI);if(da>Math.PI/2)da=Math.PI-da;if(da<20*DEG)ok=1}hit+=ok}return hit/n};
+ if(opt.dbg)return{lines:lines.map(F=>F.map(L=>({t:L.t,rho:L.rho/S,v:L.v})))};const out=[];const V=lines[0],H=lines[1];
+ for(let a=0;a<V.length;a++)for(let b=0;b<V.length;b++){if(a==b)continue;for(let c2=0;c2<H.length;c2++)for(let e=0;e<H.length;e++){if(c2==e)continue;
+  const tl=inter(V[a],H[c2]),tr=inter(V[b],H[c2]),br=inter(V[b],H[e]),bl=inter(V[a],H[e]);if(!tl||!tr||!br||!bl)continue;
+  if(tr[0]<=tl[0]||br[0]<=bl[0]||bl[1]<=tl[1]||br[1]<=tr[1])continue;
+  const Q=[tl,tr,br,bl];if(Q.some(P=>P[0]<-w*.03||P[1]<-h*.03||P[0]>w*1.03||P[1]>h*1.03))continue;
+  const Ld=(u,v)=>Math.hypot(u[0]-v[0],u[1]-v[1]),wt=Ld(tl,tr),wb=Ld(bl,br),hl=Ld(tl,bl),hr=Ld(tr,br),ww=(wt+wb)/2,hh=(hl+hr)/2;
+  if(Math.abs(wt-wb)>.25*ww||Math.abs(hl-hr)>.25*hh)continue;const area=ww*hh/N;if(area<(opt.minA||.05)||area>.97)continue;
+  let ar=ww/hh,land=false;if(ar>1){ar=1/ar;land=true}const fit=Math.exp(-Math.pow((ar-.716)/.03,2));if(fit<.15)continue;
+  const ss=[sup(tl,tr),sup(tr,br),sup(br,bl),sup(bl,tl)],mn=Math.min(...ss),mean=(ss[0]+ss[1]+ss[2]+ss[3])/4;if(mn<.2)continue;
+  const sc=(mean*.5+mn*.5)*(.4+.6*fit)*Math.pow(area,opt.ap||.6);out.push({sc,Q:Q.map(P=>[P[0]/S,P[1]/S]),land,ss,ar,area})}}
+ const lp=L=>{const c=Math.cos(L.t),s=Math.sin(L.t);return{p:[L.rho*c,L.rho*s],d:[-s,c]}};
+ for(let a=0;a<V.length;a++)for(let b=0;b<V.length;b++){if(a==b)continue;for(let e=0;e<H.length;e++){const P1=inter(V[a],H[e]),P2=inter(V[b],H[e]);if(!P1||!P2||P2[0]-P1[0]<w*.12)continue;const wd=Math.hypot(P2[0]-P1[0],P2[1]-P1[1]),hd=wd/.716;
+  for(const dir of[-1,1]){const da=lp(V[a]).d,db=lp(V[b]).d,sa=Math.sign(da[1])*dir,sb=Math.sign(db[1])*dir,P4=[P1[0]+da[0]*sa*hd,P1[1]+da[1]*sa*hd],P3=[P2[0]+db[0]*sb*hd,P2[1]+db[1]*sb*hd];
+   const Q=dir<0?[P4,P3,P2,P1]:[P1,P2,P3,P4];if(Q.some(P=>P[0]<-w*.03||P[1]<-h*.03||P[0]>w*1.03||P[1]>h*1.03))continue;const area=wd*hd/N;if(area<(opt.minA||.05)||area>.97)continue;
+   const ss=[sup(Q[0],Q[1]),sup(Q[1],Q[2]),sup(Q[2],Q[3]),sup(Q[3],Q[0])],real=dir<0?[ss[1],ss[2],ss[3]]:[ss[0],ss[1],ss[3]],inf=dir<0?ss[0]:ss[2],mn=Math.min(...real),mean=(real[0]+real[1]+real[2])/3;if(mn<.35)continue;
+   const sc=(mean*.5+mn*.5)*(.78+.15*inf)*Math.pow(area,opt.ap||.6);out.push({sc,Q:Q.map(P=>[P[0]/S,P[1]/S]),land:false,ss,ar:.716,area,inf:1})}}}
+ out.sort((p,q)=>q.sc-p.sc);const res=[];for(const o of out){if(res.some(r=>r.Q.every((P,i)=>Math.hypot(P[0]-o.Q[i][0],P[1]-o.Q[i][1])<Math.max(src.width,src.height)*.02)))continue;res.push(o);if(res.length>=4)break}
+ return res}
+
+function quadDetect(src,opt){opt=opt||{};let bx=opt.roi||sharpBox(src)||{x:0,y:0,w:src.width,h:src.height};const ex=.12,x0=Math.max(0,bx.x-bx.w*ex),y0=Math.max(0,bx.y-bx.h*ex),x1=Math.min(src.width,bx.x+bx.w*(1+ex)),y1=Math.min(src.height,bx.y+bx.h*(1+ex)),c=document.createElement('canvas');c.width=Math.round(x1-x0);c.height=Math.round(y1-y0);c.getContext('2d').drawImage(src,x0,y0,c.width,c.height,0,0,c.width,c.height);
+ const r=quadDetect0(c,Object.assign({},opt,{minA:opt.minA||.12}));r.forEach(o=>{o.Q=o.Q.map(P=>[P[0]+x0,P[1]+y0])});r.roi=[x0,y0,x1,y1];return r}
+/* ---- Empreinte visuelle (identique à tools/vis_hash.py) ---- */
+let CVIS=null,CVISp=null;
+async function cvis(){if(CVIS)return CVIS;if(!CVISp)CVISp=(async()=>{const r=await fetch('cards-vis.bin');if(!r.ok)throw new Error('vis');const b=new Uint8Array(await r.arrayBuffer()),n=b[4]|b[5]<<8|b[6]<<16|b[7]<<24,ok=new Uint8Array(n),hi=new Uint32Array(n),lo=new Uint32Array(n),gr=new Uint8Array(n*48);
+ for(let i=0;i<n;i++){const o=8+i*57;ok[i]=b[o];hi[i]=((b[o+1]<<24)|(b[o+2]<<16)|(b[o+3]<<8)|b[o+4])>>>0;lo[i]=((b[o+5]<<24)|(b[o+6]<<16)|(b[o+7]<<8)|b[o+8])>>>0;gr.set(b.subarray(o+9,o+57),i*48)}return CVIS={n,ok,hi,lo,gr}})();try{return await CVISp}catch(e){CVISp=null;throw e}}
+const DCTc=(n,K)=>{const M=[];for(let k=0;k<K;k++){const r=new Float64Array(n);for(let i=0;i<n;i++)r[i]=Math.cos(Math.PI*(2*i+1)*k/(2*n));M.push(r)}return M},DCR=DCTc(44,8),DCC=DCTc(32,8);
+function visDesc(card){const W=320,H=440,c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d',{willReadFrequently:true});x.drawImage(card,0,0,W,H);const d=x.getImageData(0,0,W,H).data,a=new Float64Array(44*32*3);
+ for(let by=0;by<44;by++)for(let bx=0;bx<32;bx++){let r=0,g=0,b=0;for(let y=by*10;y<by*10+10;y++)for(let x2=bx*10;x2<bx*10+10;x2++){const i=(y*W+x2)*4;r+=d[i];g+=d[i+1];b+=d[i+2]}const o=(by*32+bx)*3;a[o]=r/100;a[o+1]=g/100;a[o+2]=b/100}
+ const gy=new Float64Array(44*32);for(let i=0;i<44*32;i++)gy[i]=a[i*3]*.299+a[i*3+1]*.587+a[i*3+2]*.114;
+ const T=[];for(let u=0;u<8;u++){const t=new Float64Array(32);for(let i=0;i<44;i++){const cu=DCR[u][i];for(let j=0;j<32;j++)t[j]+=cu*gy[i*32+j]}T.push(t)}
+ const low=[];for(let u=0;u<8;u++)for(let v=0;v<8;v++){let s=0;for(let j=0;j<32;j++)s+=T[u][j]*DCC[v][j];low.push(s)}
+ const med=low.slice(1).sort((p,q)=>p-q)[31];let hi=0,lo=0;for(let k=1;k<64;k++){if(low[k]>med){if(k<32)hi|=1<<(31-k);else lo|=1<<(63-k)}}
+ const m=[0,0,0],sd=[0,0,0],N=44*32;for(let i=0;i<N;i++)for(let ch=0;ch<3;ch++)m[ch]+=a[i*3+ch];for(let ch=0;ch<3;ch++)m[ch]/=N;for(let i=0;i<N;i++)for(let ch=0;ch<3;ch++)sd[ch]+=(a[i*3+ch]-m[ch])**2;for(let ch=0;ch<3;ch++)sd[ch]=Math.sqrt(sd[ch]/N)+1e-6;
+ const gr=new Uint8Array(48);let k=0;for(let ry=0;ry<4;ry++)for(let cx=0;cx<4;cx++){const cs=[0,0,0];for(let y=ry*11;y<ry*11+11;y++)for(let x2=cx*8;x2<cx*8+8;x2++)for(let ch=0;ch<3;ch++)cs[ch]+=a[(y*32+x2)*3+ch];for(let ch=0;ch<3;ch++)gr[k++]=Math.max(0,Math.min(255,Math.round(128+(cs[ch]/88-m[ch])/sd[ch]*50)))}
+ return{hi:hi>>>0,lo:lo>>>0,gr}}
+const pc32=v=>{v=v-((v>>>1)&0x55555555);v=(v&0x33333333)+((v>>>2)&0x33333333);return(((v+(v>>>4))&0x0F0F0F0F)*0x01010101)>>>24};
+async function visDist(descs){let V;try{V=await cvis()}catch(e){return null}if(!descs.length)return null;const D=new Float32Array(V.n).fill(9);
+ for(const q of descs)for(let i=0;i<V.n;i++){if(!V.ok[i])continue;const h=(pc32((V.hi[i]^q.hi)>>>0)+pc32((V.lo[i]^q.lo)>>>0))/64;let g=0;const o=i*48;for(let k=0;k<48;k++)g+=Math.abs(V.gr[o+k]-q.gr[k]);const d=.5*h+2*(g/48/255);if(d<D[i])D[i]=d}return D}
+
+async function scanPrep(){try{await Promise.all([tw(),cdb(),cfp().catch(()=>0),cvis().catch(()=>0)])}catch(e){}}
+function cardQuads(src,cam){const L=[],M=Math.max(src.width,src.height),same=(A,B)=>A.every((P,i)=>Math.hypot(P[0]-B[i][0],P[1]-B[i][1])<M*.03);const y=findCard(src);if(y)L.push({Q:y,land:!!y.land});let q=[];try{q=quadDetect(src,cam?{roi:{x:0,y:0,w:src.width,h:src.height},minA:.25}:{})}catch(e){}
+ for(const o of q){if(L.length>=3)break;const Q=o.land?[o.Q[3],o.Q[0],o.Q[1],o.Q[2]]:o.Q;if(L.some(r=>same(r.Q,Q)))continue;L.push({Q,land:o.land})}return L}
+const scSure=c=>{if(!c||!c.length||c.top<15)return false;if(c.gap>=3)return true;const t=c.filter(x=>x.score>=c.top-3),b=x=>crN(x.name).split(' ')[0];return t.every(x=>b(x)==b(t[0]))};
+async function scanCanvas(cv,o){o=o||{};await scanPrep();const wk=await tw(),rd=async(c,p)=>{await wk.setParameters(p);return((await wk.recognize(c)).data.text||'').trim()},FREE={tessedit_pageseg_mode:'11',tessedit_char_whitelist:''},NUMS={tessedit_pageseg_mode:'11',tessedit_char_whitelist:'0123456789/'};
+ const CW=900,CH=1257,zN={x:0,y:0,w:CW,h:CH*.25},zB={x:0,y:CH*.88,w:CW,h:CH*.12},zA={x:0,y:0,w:CW,h:CH};
+ const Qs=cardQuads(cv,o.cam),cards=Qs.map(q=>warpC(cv,q.Q,CW,CH)),descs=cards.map(visDesc);let VD=await visDist(descs),text='',num='',lab='',best=null,steps=[];
+ const run=async s=>{best=await fpMatch(text,num,VD);steps.push(s+':'+(best.top||0).toFixed(1));return scSure(best)};
+ if(cards.length){let bi=0;for(let k=0;k<Math.min(3,cards.length);k++){const t=await rd(prepC(cards[k],zN,'g',1),FREE)+'\n'+await rd(prepC(cards[k],zN,'flat',1),FREE),nn=await rd(prepC(cards[k],zB,'g',2.5),NUMS),c=await fpMatch(t,nn,VD);steps.push('z'+k+':'+(c.top||0).toFixed(1));if(!best||c.top>best.top){best=c;bi=k;text=t;num=nn}if(scSure(c)||c.top>=8)break}
+  if(bi){[cards[0],cards[bi]]=[cards[bi],cards[0]];[Qs[0],Qs[bi]]=[Qs[bi],Qs[0]]}const c0=cards[0];
+  if(!scSure(best)){text+='\n'+await rd(prepC(c0,zA,'flat',1.2),FREE);if(!/\d{1,3}\s*\/\s*\d{2,3}/.test(num))num+=' '+await rd(prepC(c0,zB,'flat'),NUMS);
+   if(!await run('carte')&&Qs[0].land){const c2=warpC(cv,rotQ(Qs[0].Q,2),CW,CH);descs.push(visDesc(c2));VD=await visDist(descs);text+='\n'+await rd(prepC(c2,zN,'flat',1),FREE)+'\n'+await rd(prepC(c2,zA,'flat'),FREE);num+=' '+await rd(prepC(c2,zB,'g'),NUMS);await run('rotation')}
+   if(!scSure(best)&&cards[1]){text+='\n'+await rd(prepC(cards[1],zN,'flat',1),FREE)+'\n'+await rd(prepC(cards[1],zA,'flat'),FREE);num+=' '+await rd(prepC(cards[1],zB,'g'),NUMS);await run('contour2')}}
+  const q=Qs[0].Q,top=Math.min(...q.map(P=>P[1])),hgt=Math.max(...q.map(P=>P[1]))-top,lx=Math.min(...q.map(P=>P[0])),rx=Math.max(...q.map(P=>P[0]));
+  if(!o.cam&&top>cv.height*.08){const y0=Math.max(0,top-hgt*.4),lb={x:lx,y:y0,w:rx-lx,h:top-y0},lc=prepC(cv,lb,'g',.25),ld=lc.getContext('2d').getImageData(0,0,lc.width,lc.height).data;let lm=0;for(let i=0;i<ld.length;i+=4)lm+=ld[i];lm/=ld.length/4;if(lm>165)lab=await rd(prepC(cv,lb,'g'),FREE)}}
+ if(!scSure(best)){const ar=cv.width/cv.height,bx=(o.cam||(!cards.length&&ar>.6&&ar<.8))?{x:0,y:0,w:cv.width,h:cv.height}:(sharpBox(cv)||{x:0,y:0,w:cv.width,h:cv.height});
+  text+='\n'+await rd(prepC(cv,bx,'g'),FREE)+'\n'+await rd(prepC(cv,bx,'flat'),FREE);if(!/\d{1,3}\s*\/\s*\d{2,3}/.test(num))num+=' '+await rd(prepC(cv,{x:bx.x,y:bx.y+bx.h*.8,w:bx.w,h:bx.h*.2},'g'),NUMS);await run('photo')}
+ await wk.setParameters({tessedit_pageseg_mode:'3',tessedit_char_whitelist:''});
+ let thumb='';if(cards.length){try{const t=document.createElement('canvas');t.width=300;t.height=419;t.getContext('2d').drawImage(cards[0],0,0,300,419);thumb=t.toDataURL('image/jpeg',.82)}catch(e){}}
+ const r={text,num,lab,found:cards.length>0,thumb,steps},cands=best||[],all=text+' '+lab;
+
 
  const gm=all.match(/\b(PSA|CGC|BGS|SGC)\b/i),grd=gm?((all.match(/(?:GEM\s*M[IT]+|MINT|NM[- ]?MT|PRISTINE)\s*\+?\s*(10|9\.5|9|8\.5|8|7\.5|7|6)/i)||[])[1]||null):null;
  const nm=(r.num+' '+r.text).match(/(\d{1,3})\s*\/\s*(\d{2,3})/);
  const j={name:null,number:nm?nm[1]+'/'+nm[2]:null,set:null,finish:null,grader:gm?gm[1].toUpperCase():null,grade:grd,raw:r,cands,thumb:r.thumb};
  if(cands.length&&(cands.length==1||cands.gap>=3)){const c=cands[0];Object.assign(j,{name:c.name,set:c.set,number:c.number,finish:c.fin||null,off:c.img,pid:c.id})}else if(cands.length){const tie=cands.filter(c=>c.score>=cands[0].score-.5);if(tie.every(c=>c.name==tie[0].name)){j.name=tie[0].name;if(tie.every(c=>c.set==tie[0].set))j.set=tie[0].set}}return j}
 let CAM=null;
-async function camOpen(tg){if(!(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia)){TSC=tg?1:0;return $('#ph').click()}
+async function camOpen(tg){scanPrep();if(!(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia)){TSC=tg?1:0;return $('#ph').click()}
  const ov=document.createElement('div');ov.id='cam';ov.innerHTML=`<video playsinline autoplay muted></video><div class="cf"><div class="cfr"></div></div><p class="ct">${tx('Place la carte dans le cadre, bien à plat et sans reflet')}</p><div class="cb"><button data-c="file">${tx('Photo')}</button><button data-c="shot" class="sh" aria-label="${tx('Prendre la photo')}"></button><button data-c="torch">💡</button></div><button data-c="x" class="cx">✕</button>`;document.body.appendChild(ov);
  const v=ov.querySelector('video');let st;try{st=await navigator.mediaDevices.getUserMedia({audio:false,video:{facingMode:{ideal:'environment'},width:{ideal:3840},height:{ideal:2160}}})}catch(e){ov.remove();TSC=tg?1:0;flash(tx('Caméra indisponible : choisis une photo'));return $('#ph').click()}
  v.srcObject=st;CAM={ov,v,st,tg,torch:false};
@@ -618,7 +685,7 @@ function camClose(){if(!CAM)return;try{CAM.st.getTracks().forEach(t=>t.stop())}c
 async function scanFromCanvas(cv,tg){if(!tg){F._prev={name:F.name,set:F.set,number:F.number,pr:F.pr,gco:F.gco,gg:F.gg,img:F.img||''};const t=document.createElement('canvas'),r=420/cv.height;t.width=Math.round(cv.width*r);t.height=420;t.getContext('2d').drawImage(cv,0,0,t.width,t.height);F.img=t.toDataURL('image/jpeg',.82);render()}
  flash(TW?tx('Lecture de la carte…'):tx('Lecture de la carte… (le premier scan peut prendre 10 à 20 secondes)'));
  try{if(STANDALONE&&SBS&&ACC.approved&&!window.NOAI){try{const blob=await new Promise(r=>cv.toBlob(r,'image/jpeg',.9));const j=await aiScan(blob);return applyScan(j,tg,'ai')}catch(e){if(/HTTP 404|no_provider|Failed to fetch|NOT_FOUND/i.test(e.message))window.NOAI=1}}
-  applyScan(await scanCanvas(cv),tg,'free')}catch(e){flash(tx('Scan impossible')+' ('+(e.message||'erreur')+') : '+tx('saisis la carte à la main.'))}}
+  applyScan(await scanCanvas(cv,{cam:true}),tg,'free')}catch(e){flash(tx('Scan impossible')+' ('+(e.message||'erreur')+') : '+tx('saisis la carte à la main.'))}}
 
 let PK={open:false,list:[],tg:false,busy:false,q:'',mode:'pick'};
 function openPick(list,tg){PK={open:true,list,tg:!!tg,busy:false,q:'',mode:'pick',ed:false};render()}
