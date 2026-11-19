@@ -234,7 +234,7 @@ function vPl(){const inP=d=>{if(B.p=='all')return true;const x=new Date(d);if(B.
 
 const SW=[['','#2563eb'],['#7c3aed','#7c3aed'],['#e11d48','#e11d48'],['#ea580c','#ea580c'],['#059669','#059669'],['#0891b2','#0891b2'],['#db2777','#db2777']],uiB=(k,v,t)=>`<button class="chip ${UI[k]==v?'on':''}" data-a="ui" data-k="${k}" data-v="${v}">${t}</button>`;
 let SS='ev';
-const APP_UPDATED='2026-11-18T19:25:00-05:00';
+const APP_UPDATED='2026-11-18T19:32:00-05:00';
 const appUpd=()=>'Dernière mise à jour de l’app : '+new Date(APP_UPDATED).toLocaleString(LC(),{dateStyle:'long',timeStyle:'short'});
 const SECN={buy:'Acheter',stock:'Stock',sv:'Ventes',gr:'Grading',tr:'Échanges',pl:'Bilan',gx:'Croissance',ex:'Dépenses',log:'Suivi',set:'Réglages'};
 function goHome(){sheet=null;EE={id:''};CR.open=false;QS.open=TP.open=false;QS.on=false;tab='home';HS=true;HA=false;render()}
@@ -349,7 +349,7 @@ function vLog(){const a=[];S.items.forEach(i=>hist(i).forEach(h=>a.push({...h,i}
  return`<h2>Suivi des mouvements</h2><p class="mut">Chaque achat, vente, changement de statut et annulation est enregistré carte par carte.</p>${r.length?(DESK()?`<div class="tw"><table class="tg"><tr><th>Date</th><th>Mouvement</th><th>Carte</th><th>Détail</th></tr>${r.map(h=>`<tr data-open="${h.i.id}"><td>${fd(h.t)}</td><td>${EVL[h.e]||h.e}</td><td><b>${E(h.i.name)}</b></td><td>${E(h.note)}</td></tr>`).join('')}</table></div>`:r.map(h=>`<button class="it" data-open="${h.i.id}"><span><b>${E(h.i.name)}</b><br><span class="mut">${EVL[h.e]||h.e} · ${E(h.note)}</span></span><span class="mut">${fd(h.t)}</span></button>`).join('')):'<p class="mut">Aucun mouvement pour l’instant.</p>'}`}
 function pv(){const it=S.items.find(i=>i.id==sheet);if(!it||it.status=='sold'||!$('#pv'))return;const c=calc(it);$('#pv').innerHTML=L(`Frais ${M(c.fee)} · Net ${M(c.net)}<br><b class="${c.profit>=0?'ok':'ko'}">Profit ${M(c.profit)}</b>`)}
 const thumb=(it,lg)=>it.img?`<img class="th${lg?' lg':''}" src="${E(it.img)}" alt="${E((it.name||'?')[0])}" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:this.className,textContent:this.alt}))">`:`<div class="th${lg?' lg':''}">${E((it.name||'?')[0])}</div>`;
-async function thumbData(file){const b=await createImageBitmap(file),r=Math.min(1,220/Math.max(b.width,b.height)),c=document.createElement('canvas');c.width=Math.round(b.width*r);c.height=Math.round(b.height*r);c.getContext('2d').drawImage(b,0,0,c.width,c.height);return c.toDataURL('image/jpeg',.7)}
+async function thumbData(file){const b=await createImageBitmap(file),r=Math.min(1,420/Math.max(b.width,b.height)),c=document.createElement('canvas');c.width=Math.round(b.width*r);c.height=Math.round(b.height*r);const x=c.getContext('2d');x.imageSmoothingEnabled=true;x.imageSmoothingQuality='high';x.drawImage(b,0,0,c.width,c.height);return c.toDataURL('image/jpeg',.8)}
 let LE='';const canLoad=u=>new Promise(r=>{const i=new Image();i.onload=()=>r(true);i.onerror=()=>r(false);i.src=u;setTimeout(()=>r(false),8000)});
 let GRP=null;const PRODC={};
 const nz=s=>String(s||'').toLowerCase().replace(/&/g,' and ').replace(/[^a-z0-9]+/g,' ').trim();
@@ -442,7 +442,7 @@ function render(){fixEv();snap();$('#main').innerHTML=L((tab=='home'?'':`<div cl
 const flash=m=>{msg=m;render();setTimeout(()=>{if(msg==m){msg='';const t=$('#toast');if(t)t.textContent=''}},2500)};
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,5);
 
-async function shrink(file){const b=await createImageBitmap(file),r=Math.min(1,768/Math.max(b.width,b.height)),c=document.createElement('canvas');c.width=b.width*r;c.height=b.height*r;c.getContext('2d').drawImage(b,0,0,c.width,c.height);return new Promise(r=>c.toBlob(r,'image/jpeg',.7))}
+async function shrink(file){const b=await createImageBitmap(file),r=Math.min(1,1400/Math.max(b.width,b.height)),c=document.createElement('canvas');c.width=Math.round(b.width*r);c.height=Math.round(b.height*r);const x=c.getContext('2d');x.imageSmoothingEnabled=true;x.imageSmoothingQuality='high';x.drawImage(b,0,0,c.width,c.height);return new Promise(r=>c.toBlob(r,'image/jpeg',.88))}
 async function scan(file,tg){flash('Analyse en cours…');if(!tg)try{F.img=await thumbData(file)}catch(e){}
  try{const sm=window.claude&&await claude.use('sample');if(!sm)return flash('Scan IA indisponible ici : saisis la carte à la main.');
   const lim=await sm.limits();if(!lim.images)return flash('Scan par image indisponible ici.');
