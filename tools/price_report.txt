@@ -1,9 +1,8 @@
-fail SM - Team Up HTTP Error 401: Unauthorized
+fail SM Promos HTTP Error 401: Unauthorized
+ex1 | Ruby & Sapphire | 0/109 | groupes:  | ex: 1,10,100,101
 tk1a | EX Trainer Kit Latias | 0/10 | groupes:  | ex: 1,10,2,3
 tk1b | EX Trainer Kit Latios | 0/10 | groupes:  | ex: 1,10,2,3
 tk2b | EX Trainer Kit 2 Minun | 0/12 | groupes:  | ex: 1,10,11,12
-dp1 | Diamond & Pearl | 0/130 | groupes:  | ex: 1,10,100,101
-xy1 | XY | 0/146 | groupes:  | ex: 1,10,100,101
 
 TOUS LES GROUPES TCGCSV:
 Alternate Art Promos
