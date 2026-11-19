@@ -267,7 +267,7 @@ function vPl(){const inP=d=>{if(B.p=='all')return true;const x=new Date(d);if(B.
 
 const SW=[['','#2563eb'],['#7c3aed','#7c3aed'],['#e11d48','#e11d48'],['#ea580c','#ea580c'],['#059669','#059669'],['#0891b2','#0891b2'],['#db2777','#db2777']],uiB=(k,v,t)=>`<button class="chip ${UI[k]==v?'on':''}" data-a="ui" data-k="${k}" data-v="${v}">${t}</button>`;
 let SS='ev';
-const APP_UPDATED='2026-11-19T12:39:24-05:00';
+const APP_UPDATED='2026-11-19T13:24:33-05:00';
 const appUpd=()=>'Dernière mise à jour de l’app : '+new Date(APP_UPDATED).toLocaleString(LC(),{dateStyle:'long',timeStyle:'short'});
 const SECN={buy:'Acheter',stock:'Stock',sv:'Ventes',gr:'Grading',tr:'Échanges',pl:'Bilan',gx:'Croissance',ex:'Dépenses',log:'Suivi',set:'Réglages'};
 function goHome(){sheet=null;EE={id:''};CR.open=false;QS.open=TP.open=false;QS.on=false;tab='home';HS=true;HA=false;render()}
@@ -511,7 +511,7 @@ async function ptcgFind(n,t,name,text){let db;try{db=await cdb()}catch(e){return
  const out=L.slice(0,40).map(candOf);out.sp=sp;return out}
 let PDB=null,PDBp=null;async function pdb(){if(PDB)return PDB;if(!PDBp)PDBp=(async()=>{const r=await fetch('prices.json');if(!r.ok)throw new Error('p');return PDB=await r.json()})();try{return await PDBp}catch(e){PDBp=null;return null}}
 const pPick=(o,ed,pr)=>{if(!o)return null;const ord=ed?['1h','1n','h','n','r']:pr=='Reverse'?['r','h','n']:/Holo|Full Art|Alt Art|Gradée/.test(pr||'')?['h','n','r']:['n','h','r'];for(const k of ord)if(o[k])return o[k];return null};
-async function priceOf(id,ed,pr){const db=await pdb(),[sid,...nn]=String(id).split('-'),key=sid+'-'+String(nn.join('-')).toLowerCase().replace(/^0+(?=\d)/,''),v=db&&db.p?pPick(db.p[key],ed,pr):null;if(v)return v;return priceApi(id,ed)}
+async function priceOf(id,ed,pr){const db=await pdb(),[sid,...nn]=String(id).split('-'),key=sid+'-'+String(nn.join('-')).split('/')[0].trim().toLowerCase().replace(/^([a-z]*)0+(?=\d)/,'$1'),v=db&&db.p?pPick(db.p[key],ed,pr):null;if(v)return v;return priceApi(id,ed)}
 async function priceApi(id,ed){try{const ac=new AbortController(),tm=setTimeout(()=>ac.abort(),8000),r=await fetch(PTCG+'/'+encodeURIComponent(id),{signal:ac.signal});clearTimeout(tm);if(!r.ok)return null;const p=((await r.json()).data||{}).tcgplayer;const E2=p&&p.prices?Object.entries(p.prices).filter(([k,x])=>x&&x.market):[];const pick=E2.find(([k])=>ed?/1stEdition/i.test(k):!/1stEdition/i.test(k))||E2[0];return pick?pick[1].market:null}catch(e){return null}}
 /*SUG*/
 let SUG=[],SUGt=null,SUGq='';
