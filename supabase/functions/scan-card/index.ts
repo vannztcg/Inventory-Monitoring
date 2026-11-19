@@ -1,5 +1,8 @@
-// Inventory Monitoring – scan IA Claude (Supabase Edge Function « scan-card »)
-// Secret requis : ANTHROPIC_API_KEY (Edge Functions → Secrets). Optionnel : SCAN_MODEL.
+// Inventory Monitoring – scan IA (Supabase Edge Function « scan-card »)
+// Secrets : ANTHROPIC_API_KEY (obligatoire)
+// Optionnels : SCAN_MODEL (IA illimitée, défaut claude-sonnet-5-5),
+//              SCAN_MODEL_FREE (IA standard, défaut claude-haiku-5-5),
+//              FREE_SCANS_PER_MONTH (quota IA standard, défaut 100)
 const cors = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
@@ -11,19 +14,34 @@ const json = (b: unknown, s = 200) =>
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
   try {
-    // 1) Vérifier que l'utilisateur a droit au scan IA (admin ou liste ai_users)
-    const auth = req.headers.get("Authorization") ?? "";
-    const apikey = req.headers.get("apikey") ?? "";
-    const acc = await fetch(`${Deno.env.get("SUPABASE_URL")}/rest/v1/rpc/my_access`, {
-      method: "POST",
-      headers: { apikey, Authorization: auth, "Content-Type": "application/json" },
-      body: "{}",
-    }).then((r) => (r.ok ? r.json() : null)).catch(() => null);
-    if (!acc || !(acc.ai || acc.admin)) return json({ error: "not_allowed" }, 403);
+    const base = Deno.env.get("SUPABASE_URL");
+    const h = {
+      apikey: req.headers.get("apikey") ?? "",
+      Authorization: req.headers.get("Authorization") ?? "",
+      "Content-Type": "application/json",
+    };
+    const rpc = (fn: string) =>
+      fetch(`${base}/rest/v1/rpc/${fn}`, { method: "POST", headers: h, body: "{}" })
+        .then((r) => (r.ok ? r.json() : null)).catch(() => null);
 
-    // 2) Lire la carte avec Claude
+    // 1) Accès : il faut être approuvé
+    const acc = await rpc("my_access");
+    if (!acc || !acc.approved) return json({ error: "not_allowed" }, 403);
+    const premium = !!(acc.ai || acc.admin);
+
+    // 2) Quota mensuel pour l'IA standard
+    if (!premium) {
+      const n = await rpc("use_scan");
+      const lim = Number(Deno.env.get("FREE_SCANS_PER_MONTH") ?? 100);
+      if (typeof n === "number" && n > lim) return json({ error: "quota" }, 429);
+    }
+
+    // 3) Lecture de la carte par Claude
     const { image, mediaType, prompt } = await req.json();
     if (!image) return json({ error: "no_image" }, 400);
+    const model = premium
+      ? (Deno.env.get("SCAN_MODEL") || "claude-sonnet-5-5")
+      : (Deno.env.get("SCAN_MODEL_FREE") || "claude-haiku-5-5");
     const r = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: {
@@ -32,13 +50,13 @@ Deno.serve(async (req) => {
         "content-type": "application/json",
       },
       body: JSON.stringify({
-        model: Deno.env.get("SCAN_MODEL") || "claude-sonnet-5-5",
-        max_tokens: 400,
+        model,
+        max_tokens: 500,
         messages: [{
           role: "user",
           content: [
             { type: "image", source: { type: "base64", media_type: mediaType || "image/jpeg", data: image } },
-            { type: "text", text: String(prompt || "Lis cette carte Pokémon et réponds en JSON {name, number, set, finish, grader, grade}.").slice(0, 2000) },
+            { type: "text", text: String(prompt || "Lis cette carte Pokémon et réponds en JSON {name, number, set, finish, grader, grade}.").slice(0, 3000) },
           ],
         }],
       }),
@@ -47,7 +65,7 @@ Deno.serve(async (req) => {
     if (!r.ok) return json({ error: j?.error?.message ?? `anthropic ${r.status}` }, 502);
     const txt: string = j?.content?.[0]?.text ?? "";
     const m = txt.match(/\{[\s\S]*\}/);
-    return json(m ? JSON.parse(m[0]) : {});
+    return json({ ...(m ? JSON.parse(m[0]) : {}), model });
   } catch (e) {
     return json({ error: String(e) }, 500);
   }
