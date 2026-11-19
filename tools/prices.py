@@ -6,12 +6,15 @@ import json, re, time, unicodedata, urllib.request, datetime
 D = json.load(open('cards-db.json'))
 UA = {'User-Agent': 'Mozilla/5.0 InventoryMonitoring-prices'}
 def get(u, tries=3):
+    if 'tcgcsv' in u: tries = 6
     for t in range(tries):
         try:
             with urllib.request.urlopen(urllib.request.Request(u, headers=UA), timeout=60) as r: return json.loads(r.read())
         except Exception as e:
-            err = e; time.sleep(2 + 3 * t)
+            err = e; code = getattr(e, 'code', 0)
+            time.sleep((15 * (t + 1)) if code in (401, 403, 429) else (2 + 3 * t))
     raise err
+GC = {}
 KEY = {'normal': 'n', 'holofoil': 'h', 'reverseHolofoil': 'r', '1stEditionHolofoil': '1h', '1stEditionNormal': '1n', '1stEdition': '1n', 'unlimitedHolofoil': 'h', 'unlimited': 'n'}
 SUB = {'Normal': 'n', 'Holofoil': 'h', 'Reverse Holofoil': 'r', '1st Edition Holofoil': '1h', '1st Edition Normal': '1n', '1st Edition': '1n', 'Unlimited Holofoil': 'h', 'Unlimited': 'n'}
 nk = lambda s: re.sub(r'^([a-z]*)0+(?=\d)', r'\1', str(s).split('/')[0].strip().lower())
@@ -30,7 +33,8 @@ except Exception as e:
 gname = {}
 for g in groups: gname.setdefault(norm(g['name']), []).append(g)
 SETN = {s[0]: s[1] for s in D['sets']}
-ALIAS = {'svp': ['svscarletvioletpromocards', 'scarletvioletpromos'], 'swshp': ['swshswordshieldpromocards', 'swordshieldpromos'], 'smp': ['smpromos', 'sunmoonpromos'], 'xyp': ['xypromos'], 'bwp': ['blackandwhitepromos', 'bwpromos'], 'dpp': ['diamondandpearlpromos', 'dppromos'], 'hsp': ['hgsspromos'], 'basep': ['wotcpromo', 'wizardsblackstarpromos'], 'np': ['nintendopromos'], 'mep': ['mepromos', 'megaevolutionpromos']}
+ALIAS = {'svp': ['svscarletvioletpromocards', 'scarletvioletpromos'], 'swshp': ['swshswordshieldpromocards', 'swordshieldpromos'], 'smp': ['smpromos', 'sunmoonpromos'], 'xyp': ['xypromos'], 'bwp': ['blackandwhitepromos', 'bwpromos'], 'dpp': ['diamondandpearlpromos', 'dppromos'], 'hsp': ['hgsspromos'], 'basep': ['wotcpromo', 'wizardsblackstarpromos'], 'np': ['nintendopromos'], 'mep': ['memegaevolutionpromo', 'mepromos', 'megaevolutionpromos'], 'tk1a': ['extrainerkitlatias'], 'tk1b': ['extrainerkitlatios'], 'tk2a': ['extrainerkit2plusle'], 'tk2b': ['extrainerkit2minun']}
+for y in range(2011, 2030): ALIAS[f'mcd{str(y)[2:]}'] = [f'mcdonaldspromos{y}', f'mcdonaldscollection{y}']
 def groups_for(sid):
     n = norm(SETN[sid]); out = []
     for a in ALIAS.get(sid, []):
@@ -44,8 +48,9 @@ def groups_for(sid):
 for sid, nums in missing.items():
     for g in groups_for(sid):
         try:
-            prods = get(f'https://tcgcsv.com/tcgplayer/3/{g["groupId"]}/products')['results']
-            prices = get(f'https://tcgcsv.com/tcgplayer/3/{g["groupId"]}/prices')['results']
+            if g['groupId'] not in GC:
+                GC[g['groupId']] = (get(f'https://tcgcsv.com/tcgplayer/3/{g["groupId"]}/products')['results'], get(f'https://tcgcsv.com/tcgplayer/3/{g["groupId"]}/prices')['results']); time.sleep(.8)
+            prods, prices = GC[g['groupId']]
         except Exception as e: print('tcgcsv fail', g['name'], e); REP.append(f'fail {g["name"]} {e}'); continue
         num = {}
         for p in prods:
