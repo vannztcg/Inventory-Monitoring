@@ -267,7 +267,7 @@ function vPl(){const inP=d=>{if(B.p=='all')return true;const x=new Date(d);if(B.
 
 const SW=[['','#2563eb'],['#7c3aed','#7c3aed'],['#e11d48','#e11d48'],['#ea580c','#ea580c'],['#059669','#059669'],['#0891b2','#0891b2'],['#db2777','#db2777']],uiB=(k,v,t)=>`<button class="chip ${UI[k]==v?'on':''}" data-a="ui" data-k="${k}" data-v="${v}">${t}</button>`;
 let SS='ev';
-const APP_UPDATED='2026-11-19T03:39:11-05:00';
+const APP_UPDATED='2026-11-19T11:49:41-05:00';
 const appUpd=()=>'Dernière mise à jour de l’app : '+new Date(APP_UPDATED).toLocaleString(LC(),{dateStyle:'long',timeStyle:'short'});
 const SECN={buy:'Acheter',stock:'Stock',sv:'Ventes',gr:'Grading',tr:'Échanges',pl:'Bilan',gx:'Croissance',ex:'Dépenses',log:'Suivi',set:'Réglages'};
 function goHome(){sheet=null;EE={id:''};CR.open=false;QS.open=TP.open=false;QS.on=false;tab='home';HS=true;HA=false;render()}
@@ -569,20 +569,20 @@ let NIDF=null;
 async function fpMatch(text,numTxt,VD){const db=await cdb();let fp=null;try{fp=await cfp()}catch(e){}
  if(!NIDF){const df=new Map();db.cards.forEach(c=>new Set(c.k.split(' ')).forEach(t=>df.set(t,(df.get(t)||0)+1)));NIDF=t=>Math.log(db.cards.length/(df.get(t)||1))}
  const T=crN(text),Tn=T.replace(/\b[a-z]*olves? (?:from|fr[a-z]*) [a-z]+/g,' '),Wn=new Set(Tn.split(' ')),Ws=new Set(T.split(' ')),W=[...Ws].filter(w=>w.length>=4),Wl=new Map();W.forEach(w=>{const l=w.length;if(!Wl.has(l))Wl.set(l,[]);Wl.get(l).push(w)});
- const fz=w=>{if(Ws.has(w))return 1;if(w.length<6)return 0;const tol=w.length>=9?2:1;let b=0;for(let l=w.length-tol;l<=w.length+tol;l++){const A=Wl.get(l);if(!A)continue;for(const o of A){if(o[0]!=w[0]&&o[1]!=w[1]&&o[o.length-1]!=w[w.length-1])continue;const v=lev(o,w);if(v<=tol){b=Math.max(b,v==1?.8:.55);if(v==1)return b}}}
+ const fz=w=>{if(Ws.has(w))return 1;if(w.length<6)return 0;const tol=w.length>=7?2:1;let b=0;for(let l=w.length-tol;l<=w.length+tol;l++){const A=Wl.get(l);if(!A)continue;for(const o of A){if(o[0]!=w[0]&&o[1]!=w[1]&&o[o.length-1]!=w[w.length-1])continue;const v=lev(o,w);if(v<=tol){b=Math.max(b,v==1?.8:.55);if(v==1)return b}}}
   if(!b&&w.length>=6)for(const o of W)if(o.length>=5&&(o.includes(w.slice(1))||o.includes(w.slice(0,-1))))return .7;return b};
  const memo=new Map(),m=w=>{let v=memo.get(w);if(v===undefined){v=fz(w);memo.set(w,v)}return v},mn=new Map(),mN=t=>{let v=mn.get(t);if(v===undefined){v=Wn.has(t)?1:(Tn.includes(t)?m(t):(m(t)&&[...Wn].some(o=>o.length>=4&&lev(o,t)<=2)?m(t):0));mn.set(t,v)}return v};
  const all=String(numTxt||'')+' '+text,nums=[...all.matchAll(/(\d{1,3})\s*[\/|]\s*(\d{2,3})/g)].filter(x=>+x[1]<=+x[2]+120).map(x=>[db.nk(x[1]),+x[2]]),tots=new Set(nums.map(x=>x[1])),digits=String(numTxt||'').replace(/[^0-9]/g,'');
- const promo=[...T.toUpperCase().matchAll(/\b(SWSH|SVP|SV|SM|XY|BW|DP|HGSS|MEP|ME)\s?(\d{2,3})\b/g)].map(x=>x[1]+x[2]);
+ const promo=[...T.toUpperCase().matchAll(/\b(SWSH|SVP|SV|SM|XY|BW|DP|HGSS|MEP|ME)\s?(?:EN\s?)?(\d{2,3})\b/g)].map(x=>x[1]+x[2]),pz=[...T.toUpperCase().matchAll(/\b(SVP|MEP)\s?(?:EN\s?)?(\d{2,3})\b/g)].map(x=>x[1].toLowerCase()+'-'+(+x[2])),isP=c=>promo.includes(String(c.num).toUpperCase())||pz.includes(c.sid+'-'+db.nk(c.num));
  const dexs=new Set([...T.matchAll(/no\s?(\d{1,4})\b/g)].map(x=>String(+x[1])));
  const SUF=new Set(['ex','gx','v','vmax','vstar','lv','x','break','prime','star','s','the','of','pokemon','energy','basic','team','dark','light']),R=[];
  db.cards.forEach((c,i)=>{let nw=0,nm=0,ns=0;for(const t of c.k.split(' ')){if(!t)continue;if(SUF.has(t)||t.length<3){if(t.length>=2&&Ws.has(t))ns+=.4;else if(/^(ex|gx|v|vmax|vstar|lv|x|break|prime)$/.test(t))ns-=2.5;continue}const f=NIDF(t),bf=fp&&fp.cw[t]!=null?fp.cw[t]:1;nw+=f;nm+=mN(t)*f*bf}
   const nsc=nw?nm/nw:0;let s=nsc*8+(nsc>=.99?1:0)+ns,tx=0,dx=0;const f=fp&&fp.c[i];
-  if(f){for(const id of f.ids){const v=m(fp.w[id]);if(v)tx+=v*(fp.f[id]||1.5)}s+=Math.min(tx,24)*.25;if(f.hp&&Ws.has(f.hp))s+=.5;if(f.dex&&dexs.has(f.dex)){s+=3.5;dx=1}}
+  let rare=0;if(f){for(const id of f.ids){const v=m(fp.w[id]);if(v){tx+=v*(fp.f[id]||1.5);if(v==1&&(fp.f[id]||0)>=6&&fp.w[id].length>=7)rare++}}s+=Math.min(tx,24)*.25;if(f.hp&&Ws.has(f.hp))s+=.5;if(f.dex&&dexs.has(f.dex)){s+=3.5;dx=1}}
   const nk=db.nk(c.num);if(nums.some(x=>x[0]==nk&&x[1]==c.tot))s+=8;else if(nums.some(x=>x[0]==nk&&nk.length>=2))s+=2;else{if(tots.has(c.tot))s+=1.2;if(digits.length>=4&&digits.includes(String(nk)+String(c.tot)))s+=3}
-  if(promo.length&&promo.includes(String(c.num).toUpperCase()))s+=8;
+  if(isP(c))s+=8;
   const vd=VD?VD[i]:9;if(vd<9)s+=Math.max(-3,Math.min(5,(.47-vd)*20));
-  const idn=nsc>=.4||dx||(promo.length&&promo.includes(String(c.num).toUpperCase()))||nums.some(x=>x[0]==nk&&x[1]==c.tot)||vd<.25;if(!idn)s-=3;
+  const idn=nsc>=.4||dx||rare||isP(c)||nums.some(x=>x[0]==nk&&x[1]==c.tot)||vd<.25;if(!idn)s-=3;
   if(s>=3.5&&(nsc>=.5||tx>=6||s>=8||dx||vd<.25))R.push([s,c])});
  R.sort((a,b)=>b[0]-a[0]||(/Holo/i.test(b[1].rar||'')?1:0)-(/Holo/i.test(a[1].rar||'')?1:0)||String(b[1].date).localeCompare(String(a[1].date)));
  const top=R.length?R[0][0]:0,out=R.filter(r=>r[0]>=top*.6).slice(0,15).map(r=>Object.assign(candOf(r[1]),{score:Math.round(r[0]*10)/10}));out.sp=out.length?out[0].name:null;out.top=top;out.gap=R.length>1?top-R[1][0]:top;return out}
