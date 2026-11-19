@@ -1,5 +1,6 @@
-fail SM Promos HTTP Error 401: Unauthorized
-ex1 | Ruby & Sapphire | 0/109 | groupes:  | ex: 1,10,100,101
+fail SV: Prismatic Evolutions HTTP Error 401: Unauthorized
+base1 | Base | 0/102 | groupes:  | ex: 1,10,100,101
+ecard1 | Expedition Base Set | 101/165 | groupes: Base Set | ex: 1,10,100,101
 tk1a | EX Trainer Kit Latias | 0/10 | groupes:  | ex: 1,10,2,3
 tk1b | EX Trainer Kit Latios | 0/10 | groupes:  | ex: 1,10,2,3
 tk2b | EX Trainer Kit 2 Minun | 0/12 | groupes:  | ex: 1,10,11,12
