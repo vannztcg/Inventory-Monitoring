@@ -15,14 +15,17 @@ jobs:
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
       - run: python tools/prices.py
+      - run: python tools/hist.py
       - run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add prices.json tools/price_report.txt
+          git add prices.json tools/price_report.txt tools/pmap.json hist prices-chg.json
           git commit -m "Prix des cartes $(date +%F) [skip ci]" || echo "rien a changer"
           git pull --rebase -X theirs origin main
           git push origin HEAD:main

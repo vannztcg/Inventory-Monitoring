@@ -23,7 +23,7 @@ norm = lambda s: re.sub(r'[^a-z0-9]', '', unicodedata.normalize('NFD', str(s).lo
 want = {}
 for r in D['cards']:
     s = D['sets'][r[0]]; want.setdefault(s[0], set()).add(nk(r[1]))
-P = {}; src = {'ptcg': 0, 'tcgcsv': 0}
+P = {}; src = {'ptcg': 0, 'tcgcsv': 0}; PM = {}
 # 1) TCGCSV (rapide)
 missing = want
 try:
@@ -57,6 +57,10 @@ for sid, nums in missing.items():
         for p in prods:
             for x in p.get('extendedData') or []:
                 if x.get('name') == 'Number': num[p['productId']] = nk(x.get('value', ''))
+        for pid, n in num.items():
+            if n in nums:
+                l = PM.setdefault(str(g['groupId']), {}).setdefault(str(pid), [])
+                if f'{sid}-{n}' not in l: l.append(f'{sid}-{n}')
         for q in prices:
             n = num.get(q['productId']); m = q.get('marketPrice') or q.get('midPrice'); k = SUB.get(q.get('subTypeName'))
             if not n or not m or not k or n not in nums: continue
@@ -94,4 +98,5 @@ for sid, nums in want.items():
 open('tools/price_report.txt', 'w').write('\n'.join(REP) + '\n\nTOUS LES GROUPES TCGCSV:\n' + '\n'.join(sorted(g['name'] for g in groups)))
 tot = sum(len(v) for v in want.values())
 print('tcgcsv', src['tcgcsv'], 'total', len(P), '/', tot)
+json.dump(PM, open('tools/pmap.json', 'w'), separators=(',', ':'), sort_keys=True)
 json.dump({'d': datetime.date.today().isoformat(), 'src': src, 'n': len(P), 'tot': tot, 'p': P}, open('prices.json', 'w'), separators=(',', ':'))
