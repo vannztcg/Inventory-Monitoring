@@ -179,12 +179,13 @@ body.side nav button{font-weight:500;color:var(--mut)}body.side nav button.on{co
 .home .glow{position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(70% 45% at 50% -8%,rgba(99,102,241,.30),transparent 70%),radial-gradient(40% 30% at 100% 40%,rgba(139,92,246,.10),transparent 70%)}
 .home .orb,.home .hc,.home .dot{display:none!important}
 body.full{background:#07080c!important}
-.home .top{padding:34px 20px 6px!important;align-items:flex-start;max-width:1180px;margin:0 auto;width:100%;box-sizing:border-box}
-.home .top .ttl{align-items:flex-start;text-shadow:none}
-.home .top .ttl b{font-size:22px!important;letter-spacing:.22em!important;font-weight:700;background:linear-gradient(180deg,#fff,#c7cbe0);-webkit-background-clip:text;background-clip:text}
-.home .top .ttl b:last-child{font-size:12px!important;letter-spacing:.42em!important;margin:6px 0 0!important;background:linear-gradient(90deg,#a5b4fc,#c4b5fd);-webkit-background-clip:text;background-clip:text;font-weight:600}
-.home .top .lg{width:min(56%,220px)}
-.home .top .sub{margin-top:14px;font-size:13px;letter-spacing:0!important;text-transform:none!important;color:#8a90a2;text-align:left!important}
+.home .top{padding:38px 20px 4px!important;align-items:center;max-width:1180px;margin:0 auto;width:100%;box-sizing:border-box}
+.home .top .ttl{align-items:center;text-shadow:0 0 28px rgba(129,140,248,.35)}
+.home .top .ttl b{font-size:clamp(34px,10.5vw,58px)!important;letter-spacing:.12em!important;font-weight:800;background:linear-gradient(180deg,#ffffff 30%,#c7cbf5);-webkit-background-clip:text;background-clip:text;color:transparent}
+.home .top .ttl b:last-child{font-size:clamp(17px,5.4vw,28px)!important;letter-spacing:.34em!important;margin:8px -.34em 0 0!important;font-weight:700;background:linear-gradient(90deg,#818cf8,#c084fc);-webkit-background-clip:text;background-clip:text}
+.home .top .ecg{width:min(72%,340px);height:30px;margin-top:10px}
+.home .top .ecg path{stroke:#818cf8;filter:drop-shadow(0 0 6px rgba(129,140,248,.8))}.home .top .ecg .base{stroke:rgba(129,140,248,.18);filter:none}
+.home .top .sub{margin-top:8px;font-size:13px;letter-spacing:.02em!important;text-transform:none!important;color:#8a90a2;text-align:center!important}
 .home .top .sub::first-letter{text-transform:uppercase}
 .home .stats{display:grid!important;gap:10px!important;padding:16px 20px 4px!important}
 .home .st{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:14px 14px 12px;backdrop-filter:none;-webkit-backdrop-filter:none;min-width:0}
@@ -225,7 +226,7 @@ body.full{background:#07080c!important}
 .home .hfoot{text-align:center;font-size:11px;color:#5d6375;margin:0;padding:0 20px 22px}
 .pbadge{box-shadow:none;letter-spacing:.08em;font-weight:700}
 @media(min-width:900px){
-.home .top{padding:44px 28px 6px!important}
+.home .top{padding:48px 28px 6px!important}.home .top .ttl b{font-size:64px!important}.home .top .ttl b:last-child{font-size:30px!important}
 .home .stats{padding:18px 28px 4px!important;gap:12px!important}
 .home .stats.n1,.home .stats.n2,.home .stats.n3,.home .stats.n4,.home .stats.n5,.home .stats.n6{grid-template-columns:repeat(var(--n),1fr)!important}
 .home .stats.n1{--n:1}.home .stats.n2{--n:2}.home .stats.n3{--n:3}.home .stats.n4{--n:4}.home .stats.n5{--n:5}.home .stats.n6{--n:6}
@@ -366,7 +367,7 @@ function vPl(){const inP=d=>{if(B.p=='all')return true;const x=new Date(d);if(B.
 
 const SW=[['','#2563eb'],['#7c3aed','#7c3aed'],['#e11d48','#e11d48'],['#ea580c','#ea580c'],['#059669','#059669'],['#0891b2','#0891b2'],['#db2777','#db2777']],uiB=(k,v,t)=>`<button class="chip ${UI[k]==v?'on':''}" data-a="ui" data-k="${k}" data-v="${v}">${t}</button>`;
 let SS='ev';
-const APP_UPDATED='2026-11-20T03:10:57-05:00';
+const APP_UPDATED='2026-11-20T03:24:20-05:00';
 const appUpd=()=>'Dernière mise à jour de l’app : '+new Date(APP_UPDATED).toLocaleString(LC(),{dateStyle:'long',timeStyle:'short'});
 const SECN={buy:'Acheter',stock:'Stock',sv:'Ventes',gr:'Grading',tr:'Échanges',pl:'Bilan',gx:'Croissance',ex:'Dépenses',log:'Suivi',set:'Réglages'};
 function goHome(){sheet=null;EE={id:''};CR.open=false;QS.open=TP.open=false;QS.on=false;tab='home';HS=true;HA=false;render()}
@@ -453,7 +454,7 @@ function vHome(){const cls='home'+(HA?' still':''),deco=hbg()+`<div class="glow"
  const ST=[['val',TL('Valeur CollectR','CollectR value'),iv.val,'m',''],['gain',TL('Gain latent','Unrealized gain'),iv.gain,'m',iv.gain>=0?'ok':'ko'],['n',TL('Cartes en inventaire','Cards in inventory'),iv.n,'n',''],['cost',TL('Coût de l’inventaire','Inventory cost'),iv.cost,'m',''],['sm',TL('Ventes ce mois','Sales this month'),sm,'m',''],['net',TL('Profit net ','Net profit ')+y,net,'m',net>=0?'ok':'ko']].filter(x=>on(x[0]));
  const qa=[['qscan','scan','Smart Scan'],['qsale','sale','Vente rapide'],['qexp','exp','Dépense']].filter(([a])=>a=='qscan'?canSee('buy')&&canSee('scan'):a=='qsale'?canSee('stock')&&canSee('sv'):canSee('ex'));
  const dstr=now.toLocaleDateString(LC(),{weekday:'long',day:'numeric',month:'long'});
- return`<div class="${cls}">${deco}<header class="top">${ttl(1)}<div class="sub">${S.brand&&S.brand.name?E(S.brand.name)+' · ':''}${dstr}</div></header>
+ return`<div class="${cls}">${deco}<header class="top">${ttl(1)}${ecg}<div class="sub">${S.brand&&S.brand.name?E(S.brand.name)+' · ':''}${dstr}</div></header>
 ${ST.length?`<div class="stats n${ST.length}">${ST.map((x,i)=>st(x[1],x[2],x[3],x[4],i+1)).join('')}</div>`:''}
 ${on('ev')&&ev?`<div class="chips"><span class="hchip in" style="--i:5"><i></i>${TL('Événement actif','Active event')} · ${E(ev.name)}</span></div>`:''}${STANDALONE&&isOwn()?`<button class="ownbtn in" style="--i:4" data-a="goown"><span>${ICO('own')}</span><b>Console VannzTCG<small>Membres · revenus · hébergement</small></b>${ADMN?`<em>${ADMN}</em>`:''}<i>›</i></button>`:''}${on('qa')&&qa.length?`<div class="qa n${qa.length}">${qa.map(([a,g,t],i)=>`<button class="in${i==0?' pri':''}" style="--i:${i+4}" data-a="${a}">${ICO(g)}<span>${t}</span></button>`).join('')}</div>`:''}${on('rem')?(rr=>{const now=Date.now(),sn=UI.rsn||{},kk=x=>x.k||x.a||x.tab||x.t,v=rr.filter(x=>!(sn[kk(x)]>now)),x=v[0];return x?`<div class="rem"><div class="remw in" style="--i:6"><button class="${x.w?'':'info'}" ${x.a?`data-a="${x.a}"`:`data-t="${x.tab}"`}><b>${x.i}</b><span>${x.t}${v.length>1?` <small>(+${v.length-1})</small>`:''}</span></button><button class="rx" data-a="rsn" data-k="${E(kk(x))}">Plus tard</button></div></div>`:''})(reminders()):''}<div class="tiles">${on('gx')&&canSee('gx')?(g=>`<button class="tile wide in" style="--i:5" data-t="gx"><span><span class="wt">${ICO('gx')}${TL('Croissance','Growth')}</span><small>${TL('Profit cumulé','Cumulative profit')} ${M(g[11].cum)} · ${TL('ce mois','this month')} ${M(g[11].net)}</small></span>${svgLine(g.map(x=>({k:x.k,v:x.cum})),{h:60,ser:[{k:'v',c:'#8b8ff8'}]}).replace(/<text[^>]*>[^<]*<\/text>/g,'').replace(/<line[^>]*\/>/g,'')}</button>`)(growth()):''}${HTILES.filter(([t])=>canSee(t)&&(t!='sub'||(STANDALONE&&SBS))).map(([t,g,n,c1,c2],i)=>`<button class="tile in${t=='sub'?' tsub':''}" style="--i:${i+5};--c1:${c1};--c2:${c2}" data-t="${t}"><i>${ICO(t)||g}</i>${t=='sub'?TL('Mon abonnement','My subscription'):n}${t=='ex'&&due?`<em>${due}</em>`:''}</button>`).join('')}</div>${STANDALONE?`<div class="acct in" style="--i:15">${SBS?`<span class="acu"><span class="aem">${E(SBS.email||'')}</span>${myTier()?`<button class="acb" data-t="sub">${tBadge(myTier())}</button>`:''}</span><button data-a="switchacct">Changer de compte</button>`:`<span>Mode sans compte</span><button data-a="loginnow">Se connecter</button>`}</div>`:''}<p class="hfoot">${appUpd()}</p></div>`}
 function animHome(){if(tab!='home'||!HS)return;if(HA)return;document.querySelectorAll('[data-cnt]').forEach(el=>{const v=+el.dataset.cnt,f=el.dataset.fmt,t0=performance.now(),fmt=x=>f=='m'?M(x):String(Math.round(x));el.textContent=fmt(0);const step=t=>{const p=Math.min(1,(t-t0-350)/1100);if(p<0)return requestAnimationFrame(step);el.textContent=fmt(v*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(step)};requestAnimationFrame(step)});setTimeout(()=>{HA=true},2200)}
