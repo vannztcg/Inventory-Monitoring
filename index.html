@@ -380,7 +380,7 @@ function vPl(){const inP=d=>{if(B.p=='all')return true;const x=new Date(d);if(B.
 
 const SW=[['','#2563eb'],['#7c3aed','#7c3aed'],['#e11d48','#e11d48'],['#ea580c','#ea580c'],['#059669','#059669'],['#0891b2','#0891b2'],['#db2777','#db2777']],uiB=(k,v,t)=>`<button class="chip ${UI[k]==v?'on':''}" data-a="ui" data-k="${k}" data-v="${v}">${t}</button>`;
 let SS='ev';
-const APP_UPDATED='2026-11-20T13:42:33-05:00';
+const APP_UPDATED='2026-11-20T13:47:05-05:00';
 const appUpd=()=>'Dernière mise à jour de l’app : '+new Date(APP_UPDATED).toLocaleString(LC(),{dateStyle:'long',timeStyle:'short'});
 const SECN={buy:'Acheter',stock:'Stock',sv:'Ventes',gr:'Grading',tr:'Échanges',pl:'Bilan',gx:'Croissance',ex:'Dépenses',log:'Suivi',set:'Réglages'};
 function goHome(){sheet=null;EE={id:''};CR.open=false;QS.open=TP.open=false;QS.on=false;tab='home';HS=true;HA=false;render()}
@@ -514,10 +514,16 @@ async function tcgImg(set,nm,n){const s=nz(set);if(!s)return null;const k=nz(nm)
   const p=n?(ps.filter(x=>pnum(x)==n).find(x=>nz(x.name).includes(w))):ps.find(x=>nz(x.cleanName||x.name).includes(k));
   if(p&&p.imageUrl)return p.imageUrl}
  return null}
-async function dbImg(it){let db;try{db=await cdb()}catch(e){return null}const raw=String(it.number||'').trim(),n=raw.split('/')[0].trim(),t=+(raw.split('/')[1]||0),nm=crN(String(it.name||'').replace(/\s*\((?:PSA|BGS|CGC|SGC)[^)]*\)/g,'').replace(/\s*1st Edition/i,'')),st=crN(it.set||'');if(!n||!nm)return null;
- let L=(t?db.byNT.get(db.nk(n)+'/'+t):null)||db.byN.get(db.nk(n))||[];L=L.filter(c=>c.k==nm||c.k.startsWith(nm+' ')||nm.startsWith(c.k+' '));if(!L.length)return null;
- if(st){const S2=L.filter(c=>crN(c.set)==st||crN(c.code)==st||crN(c.sid)==st);if(S2.length)L=S2}return L.length==1||L.every(c=>c.img==L[0].img)?L[0].img:(st?null:L[0].img)}
-let IMGF=false;const IMGT=new Set();async function fillImgs(){if(IMGF)return;IMGF=true;try{const l=S.items.filter(i=>!i.img&&i.name&&i.number&&!IMGT.has(i.id));l.forEach(i=>IMGT.add(i.id));let n=0;for(const it of l){const u=await dbImg(it);if(u){it.img=u;n++}}if(n){save();render()}}finally{IMGF=false}}
+async function dbImg(it){let db;try{db=await cdb()}catch(e){return null}const raw=String(it.number||'').trim(),n=raw.split('/')[0].trim(),t=+(raw.split('/')[1]||0),nm0=String(it.name||'').replace(/\s*\((?:PSA|BGS|CGC|SGC)[^)]*\)/g,'').replace(/\s*1st Edition/i,''),prism=/prism\s*star|◇/i.test(nm0),nm=crN(nm0.replace(/\s*prism\s*star/i,'').replace(/◇/g,'')),st=crN(it.set||'');if(!nm)return null;
+ const nameOk=c=>c.k==nm||c.k.startsWith(nm+' ')||nm.startsWith(c.k+' ');
+ let L=n?((t?db.byNT.get(db.nk(n)+'/'+t):null)||db.byN.get(db.nk(n))||[]).filter(nameOk):db.cards.filter(nameOk);if(!L.length)return null;
+ if(st){let S2=L.filter(c=>crN(c.set)==st||crN(c.code)==st||crN(c.sid)==st);if(!S2.length)S2=L.filter(c=>crN(c.set).startsWith(st));if(S2.length)L=S2;else if(!n)return null}
+ if(prism){const P=L.filter(c=>/prism/i.test(c.rar||''));if(P.length)L=P}
+ if(L.length==1||L.every(c=>c.img==L[0].img))return L[0].img;if(!n&&!st)return null;
+ const tgt=+it.market||(it.sale&&+it.sale.price)||+it.cost||0;if(tgt>0){try{const P=await pdb(),fx=+UI.fx||1.4;if(P&&P.p){const sc=L.map(c=>{const v=pPick(P.p[c.sid+'-'+String(c.num).toLowerCase().replace(/^([a-z]*)0+(?=\d)/,'$1')],0,it.pr);return v?[Math.abs(Math.log(v*fx/tgt)),c]:null}).filter(Boolean).sort((a,b)=>a[0]-b[0]);if(sc.length&&sc[0][0]<1.2)return sc[0][1].img}}catch(e){}}
+ const lvl=r=>/special|hyper|secret|gold|mega hyper/i.test(r)?5:/illustration/i.test(r)?4:/ultra|full art|amazing|prism/i.test(r)?3:/double|holo ex|rare holo|^rare$/i.test(r)?2:/rare/i.test(r)?1:0,hi=/alt art|full art/i.test(it.pr||'');
+ return L.slice().sort((a,b)=>hi?lvl(b.rar||'')-lvl(a.rar||''):lvl(a.rar||'')-lvl(b.rar||''))[0].img}
+let IMGF=false;const IMGT=new Set();async function fillImgs(){if(IMGF)return;IMGF=true;try{const l=S.items.filter(i=>!i.img&&i.name&&!IMGT.has(i.id));l.forEach(i=>IMGT.add(i.id));let n=0;for(const it of l){const u=await dbImg(it);if(u){it.img=u;n++}}if(n){save();render()}}finally{IMGF=false}}
 async function findImg(it){{const u=await dbImg(it);if(u)return u}const n=(it.number||'').split('/')[0].replace(/^0+(?=\d)/,''),nm=it.name.replace(/\s*\((?:PSA|BGS|CGC|SGC)[^)]*\)/g,'').replace(/\s*1st Edition/i,'').replace(/\s*(30th Celeb|Pitch Black)/i,'').replace(/"/g,'').trim();
  const set=it.set||(/30th celeb/i.test(it.name)?'30th Celebration':/pitch black/i.test(it.name)?'Pitch Black':'');
  LE='';try{const u=await tcgImg(set,nm,n);if(u)return u}catch(e){LE='TCGplayer : '+String(e&&e.message||e||'bloqué').slice(0,50)}
@@ -1037,7 +1043,7 @@ async function pinAct(a,d){try{
  if(a=='pinoff'){if((await pinHash(String(PS.cur),S.sec.s))!==S.sec.h)return flash(TL('NIP incorrect','Wrong PIN'));S.sec=null;save();PS={a:'',b:'',cur:'',dur:24,mode:''};flash(TL('NIP désactivé','PIN turned off'));return render()}
 }catch(e){flash('Erreur : '+e.message)}}
 setInterval(()=>{if(pinLocked()&&!document.querySelector('.pinv'))render()},30000);
-setTimeout(()=>{fillImgs().catch(()=>{})},2500);setInterval(()=>{if(S.items.some(i=>!i.img&&i.number&&!IMGT.has(i.id)))fillImgs().catch(()=>{})},20000);
+setTimeout(()=>{fillImgs().catch(()=>{})},2500);setInterval(()=>{if(S.items.some(i=>!i.img&&i.name&&!IMGT.has(i.id)))fillImgs().catch(()=>{})},20000);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&pinLocked()&&!document.querySelector('.pinv'))render()});
 
 const CSF={};function confirmSoft(k,msg){const n=Date.now();if(CSF[k]&&n-CSF[k]<4000){delete CSF[k];return true}CSF[k]=n;flash(msg);return false}
