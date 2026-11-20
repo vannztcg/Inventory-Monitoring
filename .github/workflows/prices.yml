@@ -56,6 +56,9 @@ jobs:
           for f in prices.json prices-chg.json hist/sv3.json; do
             curl -s -o /dev/null -w "%{http_code} $f\n" "https://cdn.jsdelivr.net/gh/${GITHUB_REPOSITORY}@${SHA}/$f" || true
           done
+      - name: Garder Supabase actif (un projet gratuit est mis en pause après 7 jours sans activité)
+        run: |
+          curl -s -o /dev/null -w "Supabase %{http_code}\n" "https://qghjmjbmpbpslfkwyqet.supabase.co/rest/v1/app_settings?select=key&limit=1" -H "apikey: sb_publishable_0QvMcO5jMvuSk-KdgBVY6Q_ZtIl6qEJ" || true
       - name: Pointeur du jour sur le site (data.json)
         run: |
           git checkout -q -- . 2>/dev/null || true
