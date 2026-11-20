@@ -1,8 +1,11 @@
-fail SM - Forbidden Light HTTP Error 401: Unauthorized
+fail SM - Crimson Invasion HTTP Error 401: Unauthorized
+bp | Best of Game | 0/9 | groupes:  | ex: 1,2,3,4
 tk1a | EX Trainer Kit Latias | 0/10 | groupes:  | ex: 1,10,2,3
 tk1b | EX Trainer Kit Latios | 0/10 | groupes:  | ex: 1,10,2,3
 tk2b | EX Trainer Kit 2 Minun | 0/12 | groupes:  | ex: 1,10,11,12
-mcd21 | McDonald's Collection 2021 | 0/25 | groupes:  | ex: 1,10,11,12
+g1 | Generations | 83/117 | groupes: Generations | ex: 1,10,11,12
+sm4 | Crimson Invasion | 0/126 | groupes: SM - Crimson Invasion | ex: 1,10,100,101
+fut20 | Pokémon Futsal Collection | 0/5 | groupes:  | ex: 1,2,3,4
 
 TOUS LES GROUPES TCGCSV:
 Alternate Art Promos
@@ -88,6 +91,7 @@ ME03: Perfect Order
 ME04: Chaos Rising
 ME05: Pitch Black
 ME06: Delta Reign
+ME07: Flowing Fists
 ME: 30th Celebration
 ME: 30th Celebration Classic Collection
 ME: Ascended Heroes
