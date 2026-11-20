@@ -2,7 +2,7 @@
 1) API Pokémon TCG (api.pokemontcg.io) par set  2) TCGCSV (tcgcsv.com, données TCGplayer quotidiennes) pour combler les trous.
 Sortie prices.json : {"d": date, "src": {...}, "p": {"<sid>-<num>": {"n":..,"h":..,"r":..,"1h":..,"1n":..}}}
 """
-import json, re, time, unicodedata, urllib.request, datetime
+import json, re, time, unicodedata, urllib.request, datetime, os
 D = json.load(open('cards-db.json'))
 UA = {'User-Agent': 'Mozilla/5.0 InventoryMonitoring-prices'}
 def get(u, tries=3):
@@ -96,6 +96,15 @@ for sid, nums in want.items():
     got = sum(1 for n in nums if f'{sid}-{n}' in P)
     if got < len(nums) * .8: REP.append(f'{sid} | {SETN[sid]} | {got}/{len(nums)} | groupes: ' + '; '.join(g['name'] for g in groups_for(sid)) + ' | ex: ' + ','.join(sorted(nums)[:4]))
 open('tools/price_report.txt', 'w').write('\n'.join(REP) + '\n\nTOUS LES GROUPES TCGCSV:\n' + '\n'.join(sorted(g['name'] for g in groups)))
+# 3) Un set refusé aujourd'hui (erreur 401 de TCGCSV, etc.) : on garde le prix de la veille
+prev = os.environ.get('PREV', '')
+if prev and os.path.exists(prev):
+    try:
+        old = json.load(open(prev)).get('p', {}); src['veille'] = 0
+        for k, v in old.items():
+            if k not in P: P[k] = v; src['veille'] += 1
+        print('prix de la veille repris', src['veille'])
+    except Exception as e: print('veille illisible', e)
 tot = sum(len(v) for v in want.values())
 print('tcgcsv', src['tcgcsv'], 'total', len(P), '/', tot)
 json.dump(PM, open('tools/pmap.json', 'w'), separators=(',', ':'), sort_keys=True)

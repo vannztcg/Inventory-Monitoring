@@ -28,10 +28,13 @@ jobs:
           rm -rf hist prices-chg.json tools/hist_done.json
           if git fetch --depth=1 origin data; then
             for f in hist prices-chg.json tools/hist_done.json; do git checkout FETCH_HEAD -- "$f" || true; done
+            git show FETCH_HEAD:prices.json > "$RUNNER_TEMP/prev_prices.json" || true
             git reset -q
           fi
           ls hist 2>/dev/null | wc -l
       - run: python tools/prices.py
+        env:
+          PREV: ${{ runner.temp }}/prev_prices.json
       - run: python tools/hist.py --backfill
         env:
           BUDGET: '1500'
