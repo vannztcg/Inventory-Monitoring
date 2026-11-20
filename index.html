@@ -355,7 +355,7 @@ ${F.lot?'<p class="mut">Le coût du lot sera réparti automatiquement.</p>':`<la
 <div class="row" style="margin-top:8px">${[50,60,70,80].map(p=>`<button class="chip" data-a="pct" data-p="${p}">${p} %</button>`).join('')}</div>`}
 <div id="mg" style="margin-top:10px;min-height:22px">${mg()}</div>
 <label>Type</label><div class="row">${chips(AC,'acq',F.acq)}</div></div>
-<button class="btn" data-a="add">Valider l’achat</button></div><aside class="lastb"><h3>Derniers achats</h3>${(a=>a.map(i=>`<div class="it" data-open="${i.id}"><span class="lf">${thumb(i)}<span><b>${E(i.name)}</b><br><span class="mut">${i.date?new Date(i.date+'T12:00:00').toLocaleDateString(LC(),{day:'numeric',month:'short'})+' · ':''}${E(i.pr||'')} · ${E(i.cond||'')}${i.status!='stock'?' · '+ST[i.status]:''}</span></span></span><span class="lr"><b>${M(cost(i))}</b>${+i.market?`<small class="${+i.market>=cost(i)?'ok':'ko'}">${M(+i.market)}</small>`:''}</span></div>`).join('')||'<p class="mut">Aucune carte en stock pour l’instant.</p>')(S.items.filter(i=>i.status!='sold'&&i.status!='traded').sort((x,y)=>String(y.date||'').localeCompare(String(x.date||''))).slice(0,8))}</aside></div>`}
+<button class="btn" data-a="add">Valider l’achat</button></div><aside class="lastb"><h3>Derniers achats</h3>${(a=>a.map(i=>`<div class="it" data-open="${i.id}"><span class="lf">${thumb(i)}<span><b>${E(i.name)}</b><br><span class="mut">${i.date?new Date(i.date+'T12:00:00').toLocaleDateString(LC(),{day:'numeric',month:'short'})+' · ':''}${E(i.pr||'')} · ${E(i.cond||'')}${i.status!='stock'?' · '+ST[i.status]:''}</span></span></span><span class="lr"><b>${M(cost(i))}</b>${+i.market?`<small class="${+i.market>=cost(i)?'ok':'ko'}">${M(+i.market)}</small>`:''}</span></div>`).join('')||'<p class="mut">Aucune carte en stock pour l’instant.</p>')(S.items.filter(i=>i.status=='stock'||i.status=='listed').sort((x,y)=>String(y.date||'').localeCompare(String(x.date||''))).slice(0,8))}</aside></div>`}
 
 const lst=()=>{const a=stockFiltered();
  if(DESK()&&a.length)return`<div class="tw"><table class="tg"><tr><th>Carte</th><th>Ext.</th><th>État</th><th>Événement</th><th>Statut</th><th>Coût</th><th>Marché</th><th>Profit</th></tr>${a.map(i=>{const ev=S.events.find(x=>x.id==i.ev),p=i.sale?i.sale.net-cost(i):null;return`<tr ${op(i)} class="${QS.sel[i.id]?'on':''}"><td><div class="lf">${QS.on?`<span class="ck">${QS.sel[i.id]?'☑':'☐'}</span>`:''}${thumb(i)}<span><b>${E(i.name)}${i.note?' 📝':''}</b><br><span class="mut">${i.pr}</span></span></div></td><td>${E(i.set)} ${E(i.number)}</td><td>${i.cond}</td><td>${ev?E(ev.name):'—'}</td><td>${ST[i.status]}</td><td>${M(cost(i))}</td><td>${i.market?M(i.market):'—'}</td><td class="${p>=0?'ok':'ko'}">${p==null?'—':M(p)}</td></tr>`}).join('')}</table></div>`;
@@ -380,7 +380,7 @@ function vPl(){const inP=d=>{if(B.p=='all')return true;const x=new Date(d);if(B.
 
 const SW=[['','#2563eb'],['#7c3aed','#7c3aed'],['#e11d48','#e11d48'],['#ea580c','#ea580c'],['#059669','#059669'],['#0891b2','#0891b2'],['#db2777','#db2777']],uiB=(k,v,t)=>`<button class="chip ${UI[k]==v?'on':''}" data-a="ui" data-k="${k}" data-v="${v}">${t}</button>`;
 let SS='ev';
-const APP_UPDATED='2026-11-20T13:38:57-05:00';
+const APP_UPDATED='2026-11-20T13:42:33-05:00';
 const appUpd=()=>'Dernière mise à jour de l’app : '+new Date(APP_UPDATED).toLocaleString(LC(),{dateStyle:'long',timeStyle:'short'});
 const SECN={buy:'Acheter',stock:'Stock',sv:'Ventes',gr:'Grading',tr:'Échanges',pl:'Bilan',gx:'Croissance',ex:'Dépenses',log:'Suivi',set:'Réglages'};
 function goHome(){sheet=null;EE={id:''};CR.open=false;QS.open=TP.open=false;QS.on=false;tab='home';HS=true;HA=false;render()}
@@ -514,7 +514,11 @@ async function tcgImg(set,nm,n){const s=nz(set);if(!s)return null;const k=nz(nm)
   const p=n?(ps.filter(x=>pnum(x)==n).find(x=>nz(x.name).includes(w))):ps.find(x=>nz(x.cleanName||x.name).includes(k));
   if(p&&p.imageUrl)return p.imageUrl}
  return null}
-async function findImg(it){const n=(it.number||'').split('/')[0].replace(/^0+(?=\d)/,''),nm=it.name.replace(/\s*\((?:PSA|BGS|CGC|SGC)[^)]*\)/g,'').replace(/\s*1st Edition/i,'').replace(/\s*(30th Celeb|Pitch Black)/i,'').replace(/"/g,'').trim();
+async function dbImg(it){let db;try{db=await cdb()}catch(e){return null}const raw=String(it.number||'').trim(),n=raw.split('/')[0].trim(),t=+(raw.split('/')[1]||0),nm=crN(String(it.name||'').replace(/\s*\((?:PSA|BGS|CGC|SGC)[^)]*\)/g,'').replace(/\s*1st Edition/i,'')),st=crN(it.set||'');if(!n||!nm)return null;
+ let L=(t?db.byNT.get(db.nk(n)+'/'+t):null)||db.byN.get(db.nk(n))||[];L=L.filter(c=>c.k==nm||c.k.startsWith(nm+' ')||nm.startsWith(c.k+' '));if(!L.length)return null;
+ if(st){const S2=L.filter(c=>crN(c.set)==st||crN(c.code)==st||crN(c.sid)==st);if(S2.length)L=S2}return L.length==1||L.every(c=>c.img==L[0].img)?L[0].img:(st?null:L[0].img)}
+let IMGF=false;const IMGT=new Set();async function fillImgs(){if(IMGF)return;IMGF=true;try{const l=S.items.filter(i=>!i.img&&i.name&&i.number&&!IMGT.has(i.id));l.forEach(i=>IMGT.add(i.id));let n=0;for(const it of l){const u=await dbImg(it);if(u){it.img=u;n++}}if(n){save();render()}}finally{IMGF=false}}
+async function findImg(it){{const u=await dbImg(it);if(u)return u}const n=(it.number||'').split('/')[0].replace(/^0+(?=\d)/,''),nm=it.name.replace(/\s*\((?:PSA|BGS|CGC|SGC)[^)]*\)/g,'').replace(/\s*1st Edition/i,'').replace(/\s*(30th Celeb|Pitch Black)/i,'').replace(/"/g,'').trim();
  const set=it.set||(/30th celeb/i.test(it.name)?'30th Celebration':/pitch black/i.test(it.name)?'Pitch Black':'');
  LE='';try{const u=await tcgImg(set,nm,n);if(u)return u}catch(e){LE='TCGplayer : '+String(e&&e.message||e||'bloqué').slice(0,50)}
  const tries=[];if(n){if(set)tries.push('name:"'+nm+'" number:"'+n+'" set.name:"'+set.replace(/"/g,'')+'"');tries.push('name:"'+nm+'" number:"'+n+'"')}else tries.push('name:"'+nm+'"');
@@ -1033,6 +1037,7 @@ async function pinAct(a,d){try{
  if(a=='pinoff'){if((await pinHash(String(PS.cur),S.sec.s))!==S.sec.h)return flash(TL('NIP incorrect','Wrong PIN'));S.sec=null;save();PS={a:'',b:'',cur:'',dur:24,mode:''};flash(TL('NIP désactivé','PIN turned off'));return render()}
 }catch(e){flash('Erreur : '+e.message)}}
 setInterval(()=>{if(pinLocked()&&!document.querySelector('.pinv'))render()},30000);
+setTimeout(()=>{fillImgs().catch(()=>{})},2500);setInterval(()=>{if(S.items.some(i=>!i.img&&i.number&&!IMGT.has(i.id)))fillImgs().catch(()=>{})},20000);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&pinLocked()&&!document.querySelector('.pinv'))render()});
 
 const CSF={};function confirmSoft(k,msg){const n=Date.now();if(CSF[k]&&n-CSF[k]<4000){delete CSF[k];return true}CSF[k]=n;flash(msg);return false}
@@ -1105,7 +1110,7 @@ document.addEventListener('click',e=>{const t=e.target.closest('[data-t],[data-f
  case'trscan':if(STANDALONE)camOpen(1);else{TSC=1;$('#ph').click()}break;
  case'pct':F.cost=(num(F.market)*d.p/100).toFixed(2);render();break;
  case'add':if(!F.name.trim())return flash('Le nom de la carte est requis');
-  S.items.unshift({id:uid(),name:F.name.trim()+(F.pr=='Gradée'&&F.gg.trim()&&!/PSA|BGS|CGC|SGC/.test(F.name)?' ('+F.gco+' '+F.gg.trim()+')':''),slab:F.pr=='Gradée'&&F.gg.trim()?{co:F.gco,grade:F.gg.trim()}:null,set:F.set.trim(),number:F.number.trim(),pr:F.pr,cond:F.cond,acq:F.acq,market:num(F.market),mkt0:num(F.market),cost:F.lot?0:num(F.cost),lot:F.lot,ev:S.ev,status:'stock',img:F.img||'',note:F._cert?'Certification '+(F.pr=='Gradée'?F.gco+' ':'')+'#'+F._cert:'',date:new Date().toISOString()});
+  S.items.unshift({id:uid(),name:F.name.trim()+(F.pr=='Gradée'&&F.gg.trim()&&!/PSA|BGS|CGC|SGC/.test(F.name)?' ('+F.gco+' '+F.gg.trim()+')':''),slab:F.pr=='Gradée'&&F.gg.trim()?{co:F.gco,grade:F.gg.trim()}:null,set:F.set.trim(),number:F.number.trim(),pr:F.pr,cond:F.cond,acq:F.acq,market:num(F.market),mkt0:num(F.market),cost:F.lot?0:num(F.cost),lot:F.lot,ev:S.ev,status:'stock',img:F.img||F._off||'',note:F._cert?'Certification '+(F.pr=='Gradée'?F.gco+' ':'')+'#'+F._cert:'',date:new Date().toISOString()});
   {const n=S.items[0],ev=S.events.find(x=>x.id==n.ev);lg(n,'achat',(n.lot?'Acheté dans un lot':'Acheté '+M(n.cost))+' · '+n.acq+(ev?' · '+ev.name:''));if(!n.img)findImg(n).then(u=>{if(u){n.img=u;save();render()}}).catch(()=>{})}
   save();F.name=F.set=F.number=F.market=F.cost=F.img=F.gg='';delete F._prev;delete F._off;delete F._usd;delete F._cert;flash('Achat enregistré ✓ ('+S.items.length+' cartes)');break;
  case'sell':if(!num(X.price))return;{const c=calc(it);it.status='sold';it.sale={price:num(X.price),method:X.method,fee:c.fee,ship:c.ship,net:c.net,date:new Date().toISOString()};lg(it,'vente','Vendue '+M(num(X.price))+' ('+X.method+') · frais '+M(c.fee)+' · profit '+M(c.profit))}save();sheet=null;flash('Vente enregistrée ✓');break;
