@@ -94,6 +94,10 @@ begin
   return r;
 end $$;
 
+-- Permissions (les nouveaux projets Supabase ne les donnent plus automatiquement).
+-- La sécurité réelle reste assurée par les règles RLS ci-dessus : seul le propriétaire écrit.
+grant select, insert, update, delete on public.members, public.payments, public.app_settings to authenticated;
+grant usage, select on sequence public.payments_id_seq to authenticated;
 grant execute on function public.is_owner()    to authenticated;
 grant execute on function public.my_plan()     to authenticated;
 grant execute on function public.admin_stats() to authenticated;
