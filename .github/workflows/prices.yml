@@ -1,18 +1,21 @@
-name: Prix des cartes (quotidien)
+name: Prix et historique (quotidien)
+# Les données de prix (prices.json, prices-chg.json, hist/) vivent dans la branche « data » :
+# un seul commit, remplacé chaque jour → le dépôt ne grossit pas.
+# Le site ne reçoit qu'un petit pointeur (data.json) ; l'app lit les données via jsDelivr (CDN gratuit).
 on:
   workflow_dispatch:
   schedule:
     - cron: '17 9 * * *'
   push:
     branches: [main]
-    paths: ['tools/prices.py', '.github/workflows/prices.yml', 'cards-db.json']
+    paths: ['tools/prices.py', 'tools/hist.py', '.github/workflows/prices.yml', 'cards-db.json']
 permissions:
   contents: write
 concurrency: prices
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
         with:
@@ -20,14 +23,43 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Reprendre l'historique de la veille (branche data)
+        run: |
+          rm -rf hist prices-chg.json tools/hist_done.json
+          if git fetch --depth=1 origin data; then
+            for f in hist prices-chg.json tools/hist_done.json; do git checkout FETCH_HEAD -- "$f" || true; done
+            git reset -q
+          fi
+          ls hist 2>/dev/null | wc -l
       - run: python tools/prices.py
       - run: python tools/hist.py --backfill
         env:
-          BUDGET: '900'
-      - run: |
+          BUDGET: '1500'
+      - name: Publier les données (branche data, un seul commit)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          D=$(mktemp -d); mkdir -p "$D/tools"
+          cp -r hist prices.json prices-chg.json "$D/"
+          cp tools/pmap.json tools/hist_done.json tools/price_report.txt "$D/tools/"
+          cd "$D"
+          git init -q -b data
+          git add -A
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -qm "Données de prix $(date +%F)"
+          git push -fq "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:data
+          echo "SHA=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+      - name: Préparer le CDN
+        run: |
+          for f in prices.json prices-chg.json hist/sv3.json; do
+            curl -s -o /dev/null -w "%{http_code} $f\n" "https://cdn.jsdelivr.net/gh/${GITHUB_REPOSITORY}@${SHA}/$f" || true
+          done
+      - name: Pointeur du jour sur le site (data.json)
+        run: |
+          git checkout -q -- . 2>/dev/null || true
+          printf '{"sha":"%s","d":"%s"}\n' "$SHA" "$(date +%F)" > data.json
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add prices.json tools/price_report.txt tools/pmap.json hist prices-chg.json tools/hist_done.json
-          git commit -m "Prix des cartes $(date +%F) [skip ci]" || echo "rien a changer"
+          git add data.json
+          git commit -m "Données de prix $(date +%F) [skip ci]" || echo "rien a changer"
           git pull --rebase -X theirs origin main
           git push origin HEAD:main

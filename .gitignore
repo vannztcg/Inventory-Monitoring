@@ -1,0 +1,6 @@
+hist/
+prices-chg.json
+tools/hist_done.json
+tools/pmap.json
+tools/price_report.txt
+__pycache__/
