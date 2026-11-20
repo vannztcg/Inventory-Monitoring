@@ -58,14 +58,18 @@ for key, prs in P['p'].items():
 def backfill(budget):
     PM = json.load(open(os.path.join(ROOT, 'tools', 'pmap.json')))  # {groupId: {productId: [clé, ...]}}
     donef = os.path.join(ROOT, 'tools', 'hist_done.json')
-    done = set(json.load(open(donef))) if os.path.exists(donef) else set()
+    st = json.load(open(donef)) if os.path.exists(donef) else []
+    if isinstance(st, list): st = {'done': st, 'fail': {}}
+    done, fail = set(st['done']), st.get('fail', {})
     dates = {TODAY - datetime.timedelta(days=k) for k in range(1, ND)} | {WE - datetime.timedelta(days=7 * k) for k in range(NW)}
     dates.discard(TODAY)
-    todo = sorted((d for d in dates if d.isoformat() not in done and d >= datetime.date(2024, 2, 8)), reverse=True)
+    redo = any(not h.get('bf') for h in H.values())  # set nouveau ou incomplet : on relit tout (les valeurs existantes ne sont pas écrasées)
+    todo = sorted((d for d in dates if (redo or d.isoformat() not in done) and fail.get(d.isoformat(), 0) < 3 and d >= datetime.date(2024, 2, 8)), reverse=True)
+    print('relecture complète' if redo else 'dates manquantes seulement')
     print('archives à lire', len(todo)); T0 = time.time()
     def one(d):
         ds = d.isoformat(); tmp = tempfile.mkdtemp(); f = os.path.join(tmp, 'a.7z'); t = time.time()
-        for k in range(5):
+        for k in range(3):
             try:
                 with urllib.request.urlopen(urllib.request.Request(f'https://tcgcsv.com/archive/tcgplayer/prices-{ds}.ppmd.7z', headers=UA), timeout=180) as r, open(f, 'wb') as o: shutil.copyfileobj(r, o)
                 break
@@ -101,6 +105,7 @@ def backfill(budget):
             for fu in fin:
                 d = futs.pop(fu); ds, rows, info = fu.result()
                 print(ds, info, len(rows or []), 'prix', flush=True)
+                if rows is None and info != 'absent': fail[ds] = fail.get(ds, 0) + 1
                 if rows is not None or info == 'absent':
                     seen = set()
                     for keys, c, v in rows or []:
@@ -111,7 +116,10 @@ def backfill(budget):
                 if time.time() - T0 < budget:
                     nx = next(it, None)
                     if nx: futs[ex.submit(one, nx)] = nx
-    json.dump(sorted(done), open(donef, 'w'))
+    keep = {d.isoformat() for d in dates}
+    json.dump({'done': sorted(x for x in done if x in keep), 'fail': {k: v for k, v in fail.items() if k in keep}}, open(donef, 'w'), separators=(',', ':'))
+    if time.time() - T0 < budget:
+        for h in H.values(): h['bf'] = 1
     print('archives lues', len(done), 'en', round(time.time() - T0), 's')
 
 if '--backfill' in sys.argv: backfill(float(os.environ.get('BUDGET', 5400)))
