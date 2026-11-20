@@ -173,7 +173,7 @@ body.side nav::before{background:linear-gradient(90deg,var(--ac),#8b5cf6);-webki
 body.side nav button{font-weight:500;color:var(--mut)}body.side nav button.on{color:var(--ac);font-weight:600}
 /* interrupteurs */
 .swl{padding:4px 14px}.swr{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;padding:12px 0;border:0;border-bottom:1px solid var(--bd);background:none;color:var(--tx);text-align:left;font-size:15px;cursor:pointer}.swr:last-child{border-bottom:0}.swr b{font-weight:600;display:block}.swr small{display:block;color:var(--mut);font-size:12px;margin-top:2px}
-.tg{flex:none;position:relative;width:44px;height:26px;border-radius:99px;background:var(--bd);transition:background .2s;box-shadow:inset 0 0 0 1px rgba(16,24,40,.06)}.tg::after{content:'';position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:transform .2s}.tg.on{background:var(--ac)}.tg.on::after{transform:translateX(18px)}
+.tgl{flex:none;position:relative;width:44px;height:26px;border-radius:99px;background:var(--bd);transition:background .2s;box-shadow:inset 0 0 0 1px rgba(16,24,40,.06)}.tgl::after{content:'';position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:transform .2s}.tgl.on{background:var(--ac)}.tgl.on::after{transform:translateX(18px)}
 /* ===== Accueil ===== */
 .home{background:#07080c!important;color:#e7e9ee;border-radius:0}
 .home .glow{position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(70% 45% at 50% -8%,rgba(99,102,241,.30),transparent 70%),radial-gradient(40% 30% at 100% 40%,rgba(139,92,246,.10),transparent 70%)}
@@ -253,6 +253,7 @@ body.full{background:#07080c!important}
 .pinl{display:flex;gap:18px;margin-top:26px}.pinl button{background:none;border:0;color:#a5b4fc;font-size:13px;cursor:pointer;padding:6px}
 body.locked nav,body.locked .tb{display:none!important}body.locked{padding-left:0!important}body.locked #main{max-width:none!important;padding:0!important}
 .secico{font-size:26px;width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:color-mix(in srgb,var(--ac) 10%,transparent)}
+.tg{border-collapse:separate!important;border-spacing:0;border-radius:var(--r,16px)!important;overflow:hidden;box-shadow:var(--sh)}.tg tr:last-child td{border-bottom:0}.tg th{background:color-mix(in srgb,var(--bg) 60%,var(--card));font-size:12px;letter-spacing:.02em}
 </style>
 </head>
 <body>
@@ -378,7 +379,7 @@ function vPl(){const inP=d=>{if(B.p=='all')return true;const x=new Date(d);if(B.
 
 const SW=[['','#2563eb'],['#7c3aed','#7c3aed'],['#e11d48','#e11d48'],['#ea580c','#ea580c'],['#059669','#059669'],['#0891b2','#0891b2'],['#db2777','#db2777']],uiB=(k,v,t)=>`<button class="chip ${UI[k]==v?'on':''}" data-a="ui" data-k="${k}" data-v="${v}">${t}</button>`;
 let SS='ev';
-const APP_UPDATED='2026-11-20T03:32:19-05:00';
+const APP_UPDATED='2026-11-20T13:34:17-05:00';
 const appUpd=()=>'Dernière mise à jour de l’app : '+new Date(APP_UPDATED).toLocaleString(LC(),{dateStyle:'long',timeStyle:'short'});
 const SECN={buy:'Acheter',stock:'Stock',sv:'Ventes',gr:'Grading',tr:'Échanges',pl:'Bilan',gx:'Croissance',ex:'Dépenses',log:'Suivi',set:'Réglages'};
 function goHome(){sheet=null;EE={id:''};CR.open=false;QS.open=TP.open=false;QS.on=false;tab='home';HS=true;HA=false;render()}
@@ -453,7 +454,7 @@ const HTILES=[['sub','◆','Abonnement','#b45309','#7c3aed'],['buy','＋','Achet
 const HBGI=()=>{try{return localStorage.getItem('cv_bgimg')||''}catch(e){return''}};
 const ttl=(sm)=>`<div class="ttl${sm?' sm':''}"><b>${[...'INVENTORY'].map((c,i)=>`<span style="--d:${i}">${c}</span>`).join('')}</b><b>${[...'MONITORING'].map((c,i)=>`<span style="--d:${i+9}">${c}</span>`).join('')}</b></div>`;
 function hbg(){if(STANDALONE){const lg=S.brand&&S.brand.logo;if(UI.hbg=='custom'&&HBGI())return`<img class="hbg cover" src="${HBGI()}" alt=""><div class="shade"></div>`;return lg&&UI.hbg!='none'?`<img class="hbg" src="${lg}" alt="">`:''}if(UI.hbg=='none')return'';if(UI.hbg=='custom'&&HBGI())return`<img class="hbg cover" src="${HBGI()}" alt=""><div class="shade"></div>`;return`<img class="hbg" src="${LOGO}" alt="">`}
-function vHomeCfg(){const hh=UI.hh||{},row=(k,l,d)=>`<button class="swr" data-a="hhtog" data-k="${k}"><span><b>${l}</b>${d?`<small>${d}</small>`:''}</span><i class="tg ${hh[k]?'':'on'}"></i></button>`;
+function vHomeCfg(){const hh=UI.hh||{},row=(k,l,d)=>`<button class="swr" data-a="hhtog" data-k="${k}"><span><b>${l}</b>${d?`<small>${d}</small>`:''}</span><i class="tgl ${hh[k]?'':'on'}"></i></button>`;
  return`<h3>${TL('Chiffres affichés','Figures shown')}</h3><div class="card swl">${[['val',TL('Valeur CollectR','CollectR value'),TL('Valeur actuelle de ton inventaire','Current value of your inventory')],['gain',TL('Gain latent','Unrealized gain'),TL('Valeur − coût','Value − cost')],['n',TL('Cartes en inventaire','Cards in inventory')],['cost',TL('Coût de l’inventaire','Inventory cost')],['sm',TL('Ventes ce mois','Sales this month')],['net',TL('Profit net','Net profit'),TL('Depuis le début de l’année','Year to date')]].map(([k,l,d])=>row(k,l,d)).join('')}</div>
  <h3>${TL('Sections','Sections')}</h3><div class="card swl">${row('qa',TL('Actions rapides','Quick actions'),'Smart Scan · '+TL('Vente rapide · Dépense','Quick sale · Expense'))}${row('gx',TL('Croissance','Growth'),TL('Graphique du profit cumulé','Cumulative profit chart'))}${row('rem',TL('Rappels','Reminders'))}${row('ev',TL('Événement actif','Active event'))}</div>
  <p class="mut">${TL('L’accueil se réorganise tout seul pour rester compact.','The home screen rearranges itself to stay compact.')}</p><div class="row"><button class="btn alt" data-a="hhreset">${TL('Tout réafficher','Show everything')}</button><button class="btn" data-a="hhprev">${TL('Voir l’accueil','View home')}</button></div>`}
