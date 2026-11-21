@@ -130,16 +130,22 @@ def last(a, upto):
     for x in reversed(a[:upto]):
         if x: return x
     return 0
+def clean(a):  # prix aberrants (prévente, annonce isolée) : ignorés pour les variations
+    v = sorted(x for x in a if x)
+    if len(v) < 5: return a
+    md = v[len(v) // 2]
+    return [x if md / 4 <= x <= md * 4 else 0 for x in a]
 for sid, h in H.items():
     for num, prs in h['k'].items():
         for c, a in prs.items():
+            a = clean(a)
             now = a[-1] or last(a, ND)
             if now < 50: continue
             v = []
             for back in (7, 30):
                 p = a[ND - 1 - back] or last(a, ND - back)
                 v.append(round((now / p - 1) * 100) if p else None)
-            w = h['w'].get(num, {}).get(c) or []
+            w = clean(h['w'].get(num, {}).get(c) or [])
             p = (w[NW - 1 - 13] if len(w) == NW else 0) or a[0]
             v.append(round((now / p - 1) * 100) if p else None)
             if any(x for x in v): CH.setdefault(f'{sid}-{num}', {})[c] = v
