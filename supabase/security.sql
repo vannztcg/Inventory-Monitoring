@@ -4,6 +4,7 @@
 -- Ce que ce script fait :
 --   1. Les données d'inventaire (cv_docs) ne sont lisibles et modifiables QUE par leur propriétaire,
 --      et seulement si son compte est approuvé (même un compte créé directement par l'API ne peut rien stocker).
+--      Personne ne peut s'ajouter comme propriétaire (table admins) ni s'approuver (approved_users).
 --   2. Une demande d'accès ne peut pas être falsifiée : courriel et identifiant viennent toujours du jeton de connexion.
 --   3. Seul le propriétaire peut approuver ou retirer un accès (approved_users).
 --   4. Double authentification : un compte qui l'a activée doit l'avoir validée (session « aal2 »)
@@ -21,11 +22,13 @@ language sql stable security definer set search_path = public, auth as $$
                      where f.user_id = auth.uid() and f.status = 'verified')
 $$;
 
--- Compte approuvé par le propriétaire (s'appuie sur my_access(), déjà en place)
-create or replace function public.is_approved() returns boolean
+-- Peut utiliser l'app : compte approuvé (ou propriétaire) ET 2FA validée si activée.
+-- S'appuie sur my_access(), déjà en place ; ne la modifie pas.
+create or replace function public.app_ok() returns boolean
 language sql stable security definer set search_path = public as $$
   select auth.uid() is not null
-     and coalesce((public.my_access()->>'approved')::boolean, false)
+     and (coalesce((public.my_access()->>'approved')::boolean, false)
+          or coalesce((public.my_access()->>'admin')::boolean, false))
      and public.mfa_ok()
 $$;
 
@@ -37,13 +40,6 @@ language sql stable security definer set search_path = public as $$
      and public.mfa_ok()
 $$;
 
--- Chemin de recherche fixe pour my_access() (recommandation du Security Advisor)
-do $$ begin
-  if to_regprocedure('public.my_access()') is not null then
-    execute 'alter function public.my_access() set search_path = public, auth, extensions';
-  end if;
-end $$;
-
 -- ───────────── Inventaire (cv_docs) ─────────────
 alter table public.cv_docs enable row level security;
 do $$ declare p record; begin
@@ -52,14 +48,14 @@ do $$ declare p record; begin
   end loop;
 end $$;
 create policy cv_docs_select on public.cv_docs for select to authenticated
-  using (user_id::text = (select auth.uid())::text and (select public.is_approved()));
+  using (user_id::text = (select auth.uid())::text and (select public.app_ok()));
 create policy cv_docs_insert on public.cv_docs for insert to authenticated
-  with check (user_id::text = (select auth.uid())::text and (select public.is_approved()));
+  with check (user_id::text = (select auth.uid())::text and (select public.app_ok()));
 create policy cv_docs_update on public.cv_docs for update to authenticated
-  using (user_id::text = (select auth.uid())::text and (select public.is_approved()))
-  with check (user_id::text = (select auth.uid())::text and (select public.is_approved()));
+  using (user_id::text = (select auth.uid())::text and (select public.app_ok()))
+  with check (user_id::text = (select auth.uid())::text and (select public.app_ok()));
 create policy cv_docs_delete on public.cv_docs for delete to authenticated
-  using (user_id::text = (select auth.uid())::text and (select public.is_approved()));
+  using (user_id::text = (select auth.uid())::text and (select public.app_ok()));
 
 -- Taille maximale d'un document (5 Mo) et d'un identifiant (les lignes existantes ne sont pas touchées)
 do $$ begin
@@ -119,6 +115,19 @@ create policy au_self on public.approved_users for select to authenticated
   using (lower(email) = lower(coalesce((select auth.jwt())->>'email', '')));
 grant select, insert, update, delete on public.approved_users to authenticated;
 
+-- ───────────── Liste des propriétaires (admins) : lecture par le propriétaire seulement, aucune écriture par l'API ─────────────
+do $$ declare p record; begin
+  if to_regclass('public.admins') is not null then
+    execute 'alter table public.admins enable row level security';
+    for p in select policyname from pg_policies where schemaname = 'public' and tablename = 'admins' loop
+      execute format('drop policy %I on public.admins', p.policyname);
+    end loop;
+    execute 'create policy admins_owner_read on public.admins for select to authenticated using ((select public.is_owner()))';
+    execute 'revoke all on public.admins from anon, authenticated';
+    execute 'grant select on public.admins to authenticated';
+  end if;
+end $$;
+
 -- ───────────── Membres, paiements, réglages : RLS toujours active ─────────────
 alter table if exists public.members      enable row level security;
 alter table if exists public.payments     enable row level security;
@@ -140,7 +149,7 @@ create or replace function public.use_scan() returns int
 language plpgsql security definer set search_path = public as $$
 declare v int;
 begin
-  if not public.is_approved() then raise exception 'forbidden'; end if;
+  if not public.app_ok() then raise exception 'forbidden'; end if;
   insert into scan_usage (user_id, month, n) values (auth.uid(), to_char(now(), 'YYYY-MM'), 1)
   on conflict (user_id, month) do update set n = scan_usage.n + 1
   returning n into v;
@@ -149,10 +158,12 @@ end $$;
 
 -- ───────────── Droits : rien pour les visiteurs non connectés ─────────────
 revoke all on all tables    in schema public from anon;
+revoke truncate, trigger, references on all tables in schema public from authenticated;
 revoke all on all sequences in schema public from anon;
 revoke execute on all functions in schema public from public, anon;
 grant  execute on all functions in schema public to authenticated, service_role;
 alter default privileges in schema public revoke all on tables    from anon;
+alter default privileges in schema public revoke truncate, trigger, references on tables from authenticated;
 alter default privileges in schema public revoke all on sequences from anon;
 alter default privileges in schema public revoke execute on functions from public, anon;
 alter default privileges in schema public grant  execute on functions to authenticated, service_role;
