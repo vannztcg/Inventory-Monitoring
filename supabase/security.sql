@@ -162,6 +162,8 @@ revoke truncate, trigger, references on all tables in schema public from authent
 revoke all on all sequences in schema public from anon;
 revoke execute on all functions in schema public from public, anon;
 grant  execute on all functions in schema public to authenticated, service_role;
+-- La fonction du déclencheur n'a pas à être appelée directement
+revoke execute on function public.access_requests_guard() from public, anon, authenticated;
 alter default privileges in schema public revoke all on tables    from anon;
 alter default privileges in schema public revoke truncate, trigger, references on tables from authenticated;
 alter default privileges in schema public revoke all on sequences from anon;
