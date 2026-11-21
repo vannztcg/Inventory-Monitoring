@@ -102,6 +102,9 @@ grant execute on function public.is_owner()    to authenticated;
 grant execute on function public.my_plan()     to authenticated;
 grant execute on function public.admin_stats() to authenticated;
 
+-- Forfait choisi à l'inscription (affiché dans la console à côté de chaque demande)
+alter table if exists public.access_requests add column if not exists plan text;
+
 -- Les membres déjà approuvés reçoivent une fiche (forfait gratuit par défaut)
 insert into public.members (email)
 select lower(email) from public.approved_users
