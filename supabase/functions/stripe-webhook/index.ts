@@ -69,8 +69,14 @@ Deno.serve(async (req) => {
     return reply(400, { error: "json" });
   }
   try {
-    const [row] = await db()`select billing.stripe_apply(${body}::jsonb) as r`;
-    return reply(200, { ok: true, result: row?.r ?? null });
+    // ::text d'abord : sinon le pilote encode le texte une 2e fois en JSON
+    const [row] = await db()`select billing.stripe_apply(${body}::text::jsonb) as r`;
+    const r = row?.r ?? null;
+    if (r === "bad_event") {
+      console.error("événement illisible");
+      return reply(500, { error: "bad_event" });
+    }
+    return reply(200, { ok: true, result: r });
   } catch (e) {
     // Erreur passagère ou événement arrivé trop tôt : code 500 pour que Stripe réessaie plus tard
     console.error(e);

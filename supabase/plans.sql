@@ -95,8 +95,8 @@ revoke all on billing.events from public, anon, authenticated;
 create or replace function billing.stripe_apply(ev jsonb) returns text
 language plpgsql security definer set search_path = public, billing, auth, pg_temp as $$
 declare
-  t    text  := ev->>'type';
-  o    jsonb := ev->'data'->'object';
+  t    text;
+  o    jsonb;
   em   text;
   uid  uuid;
   cust text;
@@ -114,6 +114,10 @@ declare
   res  text  := 'ignored';
   today date := (now() at time zone 'America/Toronto')::date;
 begin
+  -- Événement reçu comme texte JSON (double encodage) : on le relit
+  if jsonb_typeof(ev) = 'string' then ev := (ev #>> '{}')::jsonb; end if;
+  t := ev->>'type';
+  o := ev->'data'->'object';
   if coalesce(ev->>'id', '') = '' or o is null then return 'bad_event'; end if;
   if exists (select 1 from billing.events where id = ev->>'id') then return 'dup'; end if;
 
