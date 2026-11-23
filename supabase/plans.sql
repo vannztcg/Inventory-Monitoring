@@ -89,6 +89,7 @@ create table if not exists billing.events (
   result text,
   at     timestamptz not null default now()
 );
+alter table billing.events enable row level security;
 revoke all on billing.events from public, anon, authenticated;
 
 create or replace function billing.stripe_apply(ev jsonb) returns text
