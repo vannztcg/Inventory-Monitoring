@@ -107,6 +107,10 @@ declare
   tax  numeric;
   pay  date;
   n    int;
+  per  text;
+  iv   text;
+  ps   bigint;
+  pe   bigint;
   res  text  := 'ignored';
   today date := (now() at time zone 'America/Toronto')::date;
 begin
@@ -125,11 +129,13 @@ begin
       if em is null then raise exception 'stripe: courriel introuvable pour %', o->>'id'; end if;
       amt := round(coalesce((o->>'amount_subtotal')::numeric, 799) / 100, 2);
       tax := round(coalesce((o->'total_details'->>'amount_tax')::numeric, 0) / 100, 2);
+      -- Forfait annuel si le montant dépasse 30 $ (79,90 $/an contre 7,99 $/mois) ; la facture corrige au besoin
+      per := case when amt >= 30 then 'yearly' else 'monthly' end;
       insert into public.members as m (email, plan, price, currency, started, next_due, status, stripe_customer, stripe_sub, updated_at)
-      values (em, 'monthly', amt, upper(coalesce(o->>'currency', 'cad')), today,
-              (today + interval '1 month')::date, 'active', cust, sub, now())
+      values (em, per, amt, upper(coalesce(o->>'currency', 'cad')), today,
+              (today + case when per = 'yearly' then interval '1 year' else interval '1 month' end)::date, 'active', cust, sub, now())
       on conflict (email) do update set
-        plan = 'monthly', price = excluded.price, currency = excluded.currency, status = 'active',
+        plan = excluded.plan, price = excluded.price, currency = excluded.currency, status = 'active',
         started  = case when m.stripe_sub is not distinct from excluded.stripe_sub then coalesce(m.started, excluded.started) else excluded.started end,
         next_due = case when m.stripe_sub is not distinct from excluded.stripe_sub and m.next_due is not null then m.next_due else excluded.next_due end,
         stripe_customer = excluded.stripe_customer, stripe_sub = excluded.stripe_sub, updated_at = now();
@@ -159,15 +165,18 @@ begin
       if em is null then
         res := 'unmatched';
       else
-        due := (to_timestamp((o->'lines'->'data'->0->'period'->>'end')::bigint) at time zone 'America/Toronto')::date;
+        ps  := nullif(o->'lines'->'data'->0->'period'->>'start', '')::bigint;
+        pe  := nullif(o->'lines'->'data'->0->'period'->>'end', '')::bigint;
+        due := (to_timestamp(pe) at time zone 'America/Toronto')::date;
+        per := case when pe - ps > 40 * 86400 then 'yearly' when pe - ps > 0 then 'monthly' end;
         amt := round(coalesce((o->>'total_excluding_tax')::numeric, (o->>'subtotal')::numeric, 0) / 100, 2);
         tax := round(greatest(coalesce((o->>'total')::numeric, 0) - coalesce((o->>'total_excluding_tax')::numeric, (o->>'total')::numeric, 0), 0) / 100, 2);
         pay := coalesce((to_timestamp(nullif(o->'status_transitions'->>'paid_at', '')::bigint) at time zone 'America/Toronto')::date, today);
         insert into public.members as m (email, plan, price, currency, started, next_due, status, stripe_customer, stripe_sub, updated_at)
-        values (em, 'monthly', amt, upper(coalesce(o->>'currency', 'cad')), today, coalesce(due, (today + interval '1 month')::date),
+        values (em, coalesce(per, 'monthly'), amt, upper(coalesce(o->>'currency', 'cad')), today, coalesce(due, (today + interval '1 month')::date),
                 'active', cust, sub, now())
         on conflict (email) do update set
-          plan = 'monthly', status = 'active',
+          plan = coalesce(per, case when m.plan in ('monthly', 'yearly') then m.plan else 'monthly' end), status = 'active',
           price = case when excluded.price > 0 then excluded.price else m.price end,
           next_due = coalesce(due, m.next_due),
           stripe_customer = coalesce(excluded.stripe_customer, m.stripe_customer),
@@ -192,7 +201,12 @@ begin
     elsif o->>'status' in ('active', 'trialing') then
       due := (to_timestamp(coalesce(o->>'current_period_end', o->'items'->'data'->0->>'current_period_end')::bigint)
               at time zone 'America/Toronto')::date;
-      update public.members set plan = 'monthly', status = 'active', next_due = coalesce(due, next_due), updated_at = now()
+      iv := coalesce(o->'items'->'data'->0->'price'->'recurring'->>'interval', o->'plan'->>'interval');
+      update public.members
+         set plan = case iv when 'year' then 'yearly' when 'month' then 'monthly'
+                            else case when plan in ('monthly', 'yearly') then plan else 'monthly' end end,
+             price = coalesce(round((o->'items'->'data'->0->'price'->>'unit_amount')::numeric / 100, 2), price),
+             status = 'active', next_due = coalesce(due, next_due), updated_at = now()
        where stripe_sub = sub;
       get diagnostics n = row_count;
       res := 'sync ' || n;
