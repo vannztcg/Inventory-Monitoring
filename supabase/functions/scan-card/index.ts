@@ -11,7 +11,7 @@
 //
 // Sécurité :
 //   - seul le site autorisé peut appeler la fonction depuis un navigateur (CORS) ;
-//   - compte connecté ET approuvé obligatoire (my_access), quota mensuel compté en base (use_scan) ;
+//   - compte connecté obligatoire (my_access), forfait qui inclut le scan (my_plan), quota mensuel compté en base (use_scan) ;
 //   - consigne fixe côté serveur : la fonction ne sert qu'à lire des cartes, pas de texte libre ;
 //   - image limitée en taille et en type ; erreurs des fournisseurs jamais renvoyées telles quelles.
 const ORIGINS = (Deno.env.get("ALLOWED_ORIGINS") ?? "https://inventorymonitoring.ca").split(",").map((s) => s.trim()).filter(Boolean);
@@ -84,6 +84,11 @@ Deno.serve(async (req) => {
     const acc = await rpc("my_access");
     if (!acc || !acc.approved) return json({ error: "not_allowed" }, 403);
     const premium = !!(acc.ai || acc.admin);
+    if (!premium) {
+      // Le forfait du membre doit inclure le Smart Scan (Free, Pro ou essai, selon tes réglages)
+      const pl = await rpc("my_plan");
+      if (pl && Array.isArray(pl.sections) && !pl.sections.includes("scan")) return json({ error: "plan" }, 403);
+    }
     const hasClaude = !!Deno.env.get("ANTHROPIC_API_KEY"), hasGemini = !!Deno.env.get("GEMINI_API_KEY");
     if (!hasClaude && !hasGemini) return json({ error: "no_provider" }, 503);
 

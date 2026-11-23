@@ -53,9 +53,13 @@ create policy settings_read on public.app_settings for select using (auth.role()
 drop policy if exists settings_owner on public.app_settings;
 create policy settings_owner on public.app_settings for all using (public.is_owner()) with check (public.is_owner());
 
--- Forfait de la personne connectée (lu par l'app à chaque ouverture)
+-- Forfait de la personne connectée (lu par l'app à chaque ouverture).
+-- Version de base seulement si elle n'existe pas encore : la version complète (essai Pro, Stripe) est dans plans.sql.
+do $do$ begin
+if to_regprocedure('public.my_plan()') is null then
+execute $f$
 create or replace function public.my_plan() returns jsonb
-language sql stable security definer set search_path = public as $$
+language sql stable security definer set search_path = public as $fn$
   select jsonb_build_object(
     'plan',     coalesce(m.plan, 'free'),
     'status',   coalesce(m.status, 'active'),
@@ -67,7 +71,10 @@ language sql stable security definer set search_path = public as $$
   )
   from (select 1) one
   left join members m on lower(m.email) = lower(auth.jwt()->>'email')
-$$;
+$fn$
+$f$;
+end if;
+end $do$;
 
 -- Statistiques pour le propriétaire seulement
 create or replace function public.admin_stats() returns jsonb
