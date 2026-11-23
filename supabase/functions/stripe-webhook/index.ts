@@ -15,7 +15,8 @@
 // customer.subscription.updated, customer.subscription.deleted.
 import postgres from "npm:postgres@3.4.5";
 
-const SECRET = Deno.env.get("STRIPE_WEBHOOK_SECRET") ?? "";
+// Espaces ou guillemets collés par erreur autour du secret : on les retire
+const SECRET = (Deno.env.get("STRIPE_WEBHOOK_SECRET") ?? "").trim().replace(/^["']+|["']+$/g, "").trim();
 const TOLERANCE = 300; // secondes
 const enc = new TextEncoder();
 let sql: ReturnType<typeof postgres> | null = null;
@@ -29,7 +30,9 @@ const same = (a: string, b: string) => {
   return r === 0;
 };
 
-export async function verify(body: string, header: string, secret: string, now = Date.now() / 1000) {
+// Renvoie "" si la signature est bonne, sinon la raison (jamais le secret)
+export async function check(body: string, header: string, secret: string, now = Date.now() / 1000) {
+  if (!secret.startsWith("whsec_")) return "secret_format";
   let t = "";
   const v1: string[] = [];
   for (const part of header.split(",")) {
@@ -39,12 +42,13 @@ export async function verify(body: string, header: string, secret: string, now =
     if (k === "t") t = v;
     else if (k === "v1") v1.push(v);
   }
-  if (!/^\d+$/.test(t) || !v1.length || !secret) return false;
-  if (Math.abs(now - Number(t)) > TOLERANCE) return false;
+  if (!/^\d+$/.test(t) || !v1.length) return "no_signature_header";
+  if (Math.abs(now - Number(t)) > TOLERANCE) return "timestamp_too_old";
   const key = await crypto.subtle.importKey("raw", enc.encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
   const sig = hex(await crypto.subtle.sign("HMAC", key, enc.encode(`${t}.${body}`)));
-  return v1.some((s) => same(s, sig));
+  return v1.some((s) => same(s, sig)) ? "" : "mismatch";
 }
+export const verify = async (body: string, header: string, secret: string, now?: number) => (await check(body, header, secret, now)) === "";
 
 const reply = (s: number, b: unknown) => new Response(JSON.stringify(b), { status: s, headers: { "Content-Type": "application/json" } });
 
@@ -54,7 +58,11 @@ Deno.serve(async (req) => {
   if (Number(req.headers.get("Content-Length") ?? 0) > 512_000) return reply(413, { error: "too_large" });
   const body = await req.text();
   if (body.length > 512_000) return reply(413, { error: "too_large" });
-  if (!(await verify(body, req.headers.get("Stripe-Signature") ?? "", SECRET))) return reply(400, { error: "signature" });
+  const why = await check(body, req.headers.get("Stripe-Signature") ?? "", SECRET);
+  if (why) {
+    console.warn("signature refusée :", why, "· longueur du secret :", SECRET.length);
+    return reply(400, { error: "signature", why });
+  }
   try {
     JSON.parse(body);
   } catch {
