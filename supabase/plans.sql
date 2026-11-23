@@ -123,7 +123,7 @@ begin
       sub  := o->>'subscription';
       inv  := o->>'invoice';
       if em is null then raise exception 'stripe: courriel introuvable pour %', o->>'id'; end if;
-      amt := round(coalesce((o->>'amount_subtotal')::numeric, 599) / 100, 2);
+      amt := round(coalesce((o->>'amount_subtotal')::numeric, 799) / 100, 2);
       tax := round(coalesce((o->'total_details'->>'amount_tax')::numeric, 0) / 100, 2);
       insert into public.members as m (email, plan, price, currency, started, next_due, status, stripe_customer, stripe_sub, updated_at)
       values (em, 'monthly', amt, upper(coalesce(o->>'currency', 'cad')), today,
