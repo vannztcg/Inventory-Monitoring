@@ -92,6 +92,17 @@ create table if not exists billing.events (
 alter table billing.events enable row level security;
 revoke all on billing.events from public, anon, authenticated;
 
+-- Page de paiement intégrée : journal des sessions créées (limite de 12 par compte et par heure)
+create table if not exists billing.checkout_log (
+  id bigserial primary key,
+  uid uuid not null,
+  period text,
+  created_at timestamptz not null default now()
+);
+create index if not exists checkout_log_uid_idx on billing.checkout_log (uid, created_at desc);
+alter table billing.checkout_log enable row level security;
+revoke all on billing.checkout_log from public, anon, authenticated;
+
 create or replace function billing.stripe_apply(ev jsonb) returns text
 language plpgsql security definer set search_path = public, billing, auth, pg_temp as $$
 declare

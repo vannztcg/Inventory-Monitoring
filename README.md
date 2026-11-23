@@ -31,3 +31,12 @@ Le Pro coûte 7,99 $/mois ou 79,90 $/an (2 mois gratuits), prix final (aucune ta
 6. Dans l'app : Console › Réglages › Paiement en ligne, colle le lien mensuel, le lien annuel et le lien du portail.
 
 La fonction `supabase/functions/stripe-webhook` vérifie la signature de Stripe et transmet l'événement à `billing.stripe_apply()` (schéma non exposé à l'API).
+
+### Page de paiement dans l'app
+Les membres paient sans quitter l'app : la fonction `supabase/functions/create-checkout` crée une session Stripe Checkout (`ui_mode: elements`) et l'app affiche le formulaire de carte de Stripe (Payment Element) dans sa propre page. Le webhook ci-dessus active le Pro, comme avec les liens.
+
+1. **Clé restreinte** (Stripe › Developers › API keys › Create restricted key) : *Checkout Sessions* en écriture, *Customers* en écriture, *Prices* et *Products* en lecture. Colle-la toi-même dans Supabase › Edge Functions › Secrets sous le nom `STRIPE_SECRET_KEY`. Ne l'envoie à personne.
+2. **Fonction** `create-checkout` déployée avec « Verify JWT » désactivé (elle vérifie elle-même la session Supabase), et le SQL `supabase/plans.sql` relancé (table `billing.checkout_log`, limite de 12 sessions par compte et par heure).
+3. **Clé publiable** (`pk_live_…`) : Console › Réglages › Paiement en ligne. Sans cette clé ou si la fonction ne répond pas, l'app utilise le lien de paiement Stripe comme avant.
+4. **Domaine** `inventorymonitoring.ca` enregistré dans Stripe › Settings › Payment method domains (Apple Pay, Google Pay et Link).
+
