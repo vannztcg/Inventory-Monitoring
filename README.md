@@ -50,3 +50,7 @@ Les membres paient sans quitter l'app : la fonction `supabase/functions/create-c
 - `supabase/legal.sql` : à coller une fois dans Supabase → SQL Editor. Ajoute `legal_info()`, `delete_my_account()` et le suivi des annulations programmées (`members.cancel_at`).
 - Dans l'app : case de consentement à l'inscription (jamais cochée d'avance, version enregistrée dans le compte), bouton « Annuler mon abonnement » dans Mon abonnement, Réglages › Confidentialité (export, suppression du compte, avis de marques).
 - Les polices (Inter, Instrument Serif) sont servies depuis `/fonts/` : aucune requête vers Google Fonts.
+
+## Smart Scan
+
+Le Smart Scan lit la carte directement sur l'appareil : détection du contour, redressement, lecture du nom et du numéro (Tesseract.js), puis comparaison avec la base `cards-db.json`, les empreintes `cards-fp.json` et les signatures visuelles `cards-vis.bin`. Aucune photo n'est envoyée à un serveur et aucun service d'IA n'est utilisé.
