@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-R9XVxcCsNA7Edy6+++qgXHUqDf33hNC56wIECBeb8eY=' 'sha256-Ml/EwIXW5nuwqPDIbi91qkBSTb81YkzZK1PUHCCSlz0=' https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js https://cdn.jsdelivr.net/npm/tesseract.js@v5.1.1/dist/worker.min.js https://cdn.jsdelivr.net/npm/tesseract.js-core@v5.1.1/ https://challenges.cloudflare.com https://js.stripe.com https://*.js.stripe.com 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https:; media-src 'self' blob:; connect-src 'self' data: https://qghjmjbmpbpslfkwyqet.supabase.co https://cdn.jsdelivr.net https://raw.githubusercontent.com https://api.github.com https://api.pokemontcg.io https://tcgcsv.com https://api.pwnedpasswords.com https://challenges.cloudflare.com https://api.stripe.com https://link.com https://*.link.com; worker-src 'self' blob:; child-src 'self' blob:; frame-src https://challenges.cloudflare.com https://js.stripe.com https://*.js.stripe.com https://hooks.stripe.com https://link.com https://*.link.com; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-TxmrAAtpb184bHWJ43bd0w9j3Ipv/6NuJkzpOYBxk4Y=' 'sha256-Ml/EwIXW5nuwqPDIbi91qkBSTb81YkzZK1PUHCCSlz0=' https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js https://cdn.jsdelivr.net/npm/tesseract.js@v5.1.1/dist/worker.min.js https://cdn.jsdelivr.net/npm/tesseract.js-core@v5.1.1/ https://challenges.cloudflare.com https://js.stripe.com https://*.js.stripe.com 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https:; media-src 'self' blob:; connect-src 'self' data: https://qghjmjbmpbpslfkwyqet.supabase.co https://cdn.jsdelivr.net https://raw.githubusercontent.com https://api.github.com https://api.pokemontcg.io https://tcgcsv.com https://api.pwnedpasswords.com https://challenges.cloudflare.com https://api.stripe.com https://link.com https://*.link.com; worker-src 'self' blob:; child-src 'self' blob:; frame-src https://challenges.cloudflare.com https://js.stripe.com https://*.js.stripe.com https://hooks.stripe.com https://link.com https://*.link.com; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="same-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>Inventory Monitoring</title>
@@ -827,6 +827,16 @@ body.tbon #tabbar,body.full.tbon #tabbar{background:rgba(15,24,41,.82)!important
 :root[data-theme="light"] .big{font-family:var(--serif);font-weight:400;font-size:52px;letter-spacing:-.02em;line-height:1.05;margin:6px 0}
 :root[data-theme="light"] .th:not(img){font-family:var(--serif);font-size:20px}
 :root[data-theme="light"] .sksum>.row>div:first-child b{font-family:var(--serif);font-weight:400;font-size:46px!important;letter-spacing:-.02em;line-height:1.1}
+
+/* patch81 : chiffres en Inter (le serif étroit paraissait étiré) ; tuiles de forfaits plus compactes */
+:root[data-theme] .big,:root[data-theme] .sksum>.row>div:first-child b,.pqt .pqp,.payp b{font-family:Inter,system-ui,sans-serif!important;font-weight:600!important;letter-spacing:-.03em!important;font-variant-numeric:tabular-nums lining-nums;font-feature-settings:"tnum","lnum"}
+:root[data-theme] .big{font-size:40px!important;line-height:1.1!important}
+:root[data-theme] .sksum>.row>div:first-child b{font-size:34px!important;line-height:1.15!important}
+.pqt .pqp{font-size:clamp(20px,5.9vw,28px)!important;line-height:1.1!important;margin-top:6px}
+.payp b{font-size:46px!important;line-height:1.05}
+.pqt{padding:13px 10px 12px!important;border-radius:16px}
+.pqt .pqs{margin-top:4px}
+.pqv{margin-top:5px}
 </style>
 </head>
 <body>
@@ -962,7 +972,7 @@ function vPl(){const inP=d=>{if(B.p=='all')return true;const x=new Date(d);if(B.
 
 const SW=[['','#2563eb'],['#7c3aed','#7c3aed'],['#e11d48','#e11d48'],['#ea580c','#ea580c'],['#059669','#059669'],['#0891b2','#0891b2'],['#db2777','#db2777']],uiB=(k,v,t)=>`<button class="chip ${UI[k]==v?'on':''}" data-a="ui" data-k="${k}" data-v="${v}">${t}</button>`;
 let SS='ev';
-const APP_UPDATED='2026-11-23T20:48:37-05:00';
+const APP_UPDATED='2026-11-24T00:47:45-05:00';
 const appUpd=()=>'Dernière mise à jour de l’app : '+new Date(APP_UPDATED).toLocaleString(LC(),{dateStyle:'long',timeStyle:'short'});
 const SECN={buy:'Acheter',stock:'Stock',sv:'Ventes',gr:'Grading',tr:'Échanges',pl:'Bilan',gx:'Croissance',ex:'Dépenses',log:'Suivi',set:'Réglages'};
 function goHome(){sheet=null;EE={id:''};CR.open=false;QS.open=TP.open=false;QS.on=false;tab='home';HS=true;HA=false;render()}
