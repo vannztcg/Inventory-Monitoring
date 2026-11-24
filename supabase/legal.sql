@@ -37,7 +37,8 @@ create or replace function public.legal_info() returns jsonb
 language sql stable security definer set search_path = public as $$
   select jsonb_build_object(
     'legal',   (select value - 'name' - 'addr' - 'prp' - 'phone' from public.app_settings where key = 'legal'),
-    'contact', (select value from public.app_settings where key = 'contact'))
+    'contact', (select value from public.app_settings where key = 'contact'),
+    'prices',  (select value from public.app_settings where key = 'prices'))
 $$;
 revoke all on function public.legal_info() from public;
 grant execute on function public.legal_info() to anon, authenticated;

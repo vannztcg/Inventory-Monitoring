@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-MjqhemuFLIyYmv58yBVAfxaw0WpVlcC5L6D6/MmVOy4=' 'sha256-Ml/EwIXW5nuwqPDIbi91qkBSTb81YkzZK1PUHCCSlz0=' https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js https://cdn.jsdelivr.net/npm/tesseract.js@v5.1.1/dist/worker.min.js https://cdn.jsdelivr.net/npm/tesseract.js-core@v5.1.1/ https://challenges.cloudflare.com https://js.stripe.com https://*.js.stripe.com 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https:; media-src 'self' blob:; connect-src 'self' data: https://qghjmjbmpbpslfkwyqet.supabase.co https://cdn.jsdelivr.net https://raw.githubusercontent.com https://api.github.com https://api.pokemontcg.io https://tcgcsv.com https://api.pwnedpasswords.com https://challenges.cloudflare.com https://api.stripe.com https://link.com https://*.link.com; worker-src 'self' blob:; child-src 'self' blob:; frame-src https://challenges.cloudflare.com https://js.stripe.com https://*.js.stripe.com https://hooks.stripe.com https://link.com https://*.link.com; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-gg8Fvp6hRWAdAWSmTNn3XuUl24Wo4904QdvhihaEIwQ=' 'sha256-Ml/EwIXW5nuwqPDIbi91qkBSTb81YkzZK1PUHCCSlz0=' https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js https://cdn.jsdelivr.net/npm/tesseract.js@v5.1.1/dist/worker.min.js https://cdn.jsdelivr.net/npm/tesseract.js-core@v5.1.1/ https://challenges.cloudflare.com https://js.stripe.com https://*.js.stripe.com 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https:; media-src 'self' blob:; connect-src 'self' data: https://qghjmjbmpbpslfkwyqet.supabase.co https://cdn.jsdelivr.net https://raw.githubusercontent.com https://api.github.com https://api.pokemontcg.io https://tcgcsv.com https://api.pwnedpasswords.com https://challenges.cloudflare.com https://api.stripe.com https://link.com https://*.link.com; worker-src 'self' blob:; child-src 'self' blob:; frame-src https://challenges.cloudflare.com https://js.stripe.com https://*.js.stripe.com https://hooks.stripe.com https://link.com https://*.link.com; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="same-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>Inventory Monitoring</title>
@@ -853,6 +853,85 @@ body.tbon #tabbar,body.full.tbon #tabbar{background:rgba(15,24,41,.82)!important
  .pqt .pqc{grid-area:c;justify-self:end;margin:2px 0 0}
  .pqt .pqr{left:16px!important;right:auto!important;transform:none!important}
 }
+
+/* ===== Page d'accueil publique (visiteurs non connectés) ===== */
+html{scroll-behavior:smooth}
+#lp{overflow:visible;overflow-x:clip;min-height:100vh;background:radial-gradient(90% 60% at 70% 0%,#13244a 0%,#0A111F 55%) #0A111F!important;color:#ECF0F7;font-family:Inter,system-ui,sans-serif;padding:0 0 40px}
+#lp [id^="lp-"]{scroll-margin-top:84px}
+#lp .lpbt{all:unset;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 26px;border-radius:999px;font:600 16px/1 Inter,system-ui,sans-serif;cursor:pointer;white-space:nowrap;transition:transform .15s,box-shadow .2s,background .2s}
+#lp .lpbt:focus-visible{outline:2px solid #7AA7FF;outline-offset:3px}
+#lp .lpbt.w{background:#fff;color:#0A111F}#lp .lpbt.w:hover{background:#E4ECFF}
+#lp .lpbt.g{background:#0F1829;color:#fff;border:1px solid #2F4E86;box-shadow:0 0 0 1px rgba(122,167,255,.15),0 8px 30px rgba(74,124,255,.28)}#lp .lpbt.g:hover{border-color:#7AA7FF}
+#lp .lpbt.t{background:none;color:#C9D4E8;padding:0 12px}#lp .lpbt.t:hover{color:#fff}
+#lp .lpbt.sm{min-height:42px;padding:0 20px;font-size:15px}
+#lp .lpn{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:20px;padding:14px max(20px,calc((100% - 1180px)/2));background:rgba(10,17,31,.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(27,39,64,.7)}
+#lp .lpbr{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-weight:700;font-size:16px;letter-spacing:-.01em}
+#lp .lpbr img{border-radius:9px}
+#lp .lpl{display:flex;gap:26px;margin:0 auto}
+#lp .lpl a{color:#C9D4E8;text-decoration:none;font-size:15px;font-weight:500}#lp .lpl a:hover{color:#fff}
+#lp .lpr{display:flex;align-items:center;gap:8px}
+#lp .lplg{display:flex;border:1px solid #1B2740;border-radius:999px;padding:3px}
+#lp .lplg button{all:unset;cursor:pointer;font:600 12px Inter,sans-serif;color:#8E9DBA;padding:6px 9px;border-radius:999px}#lp .lplg button.on{background:#1B2740;color:#fff}
+#lp .lplg button:focus-visible{outline:2px solid #7AA7FF}
+#lp .lph{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);align-items:center;gap:40px;max-width:1180px;margin:0 auto;padding:72px 20px 40px;min-height:calc(100vh - 72px);box-sizing:border-box}
+#lp h1{margin:0;font:700 clamp(40px,5.6vw,68px)/1.02 Inter,system-ui,sans-serif;letter-spacing:-.035em;color:#fff}
+#lp h1 span,#lp .lps>h2 span,#lp .lpt h2 span{display:block;color:#7AA7FF}
+#lp .lpsub{margin:22px 0 0;font-size:18px;line-height:1.5;color:#B4C0D6;max-width:520px}
+#lp .lpsub a{color:#fff;font-weight:600;text-decoration:none;border-bottom:1px solid #2F4E86}
+#lp .lpcta{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px}
+#lp .lpst{display:flex;gap:48px;margin:44px 0 0;padding:0}
+#lp .lpst div{margin:0}#lp .lpst dt{font:700 30px/1 Inter,sans-serif;letter-spacing:-.02em;color:#fff;font-variant-numeric:tabular-nums}#lp .lpst dd{margin:8px 0 0;font-size:14px;color:#8E9DBA;max-width:180px;line-height:1.4}
+#lp .lphv{position:relative;height:620px}
+#lp .lpph{width:270px;aspect-ratio:585/1266;border-radius:42px;padding:9px;background:linear-gradient(145deg,#3A4256,#11151F 40%,#2A3142);box-shadow:0 40px 80px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.06) inset}
+#lp .lpph img{display:block;width:100%;height:100%;object-fit:cover;object-position:top;border-radius:34px;background:#0A111F}
+#lp .lphv .lpph{position:absolute;top:30px;left:4%;transform:rotate(-7deg)}
+#lp .lphv .lpph.f{left:auto;right:2%;top:70px;transform:rotate(6deg)}
+#lp .lps{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;gap:64px;max-width:1080px;margin:0 auto;padding:110px 20px;border-top:1px solid rgba(27,39,64,.7)}
+#lp .lps.lpc{display:block;text-align:center}
+#lp .lpv{display:flex;justify-content:center}
+#lp .lpv .lpph{transform:rotate(-3deg)}#lp #lp-scan .lpv .lpph{transform:rotate(3deg)}
+#lp .lps>h2,#lp .lpt h2{margin:0;font:700 clamp(32px,4vw,48px)/1.06 Inter,system-ui,sans-serif;letter-spacing:-.03em;color:#fff}
+#lp .lpt p{margin:22px 0 0;font-size:17px;line-height:1.6;color:#B4C0D6}
+#lp .lpck{list-style:none;margin:26px 0 0;padding:0;display:grid;gap:14px}
+#lp .lpck li{display:flex;gap:12px;align-items:flex-start;font-size:16px;line-height:1.45;color:#ECF0F7}
+#lp .lpck svg{flex:none;width:20px;height:20px;margin-top:1px;color:#58D6A6}
+#lp .lpt .lpcl{margin-top:28px;font-size:14px;color:#8E9DBA}
+#lp .lpchips{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+#lp .lpchips span{padding:10px 18px;border:1px solid #1B2740;background:#0F1829;border-radius:999px;font-weight:600;font-size:15px;letter-spacing:.02em}
+#lp .lpg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:48px;text-align:left}
+#lp .lpf{background:#0F1829;border:1px solid #1B2740;border-radius:20px;padding:26px}
+#lp .lpf svg{width:26px;height:26px;color:#7AA7FF}
+#lp .lpf h3{margin:16px 0 0;font:600 18px Inter,sans-serif;color:#fff;text-transform:none;letter-spacing:-.01em}
+#lp .lpf p{margin:8px 0 0;font-size:15px;line-height:1.55;color:#A3AFC6}
+#lp .lppl{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:48px;text-align:left}
+#lp .lpp{position:relative;background:#0F1829;border:1px solid #1B2740;border-radius:24px;padding:30px;display:flex;flex-direction:column}
+#lp .lpp.hi{background:#142036;border-color:#2F4E86}
+#lp .lppb{position:absolute;top:-13px;right:20px;background:#58D6A6;color:#062016;font-weight:700;font-size:13px;padding:6px 12px;border-radius:999px}
+#lp .lpp h3{margin:0;font:600 16px Inter,sans-serif;color:#B4C0D6;text-transform:none;letter-spacing:0}
+#lp .lppp{margin:14px 0 0;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+#lp .lppp b{font:700 40px/1 Inter,sans-serif;letter-spacing:-.03em;color:#fff;font-variant-numeric:tabular-nums}
+#lp .lppp span{color:#8E9DBA;font-size:15px}
+#lp .lpps{margin:10px 0 26px;color:#A3AFC6;font-size:15px}
+#lp .lpp .lpbt{margin-top:auto;width:100%}
+#lp .lpnote{margin:22px 0 0;color:#8E9DBA;font-size:14px}
+#lp .lpq{max-width:760px;margin:44px auto 0;text-align:left;border-top:1px solid #1B2740}
+#lp .lpq details{border-bottom:1px solid #1B2740}
+#lp .lpq summary{cursor:pointer;list-style:none;padding:22px 40px 22px 0;font-weight:600;font-size:17px;color:#fff;position:relative}
+#lp .lpq summary::-webkit-details-marker{display:none}
+#lp .lpq summary::after{content:"+";position:absolute;right:4px;top:50%;transform:translateY(-50%);font-size:24px;font-weight:400;color:#7AA7FF}
+#lp .lpq details[open] summary::after{content:"−"}
+#lp .lpq summary:focus-visible{outline:2px solid #7AA7FF;outline-offset:2px}
+#lp .lpq details p{margin:0 0 22px;color:#B4C0D6;font-size:16px;line-height:1.6}
+#lp .lpacc .acard2{margin:40px auto 0;max-width:440px;text-align:left}
+#lp .lpacc .afoot{position:static;margin:18px 0 0;justify-content:center}
+#lp .lpft{max-width:1080px;margin:0 auto;padding:48px 20px 24px;border-top:1px solid rgba(27,39,64,.7);display:grid;gap:18px}
+#lp .lpfl{display:flex;flex-wrap:wrap;gap:22px}#lp .lpfl a{color:#C9D4E8;text-decoration:none;font-size:14px}#lp .lpfl a:hover{color:#fff}
+#lp .lpft p{margin:0;font-size:13px;line-height:1.5;color:#6F7D99}
+@media(max-width:980px){#lp .lpl{display:none}#lp .lpr{margin-left:auto}}
+@media(max-width:860px){#lp .lph{grid-template-columns:1fr;padding-top:44px;min-height:0;text-align:left}#lp .lphv{height:470px;max-width:440px;margin:0 auto;width:100%}#lp .lphv .lpph{width:210px}
+ #lp .lps{grid-template-columns:1fr;gap:40px;padding:80px 20px}#lp #lp-scan .lpv{order:-1}#lp .lpg,#lp .lppl{grid-template-columns:1fr}#lp .lppl{gap:22px}}
+@media(max-width:560px){#lp .lpn{gap:10px;padding:10px 14px}#lp .lpn .lpbr span{display:none}#lp .lpbt.t{display:none}#lp .lpst{gap:28px}#lp .lpcta .lpbt{flex:1 1 100%}#lp .lphv{height:420px}#lp .lphv .lpph{width:180px}#lp .lpph{width:230px}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}#lp .lpbt{transition:none}}
 </style>
 </head>
 <body>
@@ -913,7 +992,7 @@ const hist=it=>it.log||[{t:it.date,e:'achat',note:'Acheté '+M(cost(it))}].conca
 const EVL={achat:'Achat',statut:'Statut',vente:'Vente',annul:'Annulation',modif:'Modification',grad:'Grading',echange:'Échange'};
 const DOPT={day:'numeric',month:'short',year:'numeric'},dParse=t=>new Date(/^\d{4}-\d{2}-\d{2}$/.test(String(t||''))?t+'T12:00:00':t),fd=t=>new Date(t).toLocaleString(LC(),{dateStyle:'medium',timeStyle:'short'});
 const DESK=()=>matchMedia('(min-width:900px)').matches;
-let tab='home',PT='home',HS=(()=>{try{return!!localStorage.getItem('cv_seen')}catch(e){return false}})(),HA=false,msg='',sheet=null,ED=false,IM='',PH='';
+let tab='home',PT='home',HS=(()=>{try{return!!localStorage.getItem('cv_seen')||(!localStorage.getItem('cv_sb')&&!(matchMedia('(display-mode: standalone)').matches||navigator.standalone))}catch(e){return false}})(),HA=false,msg='',sheet=null,ED=false,IM='',PH='';
 let UI={hbg:'logo',lang:'fr',theme:'auto',ac:'',fs:'16px',r:'',bg:''};try{const u=JSON.parse(localStorage.getItem('cv_ui')||'{}');if(!u.lang&&!/^fr/i.test(navigator.language||'fr'))u.lang='en';Object.assign(UI,u)}catch(e){}
 const NAV0=document.querySelector('nav')?document.querySelector('nav').innerHTML:'';
 function applyUI(){const r=document.documentElement,b=document.body;r.lang=UI.lang;{const n=document.querySelector('nav');if(n)n.innerHTML=L(navHtml())}r.setAttribute('data-theme',UI.theme=='light'?'light':'dark');if(UI.ac){r.style.setProperty('--ac',UI.ac);r.style.setProperty('--act','#fff')}else{r.style.removeProperty('--ac');r.style.removeProperty('--act')}r.style.setProperty('--fs',UI.fs);UI.r?r.style.setProperty('--r',UI.r):r.style.removeProperty('--r');UI.bg?b.setAttribute('data-bg',UI.bg):b.removeAttribute('data-bg')}
@@ -988,7 +1067,7 @@ function vPl(){const inP=d=>{if(B.p=='all')return true;const x=new Date(d);if(B.
 
 const SW=[['','#2563eb'],['#7c3aed','#7c3aed'],['#e11d48','#e11d48'],['#ea580c','#ea580c'],['#059669','#059669'],['#0891b2','#0891b2'],['#db2777','#db2777']],uiB=(k,v,t)=>`<button class="chip ${UI[k]==v?'on':''}" data-a="ui" data-k="${k}" data-v="${v}">${t}</button>`;
 let SS='ev';
-const APP_UPDATED='2026-11-24T12:48:42-05:00';
+const APP_UPDATED='2026-11-24T15:56:01-05:00';
 const appUpd=()=>'Dernière mise à jour de l’app : '+new Date(APP_UPDATED).toLocaleString(LC(),{dateStyle:'long',timeStyle:'short'});
 const SECN={buy:'Acheter',stock:'Stock',sv:'Ventes',gr:'Grading',tr:'Échanges',pl:'Bilan',gx:'Croissance',ex:'Dépenses',log:'Suivi',set:'Réglages'};
 function goHome(){sheet=null;EE={id:''};CR.open=false;QS.open=TP.open=false;QS.on=false;tab='home';HS=true;HA=false;render()}
@@ -2102,11 +2181,58 @@ const AUBG=()=>'';
 const AULNG=()=>`<div class="alng" role="group" aria-label="Langue / Language">${ICO('globe')}<button class="${UI.lang!='en'?'on':''}" data-a="lng" data-k="fr" aria-pressed="${UI.lang!='en'}">FR</button><button class="${UI.lang=='en'?'on':''}" data-a="lng" data-k="en" aria-pressed="${UI.lang=='en'}">EN</button></div>`;
 const AUFAN=()=>`<div class="afan in" style="--i:2" aria-hidden="true">${[['▲ +24 %','c0'],['1 145 $','c1'],['PSA 10','c2']].map(([t,c])=>`<div class="acd ${c}"><i class="em"></i><b></b><b></b><span>${t}</span></div>`).join('')}</div>`;
 const ASTEP=n=>`<ol class="astep in" style="--i:1">${[TL('Compte','Account'),TL('Forfait','Plan'),TL('C’est parti','All set')].map((t,i)=>`<li class="${i<n?'done':i==n?'cur':''}"><i>${i<n?ICO('chk'):i+1}</i><span>${t}</span></li>`).join('')}</ol>`;
-function vAuth(){const up=AUTHM=='up',st=AUA?' still':'';AUA=true;const s=pwScore(SBF.pw);
+const isPWA=()=>{try{return matchMedia('(display-mode: standalone)').matches||!!navigator.standalone}catch(e){return false}};
+let LPP=0;
+function lpPrices(){if(LPP)return;LPP=1;fetch(SBU+'/rest/v1/rpc/legal_info',{method:'POST',headers:{apikey:SBK,'Content-Type':'application/json'},body:'{}'}).then(r=>r.ok?r.json():null).then(j=>{if(j&&j.prices&&!SBS){PUB.prices=j.prices;if(document.getElementById('lp'))render()}}).catch(()=>{})}
+const LPI=k=>`img/lp/${UI.lang=='en'?'en':'fr'}_${k}.webp`;
+const LPH=(k,alt,cls)=>`<div class="lpph${cls?' '+cls:''}"><img src="${LPI(k)}" alt="${alt}" width="585" height="1266" decoding="async"${cls=='b'?'':' loading="lazy"'}></div>`;
+function vLanding(){lpPrices();const I=triInfo(),en=UI.lang=='en',lq=en?'?lang=en':'';
+ const nav=[['lp-profit',TL('Profit','Profit')],['lp-scan','Smart Scan'],['lp-tout',TL('Fonctions','Features')],['lp-prix',TL('Tarifs','Pricing')],['lp-faq','FAQ']];
+ const feats=[['stock',TL('Stock et prix du marché','Stock and market prices'),TL('Chaque carte avec ce que tu l’as payée, sa valeur du jour et ton gain latent.','Every card with what you paid, today’s value and your unrealized gain.')],
+  ['sv',TL('Ventes','Sales'),TL('Note une vente en quelques secondes, avec les frais et le shipping. Le profit se calcule tout seul.','Log a sale in seconds, with fees and shipping. Profit works itself out.')],
+  ['ex',TL('Dépenses','Expenses'),TL('Tables, essence, sleeves, abonnements : tout ce qui sort de ta poche est soustrait du profit.','Tables, gas, sleeves, subscriptions: everything you spend comes off your profit.')],
+  ['ev',TL('Card shows','Card shows'),TL('Rattache tes ventes et tes dépenses à un show pour savoir s’il a été payant.','Tie sales and expenses to a show to see if it paid off.')],
+  ['gr',TL('Grading','Grading'),TL('Suis les cartes envoyées chez PSA, CGC ou BGS, avec les frais inclus au coût.','Track cards sent to PSA, CGC or BGS, with fees added to the cost.')],
+  ['sync',TL('Téléphone et ordi','Phone and computer'),TL('Tout est synchronisé. Commence au show sur ton téléphone, termine sur ton ordi.','Everything syncs. Start at the show on your phone, finish on your computer.')]];
+ const faq=[[TL('Est-ce que quelqu’un d’autre peut voir mes données ?','Can anyone else see my data?'),TL('Non. Ton inventaire est lié à ton compte, et aucun autre compte ne peut le voir.','No. Your inventory belongs to your account, and no other account can see it.')],
+  [TL('Où va la photo quand je scanne une carte ?','Where does the photo go when I scan a card?'),TL('Nulle part. Smart Scan lit la carte directement sur ton téléphone ; la photo n’est envoyée à aucun serveur.','Nowhere. Smart Scan reads the card right on your phone; the photo isn’t sent to any server.')],
+  [TL('Ça marche sur iPhone, Android et ordi ?','Does it work on iPhone, Android and computer?'),TL('Oui, dans ton navigateur. Sur ton téléphone, tu peux l’ajouter à ton écran d’accueil comme une app.','Yes, in your browser. On your phone you can add it to your home screen like an app.')],
+  [TL('Je peux annuler le Pro quand ?','When can I cancel Pro?'),TL('En tout temps, dans Réglages › Abonnement. Tu gardes le Pro jusqu’à la fin de la période déjà payée.','Anytime, in Settings › Subscription. You keep Pro until the end of the period you already paid for.')],
+  [TL('Le paiement est-il sécurisé ?','Is payment secure?'),TL('Le paiement passe par Stripe. Ton numéro de carte n’est jamais conservé chez nous.','Payment goes through Stripe. Your card number is never stored on our side.')]];
+ const plan=(k,badge,cta,up)=>{const p=I[k];return`<div class="lpp${k=='y'?' hi':''}">${badge?`<span class="lppb">${badge}</span>`:''}<h3>${p.n}</h3><p class="lppp"><b>${p.p}</b><span>${p.u}</span></p><p class="lpps">${p.s}</p><button class="lpbt ${k=='y'?'w':'g'}" data-a="lpgo" data-k="up">${cta}</button></div>`};
+ return`<div class="home auth2 lp" id="lp">
+<div class="lpn"><a class="lpbr" href="#lp-top" aria-label="Inventory Monitoring"><img src="icons/icon-192.png" alt="" width="36" height="36"><span>Inventory Monitoring</span></a>
+<div class="lpl" role="navigation" aria-label="${TL('Sections','Sections')}">${nav.map(([h,t])=>`<a href="#${h}">${t}</a>`).join('')}</div>
+<div class="lpr"><div class="lplg" role="group" aria-label="Langue / Language"><button class="${!en?'on':''}" data-a="lng" data-k="fr" aria-pressed="${!en}">FR</button><button class="${en?'on':''}" data-a="lng" data-k="en" aria-pressed="${en}">EN</button></div><button class="lpbt t" data-a="lpgo" data-k="in">${TL('Se connecter','Sign in')}</button><button class="lpbt w sm" data-a="lpgo" data-k="up">${TL('Créer un compte','Sign up')}</button></div></div>
+<section class="lph" id="lp-top"><div class="lphx">
+<h1>${TL('Tes achats, tes ventes, tes dépenses.','Your buys, your sales, your expenses.')}<span>${TL('Ton vrai profit.','Your real profit.')}</span></h1>
+<p class="lpsub">${TL('L’app d’inventaire pour les vendeurs de cartes Pokémon. Faite au Québec par <a href="https://www.instagram.com/vannztcg/" target="_blank" rel="noopener">VannzTCG</a>.','The inventory app for Pokémon card vendors. Made in Québec by <a href="https://www.instagram.com/vannztcg/" target="_blank" rel="noopener">VannzTCG</a>.')}</p>
+<div class="lpcta"><button class="lpbt g" data-a="lpgo" data-k="up">${TL('Commencer gratuitement','Start for free')}</button><button class="lpbt w" data-a="lpgo" data-k="in">${TL('Se connecter','Sign in')}</button></div>
+<dl class="lpst"><div><dt>20 000+</dt><dd>${TL('cartes reconnues par le scan','cards recognized by the scan')}</dd></div><div><dt>${TL('Gratuit','Free')}</dt><dd>${TL('pour commencer, sans carte de crédit','to start, no credit card')}</dd></div></dl></div>
+<div class="lphv" aria-hidden="true">${LPH('home','','b')}${LPH('gx','','b f')}</div></section>
+<section class="lps lpsp" id="lp-profit"><div class="lpv">${LPH('pl',TL('Écran Bilan de l’app : profit net, ventes et dépenses','App Summary screen: net profit, sales and expenses'))}</div><div class="lpt">
+<h2>${TL('Tes dépenses contre ton profit.','Your expenses against your profit.')}<span>${TL('Mois par mois.','Month by month.')}</span></h2>
+<p>${TL('Note chaque achat, chaque vente et chaque dépense : tables, essence, sleeves, shipping. L’app soustrait tout et te montre ce qu’il te reste vraiment.','Log every buy, every sale and every expense: tables, gas, sleeves, shipping. The app takes it all off and shows what’s really left.')}</p>
+<ul class="lpck">${[TL('Profit net, total investi et total des ventes','Net profit, total invested and total sales'),TL('Graphique du profit cumulé, mois après mois','Cumulative profit chart, month after month'),TL('Stock dormant : les cartes qui ne bougent plus depuis 60 jours','Dead stock: cards that haven’t moved in 60 days')].map(t=>`<li>${ICO('chk')}<span>${t}</span></li>`).join('')}</ul></div></section>
+<section class="lps" id="lp-scan"><div class="lpt">
+<h2>${TL('Prends la carte en photo.','Snap a photo of the card.')}<span>${TL('Elle s’ajoute toute seule.','It adds itself.')}</span></h2>
+<p>${TL('Smart Scan lit le nom, le set et le numéro, puis te propose la bonne version avec son prix du marché. Tu confirmes, c’est ajouté. Tout se passe sur ton téléphone : la photo n’est envoyée nulle part.','Smart Scan reads the name, set and number, then offers the right version with its market price. You confirm and it’s added. It all happens on your phone: the photo isn’t sent anywhere.')}</p>
+<p class="lpcl">${TL('Lit aussi l’étiquette des slabs','Also reads slab labels')}</p><div class="lpchips">${['PSA','CGC','BGS','SGC','TAG'].map(t=>`<span>${t}</span>`).join('')}</div></div>
+<div class="lpv">${LPH('stock',TL('Écran Stock de l’app : valeur, coût et gain latent','App Stock screen: value, cost and unrealized gain'))}</div></section>
+<section class="lps lpc" id="lp-tout"><h2>${TL('Tout ce qu’un vendeur suit.','Everything a vendor keeps track of.')}</h2>
+<div class="lpg">${feats.map(([ic,t,d])=>`<div class="lpf">${ICO(ic)}<h3>${t}</h3><p>${d}</p></div>`).join('')}</div></section>
+<section class="lps lpc" id="lp-prix"><h2>${TL('Commence gratuit.','Start free.')}<span>${TL('Passe au Pro quand ça vaut la peine.','Go Pro when it’s worth it.')}</span></h2>
+<div class="lppl">${plan('free','',TL('Créer un compte','Sign up'))}${plan('m','',TL('Choisir le mensuel','Choose monthly'))}${plan('y',I.y.v||'',TL('Choisir l’annuel','Choose yearly'))}</div>
+<p class="lpnote">${TL('Prix finaux. Paiement sécurisé par Stripe, annulable en tout temps.','Final prices. Secure payment by Stripe, cancel anytime.')}</p></section>
+<section class="lps lpc" id="lp-faq"><h2>${TL('Des réponses avant de commencer.','Answers before you start.')}</h2>
+<div class="lpq">${faq.map(([q,r])=>`<details><summary>${q}</summary><p>${r}</p></details>`).join('')}</div></section>
+<section class="lps lpc lpacc" id="lp-compte"><h2>${TL('Commence maintenant.','Get started.')}</h2>${aCard()}<p class="afoot">${ICO('lock')}${TL('Tes données sont privées : aucun autre compte ne peut les voir.','Your data is private: no other account can see it.')}</p></section>
+<footer class="lpft"><div class="lpbr"><img src="icons/icon-192.png" alt="" width="28" height="28"><span>Inventory Monitoring</span></div>
+<div class="lpfl"><a href="https://www.instagram.com/vannztcg/" target="_blank" rel="noopener">Instagram @VannzTCG</a><a href="mailto:${E(contactMail())}">${E(contactMail())}</a><a href="/conditions/${lq}" target="_blank" rel="noopener">${TL('Conditions d’utilisation','Terms of use')}</a><a href="/confidentialite/${lq}" target="_blank" rel="noopener">${TL('Confidentialité','Privacy')}</a></div>
+<p>© 2026 VannzTCG. ${TL('Pokémon est une marque de Nintendo, Creatures Inc. et GAME FREAK inc. Inventory Monitoring n’est pas affiliée à ces sociétés.','Pokémon is a trademark of Nintendo, Creatures Inc. and GAME FREAK inc. Inventory Monitoring is not affiliated with these companies.')}</p></footer></div>`}
+function aCard(){const up=AUTHM=='up',s=pwScore(SBF.pw);
  const fl=(id,k,type,lab,ic,extra)=>`<div class="afl">${ICO(ic)}<input id="${id}" data-i="SBF.${k}" value="${E(SBF[k]||'')}" type="${type}" placeholder=" " ${extra||''}><label for="${id}">${lab}</label>${type=='password'?`<button type="button" class="aeye" data-a="pweye" aria-label="${TL('Afficher ou masquer le mot de passe','Show or hide password')}">${ICO('eye')}</button>`:''}</div>`;
- return`<div class="home auth2${st}">${AUBG()}${AULNG()}${AMADE()}<div class="awrap"><section class="ahero"><div class="in" style="--i:0">${ALOGO()}</div><p class="atag in" style="--i:1">${TL('L’app d’inventaire des vendeurs de cartes','The inventory app for card vendors')}</p>
-<ul class="afeat in" style="--i:4">${[['scan',TL('Smart Scan : ajoute une carte en la photographiant','Smart Scan: add a card by taking a photo')],['trd',TL('Prix du marché chaque jour, courbes et tendances','Daily market prices, charts and trends')],['pl',TL('Profit, dépenses et rapport annuel','Profit, expenses and yearly report')],['sync',TL('Synchronisé entre ton téléphone et ton ordi','Synced between your phone and computer')]].map(([ic,t])=>`<li>${ICO(ic)}<span>${t}</span></li>`).join('')}</ul></section>
-<section class="acard2 in" style="--i:2"><div class="aseg" data-m="${AUP}"><span class="ath"></span><button class="${!up?'on':''}" data-a="authm" data-k="in">${TL('Se connecter','Sign in')}</button><button class="${up?'on':''}" data-a="authm" data-k="up">${TL('Créer un compte','Create account')}</button></div>
+  return`<section class="acard2 in" style="--i:2"><div class="aseg" data-m="${AUP}"><span class="ath"></span><button class="${!up?'on':''}" data-a="authm" data-k="in">${TL('Se connecter','Sign in')}</button><button class="${up?'on':''}" data-a="authm" data-k="up">${TL('Créer un compte','Create account')}</button></div>
 <div class="afrm" data-m="${AUTHM}"><h2 class="ah2">${up?TL('Créer un compte','Create an account'):TL('Connexion','Sign in')}</h2><p class="asub">${up?TL('Gratuit pour commencer, accès immédiat. Passe au Pro quand tu veux.','Free to start, instant access. Upgrade to Pro whenever you want.'):TL('Connecte-toi pour retrouver ton inventaire.','Sign in to get back to your inventory.')}</p>
 ${fl('aem','email','email',TL('Courriel','Email'),'mail','autocomplete="email" autocapitalize="off" inputmode="email" maxlength="254"')}
 ${fl('apw','pw','password',TL('Mot de passe','Password'),'key',`autocomplete="${up?'new-password':'current-password'}" maxlength="72"`)}
@@ -2114,7 +2240,12 @@ ${up?`<div class="apws" id="pws" data-s="${s}"><i></i><i></i><i></i><i></i><span
 ${SBF.msg?`<p class="amsg ${/✓/.test(SBF.msg)?'ok':'ko'}">${E(SBF.msg)}</p>`:''}
 <button class="abtn${SBF.busy?' busy':''}" data-a="${up?'sbup':'sbin'}" ${SBF.busy?'disabled':''}><span>${up?TL('Créer mon compte','Create my account'):TL('Se connecter','Sign in')}</span>${ICO('arrow')}</button>
 </div>
-${up?'':`<div class="alinks2"><button data-a="sbforgot">${TL('Mot de passe oublié ?','Forgot password?')}</button></div>`}</section></div>
+${up?'':`<div class="alinks2"><button data-a="sbforgot">${TL('Mot de passe oublié ?','Forgot password?')}</button></div>`}</section>`}
+function vAuth(){if(!isPWA())return vLanding();const up=AUTHM=='up',st=AUA?' still':'';AUA=true;const s=pwScore(SBF.pw);
+ const fl=(id,k,type,lab,ic,extra)=>`<div class="afl">${ICO(ic)}<input id="${id}" data-i="SBF.${k}" value="${E(SBF[k]||'')}" type="${type}" placeholder=" " ${extra||''}><label for="${id}">${lab}</label>${type=='password'?`<button type="button" class="aeye" data-a="pweye" aria-label="${TL('Afficher ou masquer le mot de passe','Show or hide password')}">${ICO('eye')}</button>`:''}</div>`;
+ return`<div class="home auth2${st}">${AUBG()}${AULNG()}${AMADE()}<div class="awrap"><section class="ahero"><div class="in" style="--i:0">${ALOGO()}</div><p class="atag in" style="--i:1">${TL('L’app d’inventaire des vendeurs de cartes','The inventory app for card vendors')}</p>
+<ul class="afeat in" style="--i:4">${[['scan',TL('Smart Scan : ajoute une carte en la photographiant','Smart Scan: add a card by taking a photo')],['trd',TL('Prix du marché chaque jour, courbes et tendances','Daily market prices, charts and trends')],['pl',TL('Profit, dépenses et rapport annuel','Profit, expenses and yearly report')],['sync',TL('Synchronisé entre ton téléphone et ton ordi','Synced between your phone and computer')]].map(([ic,t])=>`<li>${ICO(ic)}<span>${t}</span></li>`).join('')}</ul></section>
+${aCard()}</div>
 <div role="navigation" class="alegal" aria-label="${TL('Documents légaux','Legal documents')}"><a href="/conditions/${UI.lang=='en'?'?lang=en':''}" target="_blank" rel="noopener">${TL('Conditions d’utilisation','Terms of use')}</a><a href="/confidentialite/${UI.lang=='en'?'?lang=en':''}" target="_blank" rel="noopener">${TL('Confidentialité','Privacy')}</a></div><p class="afoot">${ICO('lock')}${TL('Tes données sont privées : aucun autre compte ne peut les voir.','Your data is private: no other account can see it.')}</p></div>`}
 function vPlanPick(){const st=PPA?' still':'';PPA=true;const sel=triSel('pick'),I=triInfo();if(!PUB.prices&&!PUB.free&&SBS&&!PPL){PPL=1;pubLoad().then(()=>{if(needPick())render()})}
  return`<div class="home auth2${st}">${AUBG()}${AULNG()}${AMADE()}<div class="aplanw"><div class="in" style="--i:0">${ALOGO(1)}</div>${ASTEP(1)}<h2 class="ah2 in" style="--i:2">${TL('Choisis ton forfait','Choose your plan')}</h2><p class="asub in" style="--i:2">${TL('Ton compte','Your account')} <b>${E(SBS&&SBS.email||'')}</b> ${TL('est prêt. Commence gratuitement ou passe au Pro tout de suite.','is ready. Start for free or go Pro right away.')}</p>
@@ -2268,6 +2399,7 @@ document.addEventListener('click',e=>{const t=e.target.closest('[data-t],[data-f
  case'outyes':sbLogoutDo();break;
  case'outno':OUTQ=false;render();break;
  case'loginnow':try{localStorage.removeItem('cv_guest')}catch(x){}AUTHM='in';render();break;
+ case'lpgo':AUP=AUTHM;AUTHM=d.k;SBF.msg='';render();requestAnimationFrame(()=>{const sg=document.querySelector('.aseg');if(sg)sg.dataset.m=AUTHM;AUP=AUTHM;const c=document.getElementById('lp-compte');if(c){c.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});setTimeout(()=>{const i=document.getElementById('aem');if(i)i.focus({preventScroll:true})},450)}});break;
  case'authm':AUP=AUTHM;AUTHM=d.k;SBF.msg='';render();requestAnimationFrame(()=>requestAnimationFrame(()=>{const s=document.querySelector('.aseg');if(s)s.dataset.m=AUTHM;AUP=AUTHM}));break;
  case'mailin':SBF.email=SBF.sent||SBF.email;SBF.sent=null;try{localStorage.removeItem('cv_mail')}catch(x){}AUTHM='in';AUP='in';AUA=false;SBF.msg='';render();break;
  case'mailchg':SBF.sent=null;try{localStorage.removeItem('cv_mail')}catch(x){}AUTHM='up';AUP='up';AUA=false;SBF.msg='';render();break;
