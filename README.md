@@ -40,3 +40,13 @@ Les membres paient sans quitter l'app : la fonction `supabase/functions/create-c
 3. **Clé publiable** (`pk_live_…`) : Console › Réglages › Paiement en ligne. Sans cette clé ou si la fonction ne répond pas, l'app utilise le lien de paiement Stripe comme avant.
 4. **Domaine** `inventorymonitoring.ca` enregistré dans Stripe › Settings › Payment method domains (Apple Pay, Google Pay et Link).
 
+
+## Pages légales et conformité
+
+- `/conditions/` : Conditions d'utilisation (forfaits, renouvellement automatique, annulation, remboursement, marques).
+- `/confidentialite/` : Politique de confidentialité (Loi 25 : renseignements recueillis, fournisseurs, hébergement hors Québec, conservation, droits).
+- Les deux pages sont générées par `legal.py` (textes dans `legal_content.py`), en français (version qui fait foi) et en anglais.
+- Les coordonnées de l'entreprise (nom légal, adresse, téléphone, responsable des renseignements personnels) se règlent dans la console propriétaire › Réglages › « Ton entreprise (pages légales) ». Les pages les lisent en direct avec la fonction `legal_info()`.
+- `supabase/legal.sql` : à coller une fois dans Supabase → SQL Editor. Ajoute `legal_info()`, `delete_my_account()` et le suivi des annulations programmées (`members.cancel_at`).
+- Dans l'app : case de consentement à l'inscription (jamais cochée d'avance, version enregistrée dans le compte), bouton « Annuler mon abonnement » dans Mon abonnement, Réglages › Confidentialité (export, suppression du compte, avis de marques).
+- Les polices (Inter, Instrument Serif) sont servies depuis `/fonts/` : aucune requête vers Google Fonts.

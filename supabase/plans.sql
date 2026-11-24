@@ -13,6 +13,7 @@
 -- ───────────── Colonnes Stripe ─────────────
 alter table public.members  add column if not exists stripe_customer text;
 alter table public.members  add column if not exists stripe_sub      text;
+alter table public.members  add column if not exists cancel_at       date;   -- fin programmée d'un abonnement annulé (accès Pro jusqu'à cette date)
 alter table public.payments add column if not exists ref             text;
 create unique index if not exists payments_ref_key on public.payments (ref);
 
@@ -58,6 +59,7 @@ language sql stable security definer set search_path = public as $$
                                                   where key = r.tier || '_sections')) end,
     'grace',      coalesce((select (value #>> '{}')::int from public.app_settings where key = 'grace_days'), 5),
     'stripe',     r.stripe_sub is not null,
+    'cancel_at',  r.cancel_at,
     'known',      r.email is not null
                   or exists (select 1 from public.access_requests a where a.user_id::text = auth.uid()::text)
                   or exists (select 1 from public.approved_users u, me where lower(u.email) = me.em)
@@ -209,7 +211,7 @@ begin
   elsif t in ('customer.subscription.deleted', 'customer.subscription.updated') then
     sub := o->>'id';
     if t = 'customer.subscription.deleted' or o->>'status' in ('canceled', 'unpaid', 'incomplete_expired') then
-      update public.members set plan = 'free', price = 0, next_due = null, status = 'active', stripe_sub = null, updated_at = now()
+      update public.members set plan = 'free', price = 0, next_due = null, status = 'active', stripe_sub = null, cancel_at = null, updated_at = now()
        where stripe_sub = sub;
       get diagnostics n = row_count;
       res := 'free ' || n;
@@ -221,7 +223,12 @@ begin
          set plan = case iv when 'year' then 'yearly' when 'month' then 'monthly'
                             else case when plan in ('monthly', 'yearly') then plan else 'monthly' end end,
              price = coalesce(round((o->'items'->'data'->0->'price'->>'unit_amount')::numeric / 100, 2), price),
-             status = 'active', next_due = coalesce(due, next_due), updated_at = now()
+             status = 'active', next_due = coalesce(due, next_due),
+             -- Annulation programmée dans le portail Stripe : on garde la date de fin (null si l'abonnement est réactivé)
+             cancel_at = case when coalesce((o->>'cancel_at_period_end')::boolean, false) or o->>'cancel_at' is not null
+                              then coalesce((to_timestamp((o->>'cancel_at')::bigint) at time zone 'America/Toronto')::date, due)
+                              end,
+             updated_at = now()
        where stripe_sub = sub;
       get diagnostics n = row_count;
       res := 'sync ' || n;
