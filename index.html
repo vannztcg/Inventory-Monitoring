@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-bUoKxxS9NJO29z5fK4gFByDW8nrDNycHurHqHKYcm1s=' 'sha256-Ml/EwIXW5nuwqPDIbi91qkBSTb81YkzZK1PUHCCSlz0=' https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js https://cdn.jsdelivr.net/npm/tesseract.js@v5.1.1/dist/worker.min.js https://cdn.jsdelivr.net/npm/tesseract.js-core@v5.1.1/ https://challenges.cloudflare.com https://js.stripe.com https://*.js.stripe.com 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https:; media-src 'self' blob:; connect-src 'self' data: https://qghjmjbmpbpslfkwyqet.supabase.co https://cdn.jsdelivr.net https://raw.githubusercontent.com https://api.github.com https://api.pokemontcg.io https://tcgcsv.com https://api.pwnedpasswords.com https://challenges.cloudflare.com https://api.stripe.com https://link.com https://*.link.com; worker-src 'self' blob:; child-src 'self' blob:; frame-src https://challenges.cloudflare.com https://js.stripe.com https://*.js.stripe.com https://hooks.stripe.com https://link.com https://*.link.com; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-maYlCz6NI5NhMfPSh9MSUCu3uPgbMrZSr+x5kzK2qxo=' 'sha256-Ml/EwIXW5nuwqPDIbi91qkBSTb81YkzZK1PUHCCSlz0=' https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js https://cdn.jsdelivr.net/npm/tesseract.js@v5.1.1/dist/worker.min.js https://cdn.jsdelivr.net/npm/tesseract.js-core@v5.1.1/ https://challenges.cloudflare.com https://js.stripe.com https://*.js.stripe.com 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https:; media-src 'self' blob:; connect-src 'self' data: https://qghjmjbmpbpslfkwyqet.supabase.co https://cdn.jsdelivr.net https://raw.githubusercontent.com https://api.github.com https://api.pokemontcg.io https://tcgcsv.com https://api.pwnedpasswords.com https://challenges.cloudflare.com https://api.stripe.com https://link.com https://*.link.com; worker-src 'self' blob:; child-src 'self' blob:; frame-src https://challenges.cloudflare.com https://js.stripe.com https://*.js.stripe.com https://hooks.stripe.com https://link.com https://*.link.com; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="same-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>Inventory Monitoring</title>
@@ -1005,6 +1005,54 @@ html.lpjs #lp #lp-scan .lpv.rv:not(.in){transform:translateY(60px) rotate(6deg) 
 html.lppause #lp .lphv *,html.lppause #lp .lphv{animation-play-state:paused!important}
 @media (prefers-reduced-motion:reduce){#lp .lppz{display:none}}
 @media(max-width:860px){#lp .lppz{position:static;justify-self:end;margin-top:-8px}}
+
+/* Accueil : démonstration du Smart Scan, comparatif Pro */
+#lp .lpcap{margin:14px 0 0;font-size:12px;color:#6F7D99;text-align:center}
+#lp .lpv{flex-direction:column;align-items:center}
+#lp .lpsp2{transform:rotate(3deg)}
+#lp .sc{position:relative;width:100%;height:100%;border-radius:34px;overflow:hidden;background:#05080F;display:flex;flex-direction:column;font-family:Inter,sans-serif}
+#lp .sc-hd{display:flex;justify-content:space-between;align-items:center;padding:16px 16px 10px;color:#fff;font-size:12px}#lp .sc-hd span{color:#7AA7FF;min-width:44px}#lp .sc-hd b{font-weight:600;font-size:13px}
+#lp .sc-cam{position:relative;flex:1;margin:0 8px;border-radius:22px;overflow:hidden;background:radial-gradient(120% 80% at 30% 20%,#3a2a1e,#1c140e 60%,#120d09);box-shadow:inset 0 0 60px rgba(0,0,0,.6)}
+#lp .sc-cam::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(100deg,rgba(255,255,255,.025) 0 2px,transparent 2px 9px)}
+#lp .sc-card{position:absolute;left:50%;top:42%;width:68%;aspect-ratio:63/88;transform:translate(-50%,-50%) rotate(-4deg);border-radius:8px;padding:5px;background:linear-gradient(135deg,#d9d2b8,#f3eccf 40%,#b9ae88);box-shadow:0 14px 30px rgba(0,0,0,.6);z-index:1}
+#lp .sc-cf{height:100%;border-radius:5px;background:linear-gradient(160deg,#2a3f7a,#1a2a55);display:flex;flex-direction:column;gap:5px;padding:6px;box-sizing:border-box}
+#lp .sc-tt{display:flex;align-items:center;gap:4px}#lp .sc-tt i{height:6px;border-radius:3px;background:rgba(255,255,255,.85)}#lp .sc-tt i:first-child{width:46%}#lp .sc-tt i:nth-child(2){width:14%;margin-left:auto;opacity:.6}#lp .sc-tt em{width:10px;height:10px;border-radius:50%;background:#ffd36b}
+#lp .sc-art{position:relative;flex:0 0 46%;border-radius:3px;overflow:hidden;background:linear-gradient(140deg,#8ad7ff,#b18cff 55%,#ff9bd2);border:2px solid #e9dfb8}
+#lp .sc-art span{position:absolute;border-radius:50%;filter:blur(1px)}#lp .sc-art .o1{width:60%;height:70%;left:22%;top:18%;background:radial-gradient(circle at 40% 35%,#fff,#ffc4f0 40%,rgba(255,150,220,0) 70%)}#lp .sc-art .o2{width:30%;height:30%;left:6%;top:8%;background:rgba(255,255,255,.55)}#lp .sc-art .o3{width:22%;height:22%;right:8%;bottom:10%;background:rgba(255,255,255,.4)}
+#lp .sc-art::after{content:"";position:absolute;inset:-40%;background:linear-gradient(110deg,transparent 40%,rgba(255,255,255,.55) 50%,transparent 60%);animation:scHolo 3.5s ease-in-out infinite}
+#lp .sc-tx{display:flex;flex-direction:column;gap:4px;padding:2px 2px 0}#lp .sc-tx i{height:4px;border-radius:2px;background:rgba(255,255,255,.35)}#lp .sc-tx i:nth-child(2){width:80%}#lp .sc-tx i:nth-child(3){width:60%}
+#lp .sc-no{margin-top:auto;font-size:6px;color:rgba(255,255,255,.75);letter-spacing:.04em}
+#lp .sc-k{position:absolute;width:26px;height:26px;border:3px solid #7AA7FF;z-index:2;animation:scK 7s cubic-bezier(.2,.8,.2,1) infinite}
+#lp .sc-k.k1{left:-12px;top:-12px;border-right:0;border-bottom:0;border-radius:10px 0 0 0;--x:-22px;--y:-22px}
+#lp .sc-k.k2{right:-12px;top:-12px;border-left:0;border-bottom:0;border-radius:0 10px 0 0;--x:22px;--y:-22px}
+#lp .sc-k.k3{left:-12px;bottom:-12px;border-right:0;border-top:0;border-radius:0 0 0 10px;--x:-22px;--y:22px}
+#lp .sc-k.k4{right:-12px;bottom:-12px;border-left:0;border-top:0;border-radius:0 0 10px 0;--x:22px;--y:22px}
+#lp .sc-ln{position:absolute;left:-8px;right:-8px;top:0;height:3px;border-radius:3px;background:linear-gradient(90deg,transparent,#7AA7FF,transparent);box-shadow:0 0 18px 4px rgba(122,167,255,.55);z-index:2;animation:scLn 7s ease-in-out infinite}
+#lp .sc-st{position:absolute;left:0;right:0;bottom:10px;display:flex;justify-content:center;gap:6px;z-index:2}
+#lp .sc-st span{display:flex;align-items:center;gap:3px;padding:4px 8px;border-radius:999px;background:rgba(10,17,31,.85);color:#ECF0F7;font-size:10px;font-weight:600;opacity:0;animation:scS 7s ease infinite}#lp .sc-st svg{width:11px;height:11px;color:#58D6A6}
+#lp .sc-st .s2{animation-delay:.25s}#lp .sc-st .s3{animation-delay:.5s}
+#lp .sc-rs{position:absolute;left:8px;right:8px;bottom:8px;z-index:3;padding:12px;border-radius:20px;background:#0F1829;border:1px solid #1B2740;box-shadow:0 -10px 40px rgba(0,0,0,.5);animation:scR 7s cubic-bezier(.2,.9,.25,1) infinite}
+#lp .sc-rh{display:flex;justify-content:space-between;align-items:center;font-size:11px;font-weight:600;color:#58D6A6}#lp .sc-rh small{color:#6F7D99;font-weight:500}
+#lp .sc-rr{display:flex;gap:10px;margin-top:8px;align-items:center}#lp .sc-rr b{display:block;font-size:14px;color:#fff}#lp .sc-rr span{display:block;font-size:10.5px;color:#8E9DBA;margin-top:2px}#lp .sc-rr strong{color:#ECF0F7}
+#lp .sc-th{flex:none;width:34px;aspect-ratio:63/88;border-radius:3px;background:linear-gradient(140deg,#8ad7ff,#b18cff 55%,#ff9bd2);border:2px solid #e9dfb8}
+#lp .sc-bt{margin-top:10px;padding:9px;border-radius:12px;background:#7AA7FF;color:#0A111F;font-weight:700;font-size:12px;text-align:center}
+@keyframes scK{0%,4%{transform:translate(var(--x),var(--y));opacity:.3}18%,78%{transform:none;opacity:1}88%,100%{transform:translate(var(--x),var(--y));opacity:.3}}
+@keyframes scLn{0%,10%{top:0;opacity:0}14%{opacity:1}42%{top:100%;opacity:1}46%,100%{top:100%;opacity:0}}
+@keyframes scS{0%,30%{opacity:0;transform:translateY(6px)}36%,80%{opacity:1;transform:none}86%,100%{opacity:0}}
+@keyframes scR{0%,52%{transform:translateY(120%);opacity:0}60%,88%{transform:none;opacity:1}96%,100%{transform:translateY(120%);opacity:0}}
+@keyframes scHolo{0%,100%{transform:translateX(-30%)}50%{transform:translateX(30%)}}
+html.lppause #lp .sc *,html.lppause #lp .sc *::after{animation-play-state:paused!important}
+@media (prefers-reduced-motion:reduce){#lp .sc *,#lp .sc *::after{animation:none!important}#lp .sc-k{opacity:1}#lp .sc-ln,#lp .sc-st span{opacity:0}#lp .sc-rs{transform:none;opacity:1}}
+#lp .lpcmp{max-width:760px;margin:36px auto 0;text-align:left}
+#lp .lpplus{background:linear-gradient(160deg,#142036,#0F1829 70%);border:1px solid #2F4E86;border-radius:24px;padding:28px}
+#lp .lpplus h3{margin:0;font:700 20px Inter,sans-serif;color:#fff;text-transform:none;letter-spacing:-.01em}
+#lp .lpplus ul{list-style:none;margin:18px 0 0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 24px}
+#lp .lpplus li{display:flex;gap:10px;align-items:flex-start}#lp .lpplus li svg{flex:none;width:20px;height:20px;color:#58D6A6;margin-top:1px}#lp .lpplus b{display:block;color:#fff;font-size:15px}#lp .lpplus small{display:block;color:#A3AFC6;font-size:13.5px;line-height:1.45;margin-top:2px}
+#lp .lptab{margin-top:14px;border:1px solid #1B2740;border-radius:18px;background:#0F1829}
+#lp .lptab summary{cursor:pointer;list-style:none;padding:16px 20px;font-weight:600;color:#C9D4E8;position:relative}#lp .lptab summary::-webkit-details-marker{display:none}#lp .lptab summary::after{content:"+";position:absolute;right:20px;color:#7AA7FF;font-size:20px;top:50%;transform:translateY(-50%)}#lp .lptab[open] summary::after{content:"−"}#lp .lptab summary:focus-visible{outline:2px solid #7AA7FF;outline-offset:2px;border-radius:18px}
+#lp .lptab table{width:100%;border-collapse:collapse;font-size:14px}#lp .lptab th,#lp .lptab td{padding:11px 20px;border-top:1px solid #1B2740;text-align:left;color:#ECF0F7;font-weight:500}#lp .lptab td{width:70px;text-align:center;color:#8E9DBA}#lp .lptab thead th{color:#8E9DBA;font-size:13px;font-weight:600}#lp .lptab thead th+th{text-align:center}#lp .lptab td svg{width:18px;height:18px;color:#58D6A6}
+#lp .vh{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@media(max-width:860px){#lp .lpplus ul{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -1140,7 +1188,7 @@ function vPl(){const inP=d=>{if(B.p=='all')return true;const x=new Date(d);if(B.
 
 const SW=[['','#2563eb'],['#7c3aed','#7c3aed'],['#e11d48','#e11d48'],['#ea580c','#ea580c'],['#059669','#059669'],['#0891b2','#0891b2'],['#db2777','#db2777']],uiB=(k,v,t)=>`<button class="chip ${UI[k]==v?'on':''}" data-a="ui" data-k="${k}" data-v="${v}">${t}</button>`;
 let SS='ev';
-const APP_UPDATED='2026-11-24T21:14:01-05:00';
+const APP_UPDATED='2026-11-24T21:26:29-05:00';
 const appUpd=()=>'Dernière mise à jour de l’app : '+new Date(APP_UPDATED).toLocaleString(LC(),{dateStyle:'long',timeStyle:'short'});
 const SECN={buy:'Acheter',stock:'Stock',sv:'Ventes',gr:'Grading',tr:'Échanges',pl:'Bilan',gx:'Croissance',ex:'Dépenses',log:'Suivi',set:'Réglages'};
 function goHome(){sheet=null;EE={id:''};CR.open=false;QS.open=TP.open=false;QS.on=false;tab='home';HS=true;HA=false;render()}
@@ -2259,12 +2307,12 @@ const isPWA=()=>{try{return matchMedia('(display-mode: standalone)').matches||!!
 let LPZ=false,LPP=0,LPC=0,LPIO=null,LPT=0;const LPS=new Set();
 function lpFx(){const lp=document.getElementById('lp');if(!lp)return;document.documentElement.classList.add('lpjs');const rm=matchMedia('(prefers-reduced-motion: reduce)').matches;const els=lp.querySelectorAll('[data-rv]:not(.in)');if(rm||!('IntersectionObserver' in window)){els.forEach(e=>{e.classList.add('in');LPS.add(e.dataset.rv)})}else{if(LPIO)LPIO.disconnect();LPIO=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');LPS.add(x.target.dataset.rv);LPIO.unobserve(x.target)}}),{rootMargin:'0px 0px -12% 0px',threshold:.12});els.forEach(e=>LPIO.observe(e))}
  if(!LPT&&!rm){LPT=setInterval(()=>{if(document.hidden||LPZ)return;const c=document.querySelectorAll('#lp .lpcy img');if(!c.length)return;LPC++;c.forEach((im,i)=>im.classList.toggle('on',i==LPC%c.length))},3400);let raf=0;document.addEventListener('pointermove',e=>{if(e.pointerType!='mouse'||raf)return;raf=requestAnimationFrame(()=>{raf=0;const v=document.querySelector('#lp .lphv');if(!v)return;const r=v.getBoundingClientRect(),x=Math.max(-1,Math.min(1,(e.clientX-r.left-r.width/2)/(r.width))),y=Math.max(-1,Math.min(1,(e.clientY-r.top-r.height/2)/(r.height)));v.style.setProperty('--mx',x.toFixed(3));v.style.setProperty('--my',y.toFixed(3))})},{passive:true})}}
-function lpPrices(){if(LPP)return;LPP=1;fetch(SBU+'/rest/v1/rpc/legal_info',{method:'POST',headers:{apikey:SBK,'Content-Type':'application/json'},body:'{}'}).then(r=>r.ok?r.json():null).then(j=>{if(j&&j.prices&&!SBS){PUB.prices=j.prices;if(document.getElementById('lp'))render()}}).catch(()=>{})}
+function lpPrices(){if(LPP)return;LPP=1;fetch(SBU+'/rest/v1/rpc/legal_info',{method:'POST',headers:{apikey:SBK,'Content-Type':'application/json'},body:'{}'}).then(r=>r.ok?r.json():null).then(j=>{if(j&&!SBS){if(j.prices)PUB.prices=j.prices;if('free' in j)PUB.free=j.free;if('pro' in j)PUB.pro=j.pro;if(document.getElementById('lp'))render()}}).catch(()=>{})}
 const LPI=k=>`img/lp/${UI.lang=='en'?'en':'fr'}_${k}.webp`;
 const LPH=(k,alt,cls)=>`<div class="lpph${cls?' '+cls:''}"><img src="${LPI(k)}" alt="${alt}" width="585" height="1266" decoding="async"${cls=='b'?'':' loading="lazy"'}></div>`;
 const RV=(k,d)=>`rv${LPS.has(k)?' in':''}" data-rv="${k}"${d?` style="--d:${d}s"`:''} x="`;
 function vLanding(){lpPrices();const I=triInfo(),en=UI.lang=='en',lq=en?'?lang=en':'';
- const nav=[['lp-profit',TL('Profit','Profit')],['lp-scan','Smart Scan'],['lp-tout',TL('Fonctions','Features')],['lp-prix',TL('Tarifs','Pricing')],['lp-faq','FAQ']];
+ const nav=[['lp-profit',TL('Profit','Profit')],['lp-scan','Smart Scan'],['lp-shows','Card shows'],['lp-tout',TL('Fonctions','Features')],['lp-prix',TL('Tarifs','Pricing')],['lp-faq','FAQ']];
  const feats=[['stock',TL('Stock et prix du marché','Stock and market prices'),TL('Chaque carte avec ce que tu l’as payée, sa valeur du jour et ton gain latent.','Every card with what you paid, today’s value and your unrealized gain.')],
   ['sv',TL('Ventes','Sales'),TL('Note une vente en quelques secondes, avec les frais et le shipping. Le profit se calcule tout seul.','Log a sale in seconds, with fees and shipping. Profit works itself out.')],
   ['ex',TL('Dépenses','Expenses'),TL('Tables, essence, sleeves, abonnements : tout ce qui sort de ta poche est soustrait du profit.','Tables, gas, sleeves, subscriptions: everything you spend comes off your profit.')],
@@ -2296,11 +2344,21 @@ function vLanding(){lpPrices();const I=triInfo(),en=UI.lang=='en',lq=en?'?lang=e
 <h2>${TL('Prends la carte en photo.','Snap a photo of the card.')}<span>${TL('Elle s’ajoute toute seule.','It adds itself.')}</span></h2>
 <p>${TL('Smart Scan lit le nom, le set et le numéro, puis te propose la bonne version avec son prix du marché. Tu confirmes, c’est ajouté. Tout se passe sur ton téléphone : la photo n’est envoyée nulle part.','Smart Scan reads the name, set and number, then offers the right version with its market price. You confirm and it’s added. It all happens on your phone: the photo isn’t sent anywhere.')}</p>
 <p class="lpcl">${TL('Lit aussi l’étiquette des slabs','Also reads slab labels')}</p><div class="lpchips">${['PSA','CGC','BGS','SGC','TAG'].map(t=>`<span>${t}</span>`).join('')}</div></div>
-<div class="lpv ${RV('v2',.1)}">${LPH('stock',TL('Écran Stock de l’app : valeur, coût et gain latent','App Stock screen: value, cost and unrealized gain'))}</div></section>
+<div class="lpv ${RV('v2',.1)}"><div class="lpph lpsp2" role="img" aria-label="${TL('Démonstration : Smart Scan reconnaît une carte, puis propose de l’ajouter au stock avec son prix du marché','Demo: Smart Scan recognizes a card, then offers to add it to stock with its market price')}"><div class="sc" aria-hidden="true">
+<div class="sc-hd"><span>${TL('Annuler','Cancel')}</span><b>Smart Scan</b><span></span></div>
+<div class="sc-cam"><div class="sc-card"><div class="sc-cf"><div class="sc-tt"><i></i><i></i><em></em></div><div class="sc-art"><span class="o1"></span><span class="o2"></span><span class="o3"></span></div><div class="sc-tx"><i></i><i></i><i></i></div><div class="sc-no">151/165</div></div><i class="sc-k k1"></i><i class="sc-k k2"></i><i class="sc-k k3"></i><i class="sc-k k4"></i><i class="sc-ln"></i></div>
+<div class="sc-st"><span class="s1">${ICO('chk')}${TL('Nom','Name')}</span><span class="s2">${ICO('chk')}Set</span><span class="s3">${ICO('chk')}${TL('Numéro','Number')}</span></div></div>
+<div class="sc-rs"><div class="sc-rh">${TL('Carte reconnue','Card recognized')}<small>${TL('exemple','example')}</small></div><div class="sc-rr"><div class="sc-th"></div><div><b>Mew ex</b><span>151 · 151/165 · Holo</span><span>${TL('Prix du marché','Market price')} <strong>42,00 $</strong></span></div></div><div class="sc-bt">${TL('Ajouter au stock','Add to stock')}</div></div>
+</div></div><p class="lpcap">${TL('Illustration : la vraie carte apparaît à la place de ce dessin.','Illustration: your real card appears instead of this drawing.')}</p></div></section>
+<section class="lps lpsp" id="lp-shows"><div class="lpv ${RV('v3')}">${LPH('shows',TL('Écran Dépenses de l’app : dépenses regroupées par card show','App Expenses screen: expenses grouped by card show'))}</div><div class="lpt ${RV('t3',.1)}">
+<h2>${TL('Chaque card show, son vrai bilan.','Every card show, its real numbers.')}<span>${TL('Table, essence, hôtel, repas.','Table, gas, hotel, meals.')}</span></h2>
+<p>${TL('Crée un card show avec ses dates, et ajoute les jours de route ou d’hôtel. Chaque dépense de ces jours-là s’y rattache toute seule, même celles importées du relevé de ta carte.','Create a card show with its dates, and add the travel or hotel days. Every expense on those days links to it by itself, even the ones imported from your card statement.')}</p>
+<ul class="lpck">${[TL('Dépenses regroupées par card show, avec le total','Expenses grouped by card show, with the total'),TL('Jours en plus pour la route, l’hôtel et le souper après le show','Extra days for travel, the hotel and dinner after the show'),TL('Importe le relevé de ta carte (CSV) : chaque dépense va au bon show','Import your card statement (CSV): each expense goes to the right show'),TL('Bilan par card show pour savoir s’il a été payant (Pro)','Summary per card show to see if it paid off (Pro)')].map(t=>`<li>${ICO('chk')}<span>${t}</span></li>`).join('')}</ul></div></section>
 <section class="lps lpc" id="lp-tout"><h2 class="${RV('h3')}">${TL('Tout ce qu’un vendeur suit.','Everything a vendor keeps track of.')}</h2>
 <div class="lpg">${feats.map(([ic,t,d],i)=>`<div class="lpf${i==0||i==6?' wide':''} ${RV('f'+i,(i%3)*.08)}">${ICO(ic)}<h3>${t}</h3><p>${d}</p></div>`).join('')}</div></section>
 <section class="lps lpc" id="lp-prix"><h2 class="${RV('h4')}">${TL('Commence gratuit.','Start free.')}<span>${TL('Passe au Pro quand ça vaut la peine.','Go Pro when it’s worth it.')}</span></h2>
 <div class="lppl">${plan('free','',TL('Créer un compte','Sign up'))}${plan('m','',TL('Choisir le mensuel','Choose monthly'))}${plan('y',I.y.v||'',TL('Choisir l’annuel','Choose yearly'))}</div>
+${(()=>{const fF=triFeat('free'),fP=triFeat('pro'),plus=fP.filter((x,i)=>x.ok&&!(fF[i]&&fF[i].ok));return`<div class="lpcmp ${RV('cmp',.1)}">${plus.length?`<div class="lpplus"><h3>${TL('Ce que le Pro ajoute','What Pro adds')}</h3><ul>${plus.map(x=>`<li>${ICO('chk')}<span><b>${x.n}</b>${x.d?`<small>${E(x.d)}</small>`:''}</span></li>`).join('')}</ul></div>`:''}<details class="lptab"><summary>${TL('Comparer tout ce qui est inclus','Compare everything included')}</summary><table><caption class="vh">${TL('Ce que chaque forfait inclut','What each plan includes')}</caption><thead><tr><th scope="col"><span class="vh">${TL('Fonction','Feature')}</span></th><th scope="col">Free</th><th scope="col">Pro</th></tr></thead><tbody>${fP.map((x,i)=>`<tr><th scope="row">${x.n}</th>${[fF[i]&&fF[i].ok,x.ok].map(ok=>`<td>${ok?ICO('chk')+`<span class="vh">${TL('Inclus','Included')}</span>`:`<span aria-hidden="true">—</span><span class="vh">${TL('Non inclus','Not included')}</span>`}</td>`).join('')}</tr>`).join('')}</tbody></table></details></div>`})()}
 <p class="lpnote">${TL('Prix finaux. Paiement sécurisé par Stripe, annulable en tout temps.','Final prices. Secure payment by Stripe, cancel anytime.')}</p></section>
 <section class="lps lpc" id="lp-faq"><h2 class="${RV('h5')}">${TL('Des réponses avant de commencer.','Answers before you start.')}</h2>
 <div class="lpq">${faq.map(([q,r])=>`<details><summary>${q}</summary><p>${r}</p></details>`).join('')}</div></section>
