@@ -6,7 +6,18 @@ Set : [id, nom, total, date, code, nom japonais, série TCGdex, 0].
 """
 import json, re, time, struct, collections, sys, os, urllib.request, concurrent.futures as cf
 sys.path.insert(0, os.path.dirname(__file__))
-from vis_hash import desc, fetch
+from vis_hash import desc
+import io, urllib.error
+from PIL import Image
+def fetch(u):
+    for t in range(3):
+        try:
+            with urllib.request.urlopen(urllib.request.Request(u, headers=UA), timeout=20) as r: return Image.open(io.BytesIO(r.read()))
+        except urllib.error.HTTPError as e:
+            if e.code in (403, 404, 410): raise
+            err = e; time.sleep(1 + 2 * t)
+        except Exception as e: err = e; time.sleep(1 + 2 * t)
+    raise err
 UA = {'User-Agent': 'Mozilla/5.0 InventoryMonitoring-jp'}
 def get(u, tries=9):
     for t in range(tries):
@@ -73,7 +84,7 @@ cards.sort(key=lambda c: (c[0], nkey(c[1]), c[5]))
 def urls(c):
     s = sets[c[0]]; u = []
     if c[5]: u.append((1, f'https://tcgplayer-cdn.tcgplayer.com/product/{c[5]}_200w.jpg'))
-    if s[6]: u.append((2, f'https://assets.tcgdex.net/ja/{s[6]}/{s[4]}/{c[1]}/low.webp'))
+    if s[6] and s[7]: u.append((2, f'https://assets.tcgdex.net/ja/{s[6]}/{s[4]}/{c[1]}/low.webp'))
     return u
 def job(i):
     for k, u in urls(cards[i]):
@@ -81,7 +92,7 @@ def job(i):
         except Exception: continue
     return i, 0, None
 res = [None] * len(cards)
-with cf.ThreadPoolExecutor(32) as ex:
+with cf.ThreadPoolExecutor(64) as ex:
     for n, (i, k, d) in enumerate(ex.map(job, range(len(cards)))):
         res[i] = (k, d)
         if n % 1000 == 0: print('img', n, flush=True)
