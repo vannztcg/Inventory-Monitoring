@@ -1,5 +1,5 @@
 // Inventory Monitoring – service worker (hors ligne)
-const C='im-v214';const FILES=['./','./index.html','./manifest.webmanifest','./icons/apple-touch-icon.png','./icons/icon-192.png','./icons/icon-512.png','./fonts/inter.woff','./fonts/instrument-serif.woff','./fonts/instrument-serif-italic.woff'];
+const C='im-v215';const FILES=['./','./index.html','./manifest.webmanifest','./icons/apple-touch-icon.png','./icons/icon-192.png','./icons/icon-512.png','./fonts/inter.woff','./fonts/instrument-serif.woff','./fonts/instrument-serif-italic.woff'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>c.addAll(FILES)).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==C).map(x=>caches.delete(x)))).then(()=>self.clients.claim()))});
 // Réseau d'abord (pour recevoir les mises à jour), cache si hors ligne
