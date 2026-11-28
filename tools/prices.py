@@ -105,7 +105,33 @@ if prev and os.path.exists(prev):
             if k not in P: P[k] = v; src['veille'] += 1
         print('prix de la veille repris', src['veille'])
     except Exception as e: print('veille illisible', e)
+# 4) Cartes japonaises (cards-jp.json, TCGdex) : prix TCGplayer « Pokemon Japan » (catégorie 85) par productId
+J = {}
+try:
+    JD = json.load(open('cards-jp.json'))
+    jn = lambda s: re.sub(r'(?<=-)0+(?=\d)', '', s).lower()
+    pid = {}
+    for r in JD['cards']:
+        if len(r) > 5 and r[5]: pid[r[5]] = jn(f"{JD['sets'][r[0]][0]}-{r[1]}")
+    jg = get('https://tcgcsv.com/tcgplayer/85/groups')['results']
+    for g in jg:
+        try: pr = get(f'https://tcgcsv.com/tcgplayer/85/{g["groupId"]}/prices')['results']
+        except Exception as e: print('jp fail', g.get('name'), e); continue
+        for q in pr:
+            k = pid.get(q.get('productId')); m = q.get('marketPrice') or q.get('midPrice'); t = SUB.get(q.get('subTypeName'), 'n')
+            if k and m:
+                d = J.setdefault(k, {})
+                if t not in d: d[t] = round(float(m), 2)
+        time.sleep(.25)
+    print('jp', len(J), '/', len(pid))
+except Exception as e: print('jp skip', e)
+if prev and os.path.exists(prev):
+    try:
+        for k, v in (json.load(open(prev)).get('j') or {}).items():
+            if k not in J: J[k] = v
+    except Exception: pass
+src['jp'] = len(J)
 tot = sum(len(v) for v in want.values())
 print('tcgcsv', src['tcgcsv'], 'total', len(P), '/', tot)
 json.dump(PM, open('tools/pmap.json', 'w'), separators=(',', ':'), sort_keys=True)
-json.dump({'d': datetime.date.today().isoformat(), 'src': src, 'n': len(P), 'tot': tot, 'p': P}, open('prices.json', 'w'), separators=(',', ':'))
+json.dump({'d': datetime.date.today().isoformat(), 'src': src, 'n': len(P), 'tot': tot, 'p': P, 'j': J}, open('prices.json', 'w'), separators=(',', ':'))
