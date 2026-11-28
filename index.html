@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-/ncOkS0N1NaMypkIcJrkoXfRhUG4LYenoeWUDl7rt2M=' 'sha256-Ml/EwIXW5nuwqPDIbi91qkBSTb81YkzZK1PUHCCSlz0=' https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js https://cdn.jsdelivr.net/npm/tesseract.js@v5.1.1/dist/worker.min.js https://cdn.jsdelivr.net/npm/tesseract.js-core@v5.1.1/ https://challenges.cloudflare.com https://js.stripe.com https://*.js.stripe.com 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https:; media-src 'self' blob:; connect-src 'self' data: https://qghjmjbmpbpslfkwyqet.supabase.co https://cdn.jsdelivr.net https://raw.githubusercontent.com https://api.github.com https://api.pokemontcg.io https://tcgcsv.com https://api.pwnedpasswords.com https://challenges.cloudflare.com https://api.stripe.com https://link.com https://*.link.com; worker-src 'self' blob:; child-src 'self' blob:; frame-src https://challenges.cloudflare.com https://js.stripe.com https://*.js.stripe.com https://hooks.stripe.com https://link.com https://*.link.com; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-JweJNxoHgG0wYCPO0JkyobrjdmA+GPzQ0ndRbuEiLqc=' 'sha256-Ml/EwIXW5nuwqPDIbi91qkBSTb81YkzZK1PUHCCSlz0=' https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js https://cdn.jsdelivr.net/npm/tesseract.js@v5.1.1/dist/worker.min.js https://cdn.jsdelivr.net/npm/tesseract.js-core@v5.1.1/ https://challenges.cloudflare.com https://js.stripe.com https://*.js.stripe.com 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https:; media-src 'self' blob:; connect-src 'self' data: https://qghjmjbmpbpslfkwyqet.supabase.co https://cdn.jsdelivr.net https://raw.githubusercontent.com https://api.github.com https://api.pokemontcg.io https://tcgcsv.com https://api.pwnedpasswords.com https://challenges.cloudflare.com https://api.stripe.com https://link.com https://*.link.com; worker-src 'self' blob:; child-src 'self' blob:; frame-src https://challenges.cloudflare.com https://js.stripe.com https://*.js.stripe.com https://hooks.stripe.com https://link.com https://*.link.com; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="same-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>Inventory Monitoring</title>
@@ -1524,7 +1524,7 @@ function vPl(){const inP=d=>{if(B.p=='all')return true;const x=new Date(d);if(B.
 
 const SW=[['','#2563eb'],['#7c3aed','#7c3aed'],['#e11d48','#e11d48'],['#ea580c','#ea580c'],['#059669','#059669'],['#0891b2','#0891b2'],['#db2777','#db2777']],uiB=(k,v,t)=>`<button class="chip ${UI[k]==v?'on':''}" data-a="ui" data-k="${k}" data-v="${v}">${t}</button>`;
 let SS='ev';
-const APP_UPDATED='2026-11-28T02:10:34-05:00';
+const APP_UPDATED='2026-11-28T02:12:42-05:00';
 const appUpd=()=>'Dernière mise à jour de l’app : '+new Date(APP_UPDATED).toLocaleString(LC(),{dateStyle:'long',timeStyle:'short'});
 const SECN={buy:'Acheter',stock:'Stock',sv:'Ventes',gr:'Grading',tr:'Échanges',pl:'Bilan',gx:'Croissance',ex:'Dépenses',log:'Suivi',set:'Réglages'};
 function goHome(){sheet=null;EE={id:''};CR.open=false;QS.open=TP.open=false;QS.on=false;tab='home';HS=true;HA=false;render()}
@@ -1755,7 +1755,7 @@ async function dbCard(it){let db;try{db=await cdb()}catch(e){return null}
  const lvl=r=>/special|hyper|secret|gold|mega hyper/i.test(r)?5:/illustration/i.test(r)?4:/ultra|full art|amazing|prism/i.test(r)?3:/double|holo ex|rare holo|^rare$/i.test(r)?2:/rare/i.test(r)?1:0,hi=/alt art|full art/i.test(it.pr||'');
  return L.slice().sort((a,b)=>hi?lvl(b.rar||'')-lvl(a.rar||''):lvl(a.rar||'')-lvl(b.rar||''))[0]}
 async function dbImg(it){const c=await dbCard(it);return c?c.img:null}
-let IMGF=false;const IMGT=new Set();async function fillImgs(){if(IMGF)return;IMGF=true;try{const l=S.items.filter(i=>!i.img&&i.name&&!IMGT.has(i.id));l.forEach(i=>IMGT.add(i.id));let n=0;for(const it of l){const u=await dbImg(it);if(u){it.img=u;if(it.nodb)delete it.nodb;n++}}if(n){save();render()}}finally{IMGF=false}}
+let IMGF=false;const IMGT=new Set();async function fillImgs(){if(IMGF)return;IMGF=true;try{const l=S.items.filter(i=>!i.img&&i.name&&!IMGT.has(i.id));l.forEach(i=>IMGT.add(i.id));let n=0;for(const it of l){const u=await dbImg(it);if(u&&(!/tcgdex|tcgplayer/.test(u)||await canLoad(u))){it.img=u;if(it.nodb)delete it.nodb;n++}}if(n){save();render()}}finally{IMGF=false}}
 async function findImg(it){{const u=await dbImg(it);if(u)return u}const n=(it.number||'').split('/')[0].replace(/^0+(?=\d)/,''),nm=it.name.replace(/\s*\((?:PSA|BGS|CGC|SGC|TAG)[^)]*\)/g,'').replace(/\s*1st Edition/i,'').replace(/\s*(30th Celeb|Pitch Black)/i,'').replace(/"/g,'').trim();
  const set=it.set||(/30th celeb/i.test(it.name)?'30th Celebration':/pitch black/i.test(it.name)?'Pitch Black':'');
  LE='';try{const u=await tcgImg(set,nm,n);if(u)return u}catch(e){LE='TCGplayer : '+String(e&&e.message||e||'bloqué').slice(0,50)}
@@ -1975,7 +1975,7 @@ const cardOf=k=>{const p=k.tcgplayer&&k.tcgplayer.prices;return{name:k.name,set:
 async function ptcgFindApi(n,t,name){let c=[];if(n){c=await ptcg(`number:${+n||n}`+(t?` set.printedTotal:${+t}`:''));if(!c.length&&t)c=await ptcg(`number:${+n||n}`)}if(!c.length&&name){const w=crN(name).split(' ').filter(x=>x.length>2).slice(0,3);if(w.length)c=await ptcg(w.map(x=>`name:*${x}*`).join(' '))}c=c.map(cardOf);if(name)c.sort((a,b)=>simN(name,b.name)-simN(name,a.name));return c.slice(0,12)}
 /* Photo de référence : une carte sans image reçoit celle de la base (anglaise ou japonaise) quand la correspondance est sûre */
 var AREF=0;
-async function autoRef(){if(AREF==2)return;AREF=2;if(!S.items.some(i=>!i.img&&!i.noref))return;let db;try{db=await cdb()}catch(e){AREF=0;return}
+async function autoRef(){if(AREF==2)return;AREF=2;let fx=0;for(const it of S.items)if(/assets\.tcgdex\.net/.test(it.img||'')&&!await canLoad(it.img)){it.img='';fx++}if(fx){save();IMGT.clear();fillImgs()}if(!S.items.some(i=>!i.img&&!i.noref))return;let db;try{db=await cdb()}catch(e){AREF=0;return}
  const noG=x=>String(x||'').replace(/\((PSA|BGS|CGC|SGC|TAG|BCCG)[^)]*\)/ig,'').replace(/\b(PSA|BGS|CGC|SGC|TAG)\s*\d+(\.5)?\b/ig,'').replace(/\b1st edition\b/ig,'').trim(),sN=x=>crN(String(x||'').replace(/\((JP|JPN|japonais|japanese)\)/ig,'').replace(/\b(japanese|japonais|jpn|jp)\b/ig,''));let n=0;
  for(const it of S.items){if(it.img||it.noref)continue;const nm=noG(it.name);if(!nm)continue;const q=crN(nm),jaN=/[぀-ヿ㐀-鿿]/.test(nm),txt=String(it.set||'')+' '+String(it.name||'')+' '+String(it.note||''),jpH=jaN||/\b(jp|jpn|japan|japanese|japonaise?)\b|日本/i.test(txt),sq=sN(it.set);
   const m=String(it.number||'').trim().match(/^([A-Za-z]*\d+[A-Za-z]*)\s*(?:\/\s*[A-Za-z]*(\d+))?/);let L=[];
@@ -1984,7 +1984,7 @@ async function autoRef(){if(AREF==2)return;AREF=2;if(!S.items.some(i=>!i.img&&!i
   if(sq){const L2=L.filter(c=>sN(c.set)==sq);if(L2.length)L=L2}
   if(L.some(c=>c.jp)&&L.some(c=>!c.jp)){if(jpH)L=L.filter(c=>c.jp);else L=L.filter(c=>!c.jp&&sq&&sN(c.set)==sq)}
   else if(jpH&&L.length&&!L.some(c=>c.jp))L=[];
-  L=L.filter(c=>c.img);const imgs=new Set(L.map(c=>c.img));if(imgs.size!=1)continue;
+  L=L.filter(c=>c.img);const imgs=new Set(L.map(c=>c.img));if(imgs.size!=1||!await canLoad(L[0].img))continue;
   it.img=L[0].img;it.imgRef=1;n++}
  if(n){save();render();flash(TL(n>1?n+' cartes ont maintenant une photo de référence':'1 carte a maintenant une photo de référence',n>1?n+' cards now have a reference photo':'1 card now has a reference photo'))}}
 /* ---- Base de données locale des cartes Pokémon ---- */
