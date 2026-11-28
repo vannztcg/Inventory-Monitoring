@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-JweJNxoHgG0wYCPO0JkyobrjdmA+GPzQ0ndRbuEiLqc=' 'sha256-Ml/EwIXW5nuwqPDIbi91qkBSTb81YkzZK1PUHCCSlz0=' https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js https://cdn.jsdelivr.net/npm/tesseract.js@v5.1.1/dist/worker.min.js https://cdn.jsdelivr.net/npm/tesseract.js-core@v5.1.1/ https://challenges.cloudflare.com https://js.stripe.com https://*.js.stripe.com 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https:; media-src 'self' blob:; connect-src 'self' data: https://qghjmjbmpbpslfkwyqet.supabase.co https://cdn.jsdelivr.net https://raw.githubusercontent.com https://api.github.com https://api.pokemontcg.io https://tcgcsv.com https://api.pwnedpasswords.com https://challenges.cloudflare.com https://api.stripe.com https://link.com https://*.link.com; worker-src 'self' blob:; child-src 'self' blob:; frame-src https://challenges.cloudflare.com https://js.stripe.com https://*.js.stripe.com https://hooks.stripe.com https://link.com https://*.link.com; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-fiwXI8AMXn96qZ9Xwf8cYa746elIAHd00VtMhvs9aPQ=' 'sha256-Ml/EwIXW5nuwqPDIbi91qkBSTb81YkzZK1PUHCCSlz0=' https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js https://cdn.jsdelivr.net/npm/tesseract.js@v5.1.1/dist/worker.min.js https://cdn.jsdelivr.net/npm/tesseract.js-core@v5.1.1/ https://challenges.cloudflare.com https://js.stripe.com https://*.js.stripe.com 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https:; media-src 'self' blob:; connect-src 'self' data: https://qghjmjbmpbpslfkwyqet.supabase.co https://cdn.jsdelivr.net https://raw.githubusercontent.com https://api.github.com https://api.pokemontcg.io https://tcgcsv.com https://api.pwnedpasswords.com https://challenges.cloudflare.com https://api.stripe.com https://link.com https://*.link.com; worker-src 'self' blob:; child-src 'self' blob:; frame-src https://challenges.cloudflare.com https://js.stripe.com https://*.js.stripe.com https://hooks.stripe.com https://link.com https://*.link.com; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="same-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>Inventory Monitoring</title>
@@ -1524,7 +1524,7 @@ function vPl(){const inP=d=>{if(B.p=='all')return true;const x=new Date(d);if(B.
 
 const SW=[['','#2563eb'],['#7c3aed','#7c3aed'],['#e11d48','#e11d48'],['#ea580c','#ea580c'],['#059669','#059669'],['#0891b2','#0891b2'],['#db2777','#db2777']],uiB=(k,v,t)=>`<button class="chip ${UI[k]==v?'on':''}" data-a="ui" data-k="${k}" data-v="${v}">${t}</button>`;
 let SS='ev';
-const APP_UPDATED='2026-11-28T02:12:42-05:00';
+const APP_UPDATED='2026-11-28T03:00:45-05:00';
 const appUpd=()=>'Dernière mise à jour de l’app : '+new Date(APP_UPDATED).toLocaleString(LC(),{dateStyle:'long',timeStyle:'short'});
 const SECN={buy:'Acheter',stock:'Stock',sv:'Ventes',gr:'Grading',tr:'Échanges',pl:'Bilan',gx:'Croissance',ex:'Dépenses',log:'Suivi',set:'Réglages'};
 function goHome(){sheet=null;EE={id:''};CR.open=false;QS.open=TP.open=false;QS.on=false;tab='home';HS=true;HA=false;render()}
@@ -2738,7 +2738,7 @@ function lpPrices(){if(LPP)return;LPP=1;fetch(SBU+'/rest/v1/rpc/legal_info',{met
 const LPI=k=>`img/lp/${UI.lang=='en'?'en':'fr'}_${k}.webp`;
 const LPH=(k,alt,cls)=>`<div class="lpph${cls?' '+cls:''}"><img src="${LPI(k)}" alt="${alt}" width="585" height="1266" decoding="async"${cls=='b'?'':' loading="lazy"'}></div>`;
 const RV=(k,d)=>`rv${LPS.has(k)?' in':''}" data-rv="${k}"${d?` style="--d:${d}s"`:''} x="`;
-const DBN={en:20776,ja:13361};
+const DBN={en:20776,ja:30773};
 function vLanding(){lpPrices();const I=triInfo(),en=UI.lang=='en',lq=en?'?lang=en':'',pr=proPrices();
  const nav=[['lp-profit',TL('Profit','Profit')],['lp-scan','Smart Scan'],['lp-shows','Card shows'],['lp-tout',TL('Fonctions','Features')],['lp-prix',TL('Tarifs','Pricing')],['lp-faq','FAQ']];
  const feats=[['scan','Smart Scan',TL('Prends la carte en photo : nom, set et numéro sont lus sur ton téléphone, avec le prix du marché.','Snap the card: name, set and number are read on your phone, with the market price.')],
