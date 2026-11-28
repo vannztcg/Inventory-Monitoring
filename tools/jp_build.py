@@ -8,12 +8,12 @@ import json, re, time, struct, collections, sys, os, urllib.request, concurrent.
 sys.path.insert(0, os.path.dirname(__file__))
 from vis_hash import desc, fetch
 UA = {'User-Agent': 'Mozilla/5.0 InventoryMonitoring-jp'}
-def get(u, tries=6):
+def get(u, tries=9):
     for t in range(tries):
         try:
             with urllib.request.urlopen(urllib.request.Request(u, headers=UA), timeout=60) as r: return json.loads(r.read())
         except Exception as e:
-            err = e; time.sleep(5 * (t + 1) if getattr(e, 'code', 0) in (401, 403, 429) else 2 + 2 * t)
+            err = e; time.sleep(20 * (t + 1) if getattr(e, 'code', 0) in (401, 403, 429) else 2 + 2 * t)
     raise err
 nk = lambda s: re.sub(r'^([a-z]*)0+(?=\d)', r'\1', str(s).split('/')[0].strip().lower())
 B = json.load(open('tools/jp_tcgdex.json'))
@@ -32,7 +32,7 @@ new_sets = 0; new_cards = 0; enriched = 0
 for g in sorted(groups, key=lambda g: g.get('publishedOn') or ''):
     try: prods = get(f'https://tcgcsv.com/tcgplayer/85/{g["groupId"]}/products')['results']
     except Exception as e: print('fail', g['name'], e, flush=True); continue
-    time.sleep(.3)
+    time.sleep(.8)
     rows = []
     for p in prods:
         ex = {x.get('name'): str(x.get('value', '')) for x in (p.get('extendedData') or [])}
